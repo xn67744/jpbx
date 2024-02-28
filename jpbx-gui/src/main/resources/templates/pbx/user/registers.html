@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('用户注册列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "pbx/user/registerUser";
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                modalName: "用户注册列表",
+                columns: [
+                {
+                    field: 'userAccount',
+                    title: '注册号码',
+                    visible: true
+                },
+                {
+                    field: 'domain',
+                    title: '域',
+                    visible: true
+                },
+                {
+                    field: 'ip',
+                    title: 'IP地址',
+                    visible: true
+                },
+                {
+                    field: 'port',
+                    title: '端口号',
+                    visible: true
+                },
+                {
+                    field: 'protocol',
+                    title: '协议类型',
+                    visible: true
+                },
+                {
+                    field: 'hostName',
+                    title: '主机名称',
+                    visible: true
+                },
+                {
+                    field: 'expireTime',
+                    title: '过期时间(秒)',
+                    visible: true
+                },
+                {
+                    field: 'contact',
+                    title: 'contact',
+                    visible: true
+                }
+                ]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

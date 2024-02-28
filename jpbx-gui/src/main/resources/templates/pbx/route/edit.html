@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改路由管理')" />
+    <th:block th:include="include :: bootstrap-duallistbox-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-route-edit" th:object="${tPbxRoute}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">路由名称：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="name"  class="form-control" placeholder="请输入文本" th:field="*{name}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">路由类型：</label>
+                    <div class="col-sm-9">
+                        <select name="type" class="form-control m-b" th:with="type=${@dict.getType('pbx_route_type')}">
+                            <option th:each="dict,stat : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{type}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" id="reg_div">
+                    <label class="col-sm-3 control-label">匹配前缀：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="reg"  class="form-control" placeholder="请输入文本" th:field="*{reg}">
+                    </div>
+                </div>
+                <div class="form-group" id="inbound_model_div">
+                    <label class="col-sm-3 control-label">呼入模式：</label>
+                    <div class="col-sm-9">
+                        <select name="inboundModel" class="form-control m-b" th:with="type=${@dict.getType('pbx_route_inbound_model')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{inboundModel}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" id="did_div">
+                    <label class="col-sm-3 control-label">DID号码：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="did"  class="form-control" placeholder="请输入数字" th:field="*{did}">
+                    </div>
+                </div>
+                <div class="form-group" id="callee_check_div">
+                    <label class="col-sm-3 control-label">被叫检测：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="calleeCheck"  class="form-control" th:field="*{calleeCheck}">
+                    </div>
+                </div>
+                <div class="form-group" id="transform_div">
+                    <label class="col-sm-3 control-label">转换主叫：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="transform"  class="form-control" placeholder="请输入数字" th:field="*{transform}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">新增主叫前缀：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="callerPre" class="form-control" placeholder="请输入文本" th:field="*{callerPre}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">主叫前缀删除位数：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="callerPreRemove"  class="form-control" placeholder="请输入数字" th:field="*{callerPreRemove}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">新增被叫前缀：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="calleePre"  class="form-control" placeholder="请输入文本" th:field="*{calleePre}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">被叫前缀删除位数：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="calleePreRemove"  class="form-control" placeholder="请输入数字" th:field="*{calleePreRemove}">
+                    </div>
+                </div>
+
+                <div class="form-group" id="listContainer_div">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">主叫号码：</label>
+                        <div class="col-sm-3">
+                            <input type="text" id="inputColumn1"  class="form-control" placeholder="请输入数字">
+                        </div>
+                        <label class="col-sm-2 control-label">替换号码：</label>
+                        <div class="col-sm-3">
+                            <input type="text" id="inputColumn2"  class="form-control" placeholder="请输入数字">
+                        </div>
+                        <button class="btn btn-outline-secondary" type="button" id="addButton">增加</button>
+                    </div>
+
+                    <ul id="listContainer">
+                        <!-- 列表项将在这里动态添加 -->
+                    </ul>
+                </div>
+                <div class="form-group" id="reglistContainer_div">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">主叫满足条件：</label>
+                        <div class="col-sm-2">
+                            <input type="text" id="regCallerExp"  class="form-control" placeholder="请输入数字">
+                        </div>
+                        <label class="col-sm-2 control-label">替换主叫号码：</label>
+                        <div class="col-sm-2">
+                            <input type="text" id="regCaller"  class="form-control" placeholder="请输入数字">
+                        </div>
+                        <label class="col-sm-2 control-label">被叫满足条件：</label>
+                        <div class="col-sm-2">
+                            <input type="text" id="regCalleeExp"  class="form-control" placeholder="请输入数字">
+                        </div>
+                        <label class="col-sm-2 control-label">替换被叫号码：</label>
+                        <div class="col-sm-2">
+                            <input type="text" id="regCallee"  class="form-control" placeholder="请输入数字">
+                        </div>
+                        <button class="btn btn-outline-secondary" type="button" id="addRegButton">增加</button>
+                    </div>
+
+                    <ul id="reglistContainer">
+                        <!-- 列表项将在这里动态添加 -->
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <select id="gatewayIds" name="gatewayIds" class="form-control dual_select" multiple>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: bootstrap-duallistbox-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "pbx/route";
+        var pregateway = ctx + "pbx/gateway"
+        var gatewayIds = [[${tPbxRoute.gatewayIds}]];
+        var changenums = [[${tPbxRoute.changenums}]];
+        $("#form-route-add").validate({
+            focusCleanup: true
+        });
+
+         $(function() {
+            $.ajax({
+                url: pregateway + "/list",   //数据访问路径
+                method: 'POST',
+                data: {},
+                success: function (data) {
+                    $(data.rows).each(function () {
+                        var o = document.createElement("option");
+                        o.innerHTML
+                        var selector = $("#gatewayIds")[0];
+                        o.value = this['id'];//为option标签添加id属性(用来提交给后台传递ID参数)
+                        o.text = this['name'];//option标签显示的文字
+                        var selectedDataArray = gatewayIds.split(',');
+                        if (selectedDataArray.indexOf(this['id'].toString()) !== -1) {
+                            o.selected = true; // 如果是，则将option设置为选中状态
+                        }
+                        if (typeof (selector) != "undefined") {
+                            selector.options.add(o);
+                        }
+                    });
+                    $('.dual_select').bootstrapDualListbox({
+                        nonSelectedListLabel: '未选',
+                        selectedListLabel: '已选',
+                        preserveSelectionOnMove: 'moved',
+                        moveOnSelect: false,           // 出现一个剪头，表示可以一次选择一个
+                        filterTextClear: '展示所有',
+                        moveSelectedLabel: "添加",
+                        moveAllLabel: '添加所有',
+                        removeSelectedLabel: "移除",
+                        removeAllLabel: '移除所有',
+                        infoText: '共{0}个',
+                        showFilterInputs: true,       // 是否带搜索
+                        selectorMinimalHeight: 160
+                    });
+                }
+            })
+            function submitHandler() {
+                if ($.validate.form()) {
+                    var data = $("#form-route-add").serializeArray();
+                    var changenums = [];
+                    if(!$("#reglistContainer_div").hasClass('hidden')){
+                        $('#reglistContainer').find('li').each(function() {
+                            var content = $(this).html(); // 获取 li 元素的 HTML 内容
+                            var temp = content.split(' | ')[0]; // 分割内容以获取 caller 和 callee 部分
+                            var parts = temp.split(' ; ');
+                            var callerParts = parts[0].split(' - '); // 进一步分割 caller 部分
+                            var calleeParts = parts[1].split(' - '); // 进一步分割 callee 部分
+
+                            // 提取 regCallerExpVal、regCallerVal、regCalleeExpVal 和 regCalleeVal
+                            var regCallerExpVal = callerParts[0];
+                            var regCallerVal = callerParts[1];
+                            var regCalleeExpVal = calleeParts[0];
+                            var regCalleeVal = calleeParts[1];
+
+                            // 创建 TPbxChangeNumber 实例并添加到 changenums 列表中
+                            var tpbxChangeNumber = {
+                                type: 1,
+                                callerReg: regCallerExpVal,
+                                changedCaller: regCallerVal,
+                                calleeReg: regCalleeExpVal,
+                                changedCallee: regCalleeVal
+                            };
+                            changenums.push(tpbxChangeNumber);
+                        })
+                    }
+                    if(!$("#listContainer_div").hasClass('hidden')){
+                        $('#listContainer').find('li').each(function() {
+                            var content = $(this).html(); // 获取 li 元素的 HTML 内容
+                            var temp = content.split(' | ')[0]; // 分割内容以获取 caller 和 callee 部分
+                            var parts = temp.split(' - '); // 分割内容以获取 caller 和 callee 部分
+
+                            // 创建 TPbxChangeNumber 实例并添加到 changenums 列表中
+                            var tpbxChangeNumber = {
+                                type: 0,
+                                caller: parts[0],
+                                changedCaller: parts[1]
+                            };
+                            changenums.push(tpbxChangeNumber);
+                        });
+                    }
+                    // 转换为 JSON 对象
+                    var jsonData = {};
+                    $.each(data, function() {
+                        jsonData[this.name] = this.value;
+                    });
+                    // 直接给 jsonData 添加属性
+                    jsonData.changenums = changenums;
+                    jsonData.gatewayNames = $('#gatewayIds option:selected').map(function() {
+                        return this.text;
+                    }).get().join(',');
+                    // 发送 JSON 数据到后端
+                    $.operate.save(prefix + "/add", JSON.stringify(jsonData), null, "application/json;charset=UTF-8");
+                }
+            };
+
+            $('#addButton').click(function () {
+                // 获取输入框的值
+                var column1 = $('#inputColumn1').val();
+                var column2 = $('#inputColumn2').val();
+
+                // 检查输入是否有效，这里可以根据需要添加更复杂的验证逻辑
+                if (!column1 || !column2) {
+                    alert('请输入两列的数据！');
+                    return;
+                }
+                // 创建新的列表项元素
+                var listItem = $('<li></li>');
+                // 添加显示的数据到列表项中
+                listItem.html(column1 + ' - ' + column2 + ' | <button class="deleteButton btn btn-danger btn-sm">删除</button>');
+                // 添加到列表中
+                $('#listContainer').append(listItem);
+                // 清空输入框以便下次输入
+                $('#inputColumn1').val('');
+                $('#inputColumn2').val('');
+
+                // 为新添加的删除按钮绑定事件处理器
+                bindDeleteButtonEvent();
+            });
+
+            $('#addRegButton').click(function () {
+                // 获取输入框的值
+                var regCallerVal = $('#regCaller').val();
+                var regCallerExpVal = $('#regCallerExp').val();
+                var regCalleeVal = $('#regCallee').val();
+                var regCalleeExpVal = $('#regCalleeExp').val();
+                // 检查输入是否有效，这里可以根据需要添加更复杂的验证逻辑
+                if (!(regCallerVal && regCallerExpVal || regCalleeVal && regCalleeExpVal)) {
+                    alert('请输入两列的数据！');
+                    return;
+                }
+                // 创建新的列表项元素
+                var listItem = $('<li></li>');
+                // 添加显示的数据到列表项中
+                listItem.html(regCallerExpVal + ' - ' + regCallerVal + ' ; ' + regCalleeExpVal + ' - ' + regCalleeVal + ' | <button class="deleteButton btn btn-danger btn-sm">删除</button>');
+                // 添加到列表中
+                $('#reglistContainer').append(listItem);
+                // 清空输入框以便下次输入
+                $('#regCaller').val('');
+                $('#regCallerExp').val('');
+                $('#regCallee').val('');
+                $('#regCalleeExp').val('');
+                // 为新添加的删除按钮绑定事件处理器
+                bindDeleteButtonEvent();
+            });
+
+            // 绑定删除按钮的事件处理器函数
+            function bindDeleteButtonEvent() {
+                $('.deleteButton').unbind('click').click(function () {
+                    // 删除包含该按钮的列表项元素
+                    $(this).closest('li').remove();
+                });
+            }
+            //获取转变对象
+            changenums.forEach(function(changeNum) {
+                if(changeNum.type === 0){
+                    // 创建新的列表项元素
+                    var listItem = $('<li></li>');
+                    // 添加显示的数据到列表项中
+                    listItem.html(changeNum.caller + ' - ' + changeNum.changedCaller + ' | <button class="deleteButton btn btn-danger btn-sm">删除</button>');
+                    // 添加到列表中
+                    $('#listContainer').append(listItem);
+                }
+                if(changeNum.type === 1){
+                    // 创建新的列表项元素
+                    var listItem = $('<li></li>');
+                    // 添加显示的数据到列表项中
+                    listItem.html((changeNum.callerReg || '') + ' - ' + (changeNum.changedCaller || '') + ' ; ' + (changeNum.calleeReg || '') + ' - ' + (changeNum.changedCallee || '') + ' | <button class="deleteButton btn btn-danger btn-sm">删除</button>');
+                    // 添加到列表中
+                    $('#reglistContainer').append(listItem);
+                }
+            });
+
+            // 初始绑定删除按钮事件，以防页面加载时已有列表项存在的情况
+            bindDeleteButtonEvent();
+            var routeTypeSelect = $('select[name="type"]');
+
+            // 当路由类型 select 的值改变时
+            routeTypeSelect.change(function() {
+                var value = $(this).val(); // 获取当前选中的值
+                // 根据值来显示或隐藏相应的表单组
+                if (value === '1') {
+                    // 呼出
+                    $('#reg_div').removeClass('hidden').find('input').prop('disabled', false); ; // 显示匹配前缀的 div
+                    $('#inbound_model_div').addClass('hidden').find('select').prop('disabled', true); ; // 隐藏呼入模式的 div
+                    $('#listContainer_div').removeClass('hidden');
+                    $('#did_div').addClass('hidden').find('input').prop('disabled', true);
+                    $('#callee_check_div').addClass('hidden').find('input').prop('disabled', true);
+                    $('#transform_div').addClass('hidden').find('input').prop('disabled', true);
+                } else if (value === '2') {
+                    // 呼入
+                    $('#inbound_model_div').removeClass('hidden').find('select').prop('disabled', false); ; // 显示呼入模式的 div
+                    $('#reg_div').addClass('hidden').find('input').prop('disabled', true); ; // 隐藏匹配前缀的 div
+                    $('#listContainer_div').addClass('hidden');
+                }
+            });
+
+            // 触发一次 change 事件，以处理页面加载时的情况
+            routeTypeSelect.trigger('change');
+
+            var routeInboundModel = $('select[name="inboundModel"]');
+            // 当路由类型 select 的值改变时
+            routeInboundModel.change(function() {
+                var value = $(this).val(); // 获取当前选中的值
+                // 根据值来显示或隐藏相应的表单组
+                if (value === '1') {
+                    $('#did_div').addClass('hidden').find('input').prop('disabled', true);
+                    $('#callee_check_div').addClass('hidden').find('input').prop('disabled', true);
+                    $('#transform_div').addClass('hidden').find('input').prop('disabled', true);
+                } else if (value === '2') {
+                    // 如果值为 1，did
+                    $('#did_div').removeClass('hidden').find('input').prop('disabled', false);
+                    $('#callee_check_div').removeClass('hidden').find('input').prop('disabled', false) ;
+                    $('#transform_div').removeClass('hidden').find('input').prop('disabled', false);
+                }
+            });
+            // 触发一次 change 事件，以处理页面加载时的情况
+            routeInboundModel.trigger('change');
+        });
+    </script>
+</body>
+</html>

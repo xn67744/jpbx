@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxRouteMapper">
+    
+    <resultMap type="TPbxRoute" id="TPbxRouteResult">
+        <result property="id"    column="id"    />
+        <result property="reg"    column="reg"    />
+        <result property="type"    column="type"    />
+        <result property="inboundModel"    column="inbound_model"    />
+        <result property="gatewayIds"    column="gateway_id"    />
+        <result property="gatewayNames"    column="gateway_name"    />
+        <result property="callerPre"    column="caller_pre"    />
+        <result property="callerPreRemove"    column="caller_pre_remove"    />
+        <result property="calleePre"    column="callee_pre"    />
+        <result property="calleePreRemove"    column="callee_pre_remove"    />
+        <result property="did"    column="did"    />
+        <result property="calleeCheck"    column="callee_check"    />
+        <result property="transform"    column="transform"    />
+        <result property="name"    column="name"    />
+    </resultMap>
+
+
+    <sql id="selectTPbxRouteVo">
+        select id, reg, type, inbound_model, gateway_id, gateway_name, caller_pre, caller_pre_remove, callee_pre, callee_pre_remove, did, callee_check, transform, name from t_pbx_route
+    </sql>
+
+    <select id="selectTPbxRouteList" parameterType="TPbxRoute" resultMap="TPbxRouteResult">
+        <include refid="selectTPbxRouteVo"/>
+        <where>  
+            <if test="gatewayNames != null  and gatewayNames != ''"> and gateway_name like concat('%', #{gatewayNames}, '%')</if>
+            <if test="name != null  and name != ''"> and name = #{name}</if>
+            <if test="reg != null and reg != ''"> and #{reg} ~ reg</if>
+        </where>
+    </select>
+    
+    <select id="selectTPbxRouteById" parameterType="String" resultMap="TPbxRouteResult">
+        <include refid="selectTPbxRouteVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTPbxRoute" parameterType="TPbxRoute">
+        insert into t_pbx_route
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="reg != null">reg,</if>
+            <if test="type != null">type,</if>
+            <if test="inboundModel != null">inbound_model,</if>
+            <if test="gatewayIds != null">gateway_id,</if>
+            <if test="gatewayNames != null">gateway_name,</if>
+            <if test="callerPre != null">caller_pre,</if>
+            <if test="callerPreRemove != null">caller_pre_remove,</if>
+            <if test="calleePre != null">callee_pre,</if>
+            <if test="calleePreRemove != null">callee_pre_remove,</if>
+            <if test="did != null">did,</if>
+            <if test="calleeCheck != null">callee_check,</if>
+            <if test="transform != null">transform,</if>
+            <if test="name != null">name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="reg != null">#{reg},</if>
+            <if test="type != null">#{type},</if>
+            <if test="inboundModel != null">#{inboundModel},</if>
+            <if test="gatewayIds != null">#{gatewayIds},</if>
+            <if test="gatewayNames != null">#{gatewayNames},</if>
+            <if test="callerPre != null">#{callerPre},</if>
+            <if test="callerPreRemove != null">#{callerPreRemove},</if>
+            <if test="calleePre != null">#{calleePre},</if>
+            <if test="calleePreRemove != null">#{calleePreRemove},</if>
+            <if test="did != null">#{did},</if>
+            <if test="calleeCheck != null">#{calleeCheck},</if>
+            <if test="transform != null">#{transform},</if>
+            <if test="name != null">#{name},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTPbxRoute" parameterType="TPbxRoute">
+        update t_pbx_route
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reg != null">reg = #{reg},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="inboundModel != null">inbound_model = #{inboundModel},</if>
+            <if test="gatewayIds != null">gateway_id = #{gatewayIds},</if>
+            <if test="gatewayNames != null">gateway_name = #{gatewayNames},</if>
+            <if test="callerPre != null">caller_pre = #{callerPre},</if>
+            <if test="callerPreRemove != null">caller_pre_remove = #{callerPreRemove},</if>
+            <if test="calleePre != null">callee_pre = #{calleePre},</if>
+            <if test="calleePreRemove != null">callee_pre_remove = #{calleePreRemove},</if>
+            <if test="did != null">did = #{did},</if>
+            <if test="calleeCheck != null">callee_check = #{calleeCheck},</if>
+            <if test="transform != null">transform = #{transform},</if>
+            <if test="name != null">name = #{name},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTPbxRouteById" parameterType="String">
+        delete from t_pbx_route where id = #{id}
+    </delete>
+
+    <delete id="deleteTPbxRouteByIds" parameterType="String">
+        delete from t_pbx_route where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

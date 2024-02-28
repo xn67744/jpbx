@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxSysconfMapper">
+    
+    <resultMap type="TPbxSysconf" id="TPbxSysconfResult">
+        <result property="id"    column="id"    />
+        <result property="localIp"    column="local_ip"    />
+        <result property="remoteIp"    column="remote_ip"    />
+        <result property="externalPort"    column="external_port"    />
+        <result property="internalPort"    column="internal_port"    />
+        <result property="startRtpPort"    column="start_rtp_port"    />
+        <result property="endRtpPort"    column="end_rtp_port"    />
+        <result property="audioCode"    column="audio_code"    />
+        <result property="videoCode"    column="video_code"    />
+        <result property="frameRate"    column="frame_rate"    />
+        <result property="bitRate"    column="bit_rate"    />
+        <result property="iceStart"    column="ice_start"    />
+        <result property="stunAddress"    column="stun_address"    />
+        <result property="audioRecord"    column="audio_record"    />
+        <result property="videoRecord"    column="video_record"    />
+        <result property="soundFilePath"    column="sound_file_path"    />
+        <result property="audioRecordPath"    column="audio_record_path"    />
+        <result property="videoRecordPath"    column="video_record_path"    />
+        <result property="wsPort"    column="ws_port"    />
+        <result property="wssPort"    column="wss_port"    />
+        <result property="freeswitchPath"    column="freeswitch_path"    />
+        <result property="freeswitchLogPath"    column="freeswitch_log_path"    />
+    </resultMap>
+
+    <sql id="selectTPbxSysconfVo">
+        select id, local_ip, remote_ip, external_port, internal_port, start_rtp_port, end_rtp_port, audio_code, video_code, frame_rate, bit_rate, ice_start, stun_address, audio_record, video_record, sound_file_path, audio_record_path, video_record_path, freeswitch_path,freeswitch_log_path,ws_port,wss_port from t_pbx_sysconf
+    </sql>
+
+    <select id="selectTPbxSysconfList" parameterType="TPbxSysconf" resultMap="TPbxSysconfResult">
+        <include refid="selectTPbxSysconfVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectTPbxSysconfById" parameterType="String" resultMap="TPbxSysconfResult">
+        <include refid="selectTPbxSysconfVo"/>
+        where id = #{id}
+    </select>
+
+        
+    <insert id="insertTPbxSysconf" parameterType="TPbxSysconf">
+        insert into t_pbx_sysconf
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="localIp != null">local_ip,</if>
+            <if test="remoteIp != null">remote_ip,</if>
+            <if test="externalPort != null">external_port,</if>
+            <if test="internalPort != null">internal_port,</if>
+            <if test="startRtpPort != null">start_rtp_port,</if>
+            <if test="endRtpPort != null">end_rtp_port,</if>
+            <if test="audioCode != null">audio_code,</if>
+            <if test="videoCode != null">video_code,</if>
+            <if test="frameRate != null">frame_rate,</if>
+            <if test="bitRate != null">bit_rate,</if>
+            <if test="iceStart != null">ice_start,</if>
+            <if test="stunAddress != null">stun_address,</if>
+            <if test="audioRecord != null">audio_record,</if>
+            <if test="videoRecord != null">video_record,</if>
+            <if test="soundFilePath != null">sound_file_path,</if>
+            <if test="audioRecordPath != null">audio_record_path,</if>
+            <if test="videoRecordPath != null">video_record_path,</if>
+            <if test="wsPort != null">ws_port,</if>
+            <if test="wssPort != null">wss_port,</if>
+            <if test="freeswitchPath != null">freeswitch_path,</if>
+            <if test="freeswitchLogPath != null">freeswitch_log_path,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="localIp != null">#{localIp},</if>
+            <if test="remoteIp != null">#{remoteIp},</if>
+            <if test="externalPort != null">#{externalPort},</if>
+            <if test="internalPort != null">#{internalPort},</if>
+            <if test="startRtpPort != null">#{startRtpPort},</if>
+            <if test="endRtpPort != null">#{endRtpPort},</if>
+            <if test="audioCode != null">#{audioCode},</if>
+            <if test="videoCode != null">#{videoCode},</if>
+            <if test="frameRate != null">#{frameRate},</if>
+            <if test="bitRate != null">#{bitRate},</if>
+            <if test="iceStart != null">#{iceStart},</if>
+            <if test="stunAddress != null">#{stunAddress},</if>
+            <if test="audioRecord != null">#{audioRecord},</if>
+            <if test="videoRecord != null">#{videoRecord},</if>
+            <if test="soundFilePath != null">#{soundFilePath},</if>
+            <if test="audioRecordPath != null">#{audioRecordPath},</if>
+            <if test="videoRecordPath != null">#{videoRecordPath},</if>
+            <if test="wsPort != null">#{wsPort},</if>
+            <if test="wssPort != null">#{wssPort},</if>
+            <if test="freeswitchPath != null">#{freeswitchPath},</if>
+            <if test="freeswitchLogPath != null">#{freeswitchLogPath},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTPbxSysconf" parameterType="TPbxSysconf">
+        update t_pbx_sysconf
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="localIp != null">local_ip = #{localIp},</if>
+            <if test="remoteIp != null">remote_ip = #{remoteIp},</if>
+            <if test="externalPort != null">external_port = #{externalPort},</if>
+            <if test="internalPort != null">internal_port = #{internalPort},</if>
+            <if test="startRtpPort != null">start_rtp_port = #{startRtpPort},</if>
+            <if test="endRtpPort != null">end_rtp_port = #{endRtpPort},</if>
+            <if test="audioCode != null">audio_code = #{audioCode},</if>
+            <if test="videoCode != null">video_code = #{videoCode},</if>
+            <if test="frameRate != null">frame_rate = #{frameRate},</if>
+            <if test="bitRate != null">bit_rate = #{bitRate},</if>
+            <if test="iceStart != null">ice_start = #{iceStart},</if>
+            <if test="stunAddress != null">stun_address = #{stunAddress},</if>
+            <if test="audioRecord != null">audio_record = #{audioRecord},</if>
+            <if test="videoRecord != null">video_record = #{videoRecord},</if>
+            <if test="soundFilePath != null">sound_file_path = #{soundFilePath},</if>
+            <if test="audioRecordPath != null">audio_record_path = #{audioRecordPath},</if>
+            <if test="videoRecordPath != null">video_record_path = #{videoRecordPath},</if>
+            <if test="freeswitchPath != null">freeswitch_path = #{freeswitchPath},</if>
+            <if test="freeswitchLogPath != null">freeswitch_log_path = #{freeswitchLogPath},</if>
+            <if test="wsPort != null">ws_port = #{wsPort},</if>
+            <if test="wssPort != null">wss_port = #{wssPort},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTPbxSysconfById" parameterType="String">
+        delete from t_pbx_sysconf where id = #{id}
+    </delete>
+
+    <delete id="deleteTPbxSysconfByIds" parameterType="String">
+        delete from t_pbx_sysconf where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('日志查看')" />
+	<head>
+		<meta charset="UTF-8">
+		<title>占满剩余高度的Textarea</title>
+		<style>
+
+		</style>
+	</head>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+	<div class="row">
+		<div class="col-sm-12 search-collapse">
+			<form id="gen-form">
+				<div class="select-list">
+					<ul>
+						<li class="select-time">
+							<label>日志时间： </label>
+							<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+							<span>-</span>
+							<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+						</li>
+						<li>
+							<a class="btn btn-primary btn-rounded btn-sm" onclick="watch()"><i class="fa fa-search"></i>&nbsp;查看日志</a>
+							<a class="btn btn-warning btn-rounded btn-sm" onclick="watchCurrent()"><i class="fa fa-refresh"></i>&nbsp;查看当前日志</a>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+		&nbsp;
+		<div class="col-sm-12">
+			<div class="col-sm-12" id="content" style="overflow-y: auto;" />
+		</div>
+	</div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:src="@{/ajax/libs/highlight/highlight.min.js}"></script>
+<script th:inline="javascript">
+		var prefix = ctx + "pbx/log";
+		$(function() {
+			watch();
+		});
+		function watch(){
+		    $.ajax({
+                url: prefix + "/watchLog?beginDate="+$("#startTime").val()+"&endDate="+$("#endTime").val(),
+                method: 'GET',
+                success: function (data) {
+                    $("#content").html(data)
+                },
+                error: function(){
+                	alert('日志获取失败!')
+                }
+            })
+		}
+		function watchCurrent(){
+		    $("#startTime").val("");
+    		$("#endTime").val("");
+		    $.ajax({
+                url: prefix + "/watchLog",
+                method: 'GET',
+                success: function (data) {
+                    $("#content").html(data)
+                },
+                error: function(){
+                	alert('日志获取失败!')
+                }
+            })
+		}
+</script>
+</body>
+</html>

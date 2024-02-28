@@ -1,0 +1,38 @@
+/.recommenders/
+*.class
+*.classpath
+.DS_Store
+*.project
+.settings/
+# Java annotation processor (APT)  
+*.factorypath 
+target/
+bin/
+logs
+*.log
+*.iml
+*/*.iml
+*/*/*.iml
+.springBeans
+*.idea/
+.idea/
+
+*.mvn/
+*.cmd
+mvnw
+.metadata/
+*/.metadata/
+.recommenders/
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+output/
+#*.gitignore
+
+# Package Files #
+# *.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+

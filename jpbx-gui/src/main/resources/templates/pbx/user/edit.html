@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改呼叫账户管理')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-user-edit" th:object="${tPbxUser}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">呼叫号码：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="number" id="number" class="form-control" placeholder="请输入文本" th:field="*{number}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">显示名称：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="name" id="name" class="form-control" placeholder="请输入文本" th:field="*{name}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">域（domain）：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="domain" id="domain" class="form-control" placeholder="请输入文本" th:field="*{domain}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">密码：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="password" id="password" class="form-control" placeholder="请输入文本" th:field="*{password}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">账号类型：</label>
+                    <div class="col-sm-9">
+                        <select name="type" class="form-control m-b" th:with="type=${@dict.getType('pbx_account_type')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{type}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">是否录音：</label>
+                    <div class="col-sm-9">
+                        <label class="toggle-switch switch-solid">
+                            <input type="checkbox" id="audio" th:checked="${tPbxUser.audio == '0' ? true : false}"> <span></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">是否录像：</label>
+                    <div class="col-sm-9">
+                        <label class="toggle-switch switch-solid">
+                            <input type="checkbox" id="video" th:checked="${tPbxUser.video == '0' ? true : false}"> <span></span>
+
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">账户等级：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="level" class="form-control" placeholder="请输入文本" th:field="*{level}">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "pbx/user";
+        $("#form-user-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                var data = $("#form-user-edit").serializeArray();
+            	var video = $("input[id='video']").is(':checked') == true ? 0 : 1;
+	        	var audio = $("input[id='audio']").is(':checked') == true ? 0 : 1;
+	        	data.push({"name": "video", "value": video});
+	        	data.push({"name": "audio", "value": audio});
+                $.operate.saveTab(prefix + "/edit", data);
+            }
+        }
+    </script>
+</body>
+</html>

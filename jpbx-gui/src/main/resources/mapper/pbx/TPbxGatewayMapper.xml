@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxGatewayMapper">
+    
+    <resultMap type="TPbxGateway" id="TPbxGatewayResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="realm"    column="realm"    />
+        <result property="register"    column="register"    />
+        <result property="transport"    column="transport"    />
+        <result property="retrySeconds"    column="retry_seconds"    />
+        <result property="username"    column="username"    />
+        <result property="password"    column="password"    />
+        <result property="type"    column="type"    />
+    </resultMap>
+
+    <sql id="selectTPbxGatewayVo">
+        select id, name, realm, register, transport, retry_seconds, username, password, type
+        <if test="routeId != null and routeId != ''">
+        , CASE
+        WHEN EXISTS (
+            SELECT 1
+            FROM "public"."t_pbx_route" r
+            WHERE ',' || r.gateway_id || ',' LIKE '%,' || r.id || ',%'
+            AND r.id = #{routeId}
+        ) THEN 1
+        ELSE 0
+       END AS selected
+       </if>
+       from t_pbx_gateway
+    </sql>
+
+    <select id="selectTPbxGatewayList" parameterType="TPbxGateway" resultMap="TPbxGatewayResult">
+        <include refid="selectTPbxGatewayVo"/>
+        <where>  
+            <if test="realm != null  and realm != ''"> and realm = #{realm}</if>
+            <if test="name != null  and name != ''"> and name = #{name}</if>
+            <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
+            <if test="type != null "> and type = #{type}</if>
+        </where>
+    </select>
+    
+    <select id="selectTPbxGatewayById" parameterType="String" resultMap="TPbxGatewayResult">
+        <include refid="selectTPbxGatewayVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTPbxGateway" parameterType="TPbxGateway">
+        insert into t_pbx_gateway
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="realm != null and realm != ''">realm,</if>
+            <if test="register != null">register,</if>
+            <if test="transport != null">transport,</if>
+            <if test="retrySeconds != null">retry_seconds,</if>
+            <if test="username != null">username,</if>
+            <if test="password != null">password,</if>
+            <if test="type != null">type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="realm != null and realm != ''">#{realm},</if>
+            <if test="register != null">#{register},</if>
+            <if test="transport != null">#{transport},</if>
+            <if test="retrySeconds != null">#{retrySeconds},</if>
+            <if test="username != null">#{username},</if>
+            <if test="password != null">#{password},</if>
+            <if test="type != null">#{type},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTPbxGateway" parameterType="TPbxGateway">
+        update t_pbx_gateway
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="realm != null and realm != ''">realm = #{realm},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="register != null">register = #{register},</if>
+            <if test="transport != null">transport = #{transport},</if>
+            <if test="retrySeconds != null">retry_seconds = #{retrySeconds},</if>
+            <if test="username != null">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="type != null">type = #{type},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTPbxGatewayById" parameterType="String">
+        delete from t_pbx_gateway where id = #{id}
+    </delete>
+
+    <delete id="deleteTPbxGatewayByIds" parameterType="String">
+        delete from t_pbx_gateway where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

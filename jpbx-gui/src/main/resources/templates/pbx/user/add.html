@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增呼叫账户管理')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-user-add">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">呼叫号码：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="number" id="number" class="form-control" placeholder="请输入文本">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">显示名称：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="name" id="name" class="form-control" placeholder="请输入文本">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">域（domain）：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="domain" id="domain" class="form-control" placeholder="请输入文本">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">密码：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="password" id="password" class="form-control" placeholder="请输入文本">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">账号类型：</label>
+                    <div class="col-sm-9">
+                        <select name="type" class="form-control m-b" th:with="type=${@dict.getType('pbx_account_type')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">是否录音：</label>
+                    <div class="col-sm-9">
+                        <label class="toggle-switch switch-solid">
+                            <input type="checkbox" id="audio" checked="false"> <span></span>
+
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">是否录像：</label>
+                    <div class="col-sm-9">
+                        <label class="toggle-switch switch-solid">
+                            <input type="checkbox" id="video" checked="false"> <span></span>
+
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">账户等级：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="level" class="form-control" placeholder="请输入文本">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "pbx/user"
+        $("#form-user-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                var data = $("#form-user-add").serializeArray();
+            	var video = $("input[id='video']").is(':checked') == true ? 0 : 1;
+	        	var audio = $("input[id='audio']").is(':checked') == true ? 0 : 1;
+	        	data.push({"name": "video", "value": video});
+	        	data.push({"name": "audio", "value": audio});
+                $.operate.saveTab(prefix + "/add", data);
+            }
+        }
+    </script>
+</body>
+</html>

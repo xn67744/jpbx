@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxChangeNumberMapper">
+    <resultMap id="TPbxChangeNumberResultMap" type="TPbxChangeNumber">
+        <result column="id" property="id" />
+        <result column="type" property="type" />
+        <result column="caller_reg" property="callerReg" />
+        <result column="changed_caller" property="changedCaller" />
+        <result column="callee_reg" property="calleeReg" />
+        <result column="changed_callee" property="changedCallee" />
+        <result column="order" property="order" />
+        <result column="caller" property="caller" />
+        <result column="route_id" property="routeId" />
+        <!-- 如果需要额外的处理，比如字段转换、默认值等，可以在这里添加 -->
+    </resultMap>
+    <insert id="insertChangeNumbes" parameterType="TPbxChangeNumber">
+        insert into t_pbx_change_number
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">id,</if>
+            <if test="callerReg != null and callerReg != ''">caller_reg,</if>
+            <if test="changedCaller != null and changedCaller != ''">changed_caller,</if>
+            <if test="calleeReg != null and calleeReg != ''">callee_reg,</if>
+            <if test="changedCallee != null and changedCallee != ''">changed_callee,</if>
+            <if test="order != null">order,</if>
+            <if test="routeId != null and routeId != ''">route_id,</if>
+            <if test="caller != null and caller != ''">caller,</if>
+            <if test="type != null">type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">#{id},</if>
+            <if test="callerReg != null and callerReg != ''">#{callerReg},</if>
+            <if test="changedCaller != null and changedCaller != ''">#{changedCaller},</if>
+            <if test="calleeReg != null and calleeReg != ''">#{calleeReg},</if>
+            <if test="changedCallee != null and changedCallee != ''">#{changedCallee},</if>
+            <if test="order != null">#{order},</if>
+            <if test="routeId != null and routeId != ''">#{routeId},</if>
+            <if test="caller != null and caller != ''">#{caller},</if>
+            <if test="type != null">#{type},</if>
+         </trim>
+    </insert>
+
+    <delete id="deleteTPbxChangeNumberByRouteId" parameterType="String">
+        delete from t_pbx_change_number where route_id = #{routeId}
+    </delete>
+
+    <delete id="deleteTPbxChangeNumberById" parameterType="String">
+        delete from t_pbx_change_number where id = #{id}
+    </delete>
+
+    <delete id="deleteTPbxChangeNumberByIds">
+        delete from t_pbx_change_number where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="selectChangeNumbes" resultMap="TPbxChangeNumberResultMap">
+        SELECT
+        id,
+        type,
+        caller_reg,
+        changed_caller,
+        callee_reg,
+        changed_callee,
+        "order",
+        caller,
+        route_id
+        FROM
+        "public"."t_pbx_change_number"
+        WHERE
+        1 = 1
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="type != null">
+            AND type = #{type}
+        </if>
+        <if test="callerReg != null">
+            AND caller_reg = #{callerReg}
+        </if>
+        <if test="changedCaller != null">
+            AND changed_caller = #{changedCaller}
+        </if>
+        <if test="calleeReg != null">
+            AND callee_reg = #{calleeReg}
+        </if>
+        <if test="changedCallee != null">
+            AND changed_callee = #{changedCallee}
+        </if>
+        <if test="caller != null">
+            AND caller = #{caller}
+        </if>
+        <if test="routeId != null">
+            AND route_id = #{routeId}
+        </if>
+        <if test="order != null">
+            AND "order" = #{order}
+        </if>
+    </select>
+
+</mapper>

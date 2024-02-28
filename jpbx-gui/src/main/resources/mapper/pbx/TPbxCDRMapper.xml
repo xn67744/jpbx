@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxCDRMapper">
+
+    <resultMap id="CdrResultMap" type="TPbxCDR">
+        <result property="id" column="id"/>
+        <result property="localIpV4" column="local_ip_v4"/>
+        <result property="callerIdName" column="caller_id_name"/>
+        <result property="callerIdNumber" column="caller_id_number"/>
+        <result property="destinationNumber" column="destination_number"/>
+        <result property="context" column="context"/>
+        <result property="startStamp" column="start_stamp"/>
+        <result property="answerStamp" column="answer_stamp"/>
+        <result property="endStamp" column="end_stamp"/>
+        <result property="duration" column="duration"/>
+        <result property="billsec" column="billsec"/>
+        <result property="hangupCause" column="hangup_cause"/>
+        <result property="uuid" column="uuid"/>
+        <result property="blegUuid" column="bleg_uuid"/>
+        <result property="accountcode" column="accountcode"/>
+        <result property="readCodec" column="read_codec"/>
+        <result property="writeCodec" column="write_codec"/>
+        <result property="sipHangupDisposition" column="sip_hangup_disposition"/>
+        <result property="ani" column="ani"/>
+    </resultMap>
+
+    <select id="selectTPbxCDRList" resultMap="CdrResultMap">
+        SELECT * FROM cdr
+        <where>
+            <if test="callerIdName != null and callerIdName != ''">
+                AND caller_id_name = #{callerIdName}
+            </if>
+            <if test="callerIdNumber != null and callerIdNumber != ''">
+                AND caller_id_number like concat('%',#{callerIdNumber},'%')
+            </if>
+            <if test="destinationNumber != null and destinationNumber != ''">
+                AND destination_number like concat('%',#{destinationNumber},'%')
+            </if>
+            <if test="context != null and context != ''">
+                AND context = #{context}
+            </if>
+            <if test="duration != null">
+                AND duration = #{duration}
+            </if>
+            <if test="billsec != null">
+                AND billsec = #{billsec}
+            </if>
+            <if test="hangupCause != null and hangupCause != ''">
+                AND hangup_cause = #{hangupCause}
+            </if>
+            <if test="uuid != null and uuid != ''">
+                AND uuid = #{uuid}
+            </if>
+            <if test="blegUuid != null and blegUuid != ''">
+                AND bleg_uuid = #{blegUuid}
+            </if>
+            <if test="accountcode != null and accountcode != ''">
+                AND accountcode = #{accountcode}
+            </if>
+            <if test="readCodec != null and readCodec != ''">
+                AND read_codec = #{readCodec}
+            </if>
+            <if test="writeCodec != null and writeCodec != ''">
+                AND write_codec = #{writeCodec}
+            </if>
+            <if test="sipHangupDisposition != null and sipHangupDisposition != ''">
+                AND sip_hangup_disposition = #{sipHangupDisposition}
+            </if>
+            <if test="ani != null and ani != ''">
+                AND ani = #{ani}
+            </if>
+        </where>
+        order by start_stamp desc
+    </select>
+
+</mapper>

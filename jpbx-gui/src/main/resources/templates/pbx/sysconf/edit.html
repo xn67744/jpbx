@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改服务配置')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-sysconf-edit" th:object="${tPbxSysconf}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">本机IP：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="localIp" id="localIp" class="form-control" placeholder="请输入本机IP" th:field="*{localIp}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">外网IP：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="remoteIp" id="remoteIp" class="form-control" placeholder="请输入外网IP" th:field="*{remoteIp}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">中继端口：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="externalPort" id="externalPort" class="form-control" placeholder="请输入中继端口" th:field="*{externalPort}">
+                </div>6
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">注册端口：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="internalPort" id="internalPort" class="form-control" placeholder="请输入注册端口" th:field="*{internalPort}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">起始RTP端口：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="startRtpPort" id="startRtpPort" class="form-control" placeholder="请输入起始RTP端口" th:field="*{startRtpPort}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">结束RTP端口：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="endRtpPort" id="endRtpPort" class="form-control" placeholder="请输入结束RTP端口" th:field="*{endRtpPort}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">WS端口：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="wsPort" id="wsPort" class="form-control" placeholder="WS端口" th:field="*{wsPort}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">WSS端口：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="wssPort" id="wssPort" class="form-control" placeholder="WSS端口" th:field="*{wssPort}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">音频编码：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="audioCode" id="audioCode" class="form-control" placeholder="请输入音频编码" th:field="*{audioCode}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">视频编码：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="videoCode" id="videoCode" class="form-control" placeholder="请输入视频编码" th:field="*{videoCode}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">分辨率：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="frameRate" id="frameRate" class="form-control" placeholder="请输入分辨率" th:field="*{frameRate}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">码率：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="bitRate" id="bitRate" class="form-control" placeholder="请输入码率" th:field="*{bitRate}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">是否启动ICE：</label>
+                <div class="col-sm-9">
+                    <label class="toggle-switch switch-solid">
+                        <input type="checkbox" id="iceStart" th:checked="${tPbxSysconf.iceStart}"> <span></span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">STUN地址：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="stunAddress" id="stunAddress" class="form-control" placeholder="请输入STUN地址" th:field="*{stunAddress}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">是否录音：</label>
+                <div class="col-sm-9">
+                    <label class="toggle-switch switch-solid">
+                        <input type="checkbox" id="audioRecord" th:checked="${tPbxSysconf.audioRecord}"> <span></span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">是否录像：</label>
+                <div class="col-sm-9">
+                    <label class="toggle-switch switch-solid">
+                        <input type="checkbox" id="videoRecord" th:checked="${tPbxSysconf.videoRecord}"> <span></span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">音频存储地址：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="audioRecordPath" id="audioRecordPath" class="form-control" placeholder="请输入音频存储地址" th:field="*{audioRecordPath}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">视频存储地址：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="videoRecordPath" id="videoRecordPath" class="form-control" placeholder="请输入视频存储地址" th:field="*{videoRecordPath}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">声音文件地址：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="soundFilePath" id="soundFilePath" class="form-control" placeholder="请输入声音文件地址" th:field="*{soundFilePath}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">交换服务文件路径：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="freeswitchPath" id="freeswitchPath" class="form-control" placeholder="请输入交换服务文件路径" th:field="*{freeswitchPath}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">交换服务文件路径：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="freeswitchLogPath" id="freeswitchLogPath" class="form-control" placeholder="请输入交换服务日志路径" th:field="*{freeswitchLogPath}">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+            <button type="button" class="btn btn-sm btn-warning" onclick="effect()"><i class="fa fa-check"></i>生效配置</button>&nbsp;
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "pbx/sysconf";
+        $("#form-sysconf-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                var data = $("#form-sysconf-edit").serializeArray();
+            	var iceStart = $("input[id='iceStart']").is(':checked');
+	        	var audioRecord = $("input[id='audioRecord']").is(':checked');
+	        	var videoRecord = $("input[id='videoRecord']").is(':checked');
+	        	data.push({"name": "iceStart", "value": iceStart});
+	        	data.push({"name": "audioRecord", "value": audioRecord});
+	        	data.push({"name": "videoRecord", "value": videoRecord});
+                $.operate.save(prefix + "/edit", data, function(result) {
+                    if (result.msg == '操作成功') {
+                        // 如果操作成功，刷新当前页面
+                        location.reload();
+                    }
+                });
+            }
+        }
+
+        function effect() {
+            $.ajax({
+                url: prefix + "/effect",   //配置生效
+                method: 'GET',
+                data: {},
+                success: function (data) {
+                    alert('生效成功!')
+                }
+            })
+        }
+    </script>
+</body>
+</html>

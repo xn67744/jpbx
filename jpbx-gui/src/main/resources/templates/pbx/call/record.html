@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('呼叫记录管理列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="pbx:user:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "pbx/call";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                exportUrl: prefix + "/export",
+                modalName: "呼叫记录管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'uuid',
+                    title: 'UUID',
+                    visible: true
+                },
+                {
+                    field: 'localIpV4',
+                    title: 'IP地址',
+                    visible: true
+                },
+                {
+                    field: 'callerIdNumber',
+                    title: '主叫号码',
+                    visible: true
+                },
+                {
+                    field: 'destinationNumber',
+                    title: '被叫号码',
+                    visible: true
+                },
+                {
+                    field: 'context',
+                    title: '呼叫内容',
+                    visible: true,
+                },
+                {
+                    field: 'startStamp',
+                    title: '呼叫时间',
+                    visible: true
+                },
+                {
+                    field: 'answerStamp',
+                    title: '应答时间',
+                    visible: true
+                },
+                {
+                    field: 'endStamp',
+                    title: '结束时间',
+                    visible: true,
+                },
+                {
+                    field: 'duration',
+                    title: '呼叫时长',
+                    visible: true,
+                },
+                {
+                    field: 'hangupCause',
+                    title: '挂断原因',
+                    visible: true,
+                },
+                {
+                    field: 'blegUuid',
+                    title: 'blegUUID',
+                    visible: true,
+                },
+                {
+                    field: 'readCodec',
+                    title: '读取编码',
+                    visible: true,
+                },
+                {
+                    field: 'writeCodec',
+                    title: '写入编码',
+                    visible: true,
+                }
+                ]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>
