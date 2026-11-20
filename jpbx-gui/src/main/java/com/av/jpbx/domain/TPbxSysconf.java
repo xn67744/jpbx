@@ -80,4 +80,7 @@ public class TPbxSysconf extends BaseEntity
 
     private String wssPort;
 
+    /** mod_cdr_pg_csv db-info 连接串 */
+    private String cdrDbInfo;
+
 }

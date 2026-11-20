@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head><th:block th:include="include :: header('ESL控制台')" /></head>
+<body class="white-bg">
+<div class="wrapper wrapper-content">
+  <div class="form-group">
+    <label>API 命令</label>
+    <input id="command" class="form-control" placeholder="如 status / sofia / show" value="status"/>
+  </div>
+  <div class="form-group">
+    <label>参数</label>
+    <input id="args" class="form-control" placeholder="可选，如 channels / status"/>
+  </div>
+  <button class="btn btn-primary" onclick="runApi()">执行</button>
+  <pre id="out" style="margin-top:15px;background:#1e1e1e;color:#dcdcdc;padding:12px;min-height:280px;white-space:pre-wrap;"></pre>
+</div>
+<th:block th:include="include :: footer" />
+<script>
+var prefix = ctx + "pbx/ops";
+function runApi(){
+  $.post(prefix+'/api', {command:$('#command').val(), args:$('#args').val()}, function(res){
+    $('#out').text(res.data || res.msg || JSON.stringify(res));
+  });
+}
+</script>
+</body></html>

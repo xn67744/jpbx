@@ -6,6 +6,17 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import com.av.common.config.AVConfig;
+import com.av.jpbx.domain.TPbxCDR;
+import com.av.jpbx.domain.TPbxConference;
+import com.av.jpbx.domain.TPbxGateway;
+import com.av.jpbx.domain.TPbxQueue;
+import com.av.jpbx.domain.TPbxUser;
+import com.av.jpbx.service.FsEslClient;
+import com.av.jpbx.service.ITPbxCallService;
+import com.av.jpbx.service.ITPbxConferenceService;
+import com.av.jpbx.service.ITPbxGatewayService;
+import com.av.jpbx.service.ITPbxQueueService;
+import com.av.jpbx.service.ITPbxUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -44,6 +55,24 @@ public class SysIndexController extends BaseController
     @Autowired
     private SysPasswordService passwordService;
 
+    @Autowired
+    private ITPbxUserService pbxUserService;
+
+    @Autowired
+    private ITPbxGatewayService pbxGatewayService;
+
+    @Autowired
+    private ITPbxQueueService pbxQueueService;
+
+    @Autowired
+    private ITPbxConferenceService pbxConferenceService;
+
+    @Autowired
+    private ITPbxCallService pbxCallService;
+
+    @Autowired
+    private FsEslClient fsEslClient;
+
     // 系统首页
     @GetMapping("/index")
     public String index(ModelMap mmap)
@@ -62,7 +91,7 @@ public class SysIndexController extends BaseController
         mmap.put("tagsView", tagsView);
         mmap.put("mainClass", contentMainClass(footer, tagsView));
         mmap.put("copyrightYear", AVConfig.getCopyrightYear());
-        mmap.put("demoEnabled", AVConfig.isDemoEnabled());
+        mmap.put("version", AVConfig.getVersion());
         mmap.put("isDefaultModifyPwd", initPasswordIsModify(user.getPwdUpdateDate()));
         mmap.put("isPasswordExpired", passwordIsExpiration(user.getPwdUpdateDate()));
         mmap.put("isMobile", ServletUtils.checkAgentIsMobile(ServletUtils.getRequest().getHeader("User-Agent")));
@@ -127,11 +156,66 @@ public class SysIndexController extends BaseController
         CookieUtils.setCookie(response, "nav-style", style);
     }
 
-    // 系统介绍
+    // 系统介绍 / 首页概览
     @GetMapping("/system/main")
     public String main(ModelMap mmap)
     {
         mmap.put("version", AVConfig.getVersion());
+
+        int userTotal = 0, userEnabled = 0, gatewayTotal = 0, queueTotal = 0, conferenceTotal = 0, onlineRegister = 0;
+        boolean eslOnline = false;
+        List<TPbxCDR> recentCalls = new java.util.ArrayList<>();
+        try
+        {
+            List<TPbxUser> users = pbxUserService.selectTPbxUserList(new TPbxUser());
+            if (users != null)
+            {
+                userTotal = users.size();
+                for (TPbxUser u : users)
+                {
+                    if (u.getEnabled() != null && u.getEnabled() == 1)
+                    {
+                        userEnabled++;
+                    }
+                }
+            }
+            List<TPbxGateway> gateways = pbxGatewayService.selectTPbxGatewayList(new TPbxGateway());
+            gatewayTotal = gateways == null ? 0 : gateways.size();
+            List<TPbxQueue> queues = pbxQueueService.selectTPbxQueueList(new TPbxQueue());
+            queueTotal = queues == null ? 0 : queues.size();
+            List<TPbxConference> conferences = pbxConferenceService.selectTPbxConferenceList(new TPbxConference());
+            conferenceTotal = conferences == null ? 0 : conferences.size();
+            List<TPbxCDR> cdrList = pbxCallService.selectTPbxCallRecordList(new TPbxCDR());
+            if (cdrList != null && !cdrList.isEmpty())
+            {
+                recentCalls = cdrList.size() > 6 ? cdrList.subList(0, 6) : cdrList;
+            }
+        }
+        catch (Exception e)
+        {
+            logger.warn("首页概览统计失败：{}", e.getMessage());
+        }
+        try
+        {
+            eslOnline = fsEslClient.isConnected();
+            if (eslOnline)
+            {
+                onlineRegister = pbxUserService.getRegisterUser().size();
+            }
+        }
+        catch (Exception e)
+        {
+            logger.warn("首页读取 FreeSWITCH 状态失败：{}", e.getMessage());
+        }
+
+        mmap.put("userTotal", userTotal);
+        mmap.put("userEnabled", userEnabled);
+        mmap.put("gatewayTotal", gatewayTotal);
+        mmap.put("queueTotal", queueTotal);
+        mmap.put("conferenceTotal", conferenceTotal);
+        mmap.put("onlineRegister", onlineRegister);
+        mmap.put("eslOnline", eslOnline);
+        mmap.put("recentCalls", recentCalls);
         return "main";
     }
 

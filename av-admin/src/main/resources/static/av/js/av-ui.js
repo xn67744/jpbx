@@ -1344,7 +1344,7 @@ var table = {
                 if (result.code == web_status.SUCCESS) {
                     var topWindow = $(window.parent.document);
                     var currentId = $('.page-tabs-content', topWindow).find('.active').attr('data-panel');
-                    var topWindow = $('.RuoYi_iframe[data-id="' + currentId + '"]', topWindow)[0];
+                    var topWindow = $('.jpbx_iframe[data-id="' + currentId + '"]', topWindow)[0];
                     if ($.common.isNotEmpty(topWindow) && $.common.isNotEmpty(currentId)) {
                     	var $contentWindow = topWindow.contentWindow;
                     	$contentWindow.$.modal.msgSuccess(result.msg);

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxQueueMapper">
+    <resultMap type="TPbxQueue" id="TPbxQueueResult">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="strategy" column="strategy" />
+        <result property="mohSound" column="moh_sound" />
+        <result property="timeBaseScore" column="time_base_score" />
+        <result property="maxWaitTime" column="max_wait_time" />
+        <result property="maxWaitTimeWithNoAgent" column="max_wait_time_with_no_agent" />
+        <result property="tierRulesApply" column="tier_rules_apply" />
+        <result property="discardAbandonedAfter" column="discard_abandoned_after" />
+        <result property="abandonedResumeAllowed" column="abandoned_resume_allowed" />
+        <result property="enabled" column="enabled" />
+        <result property="remark" column="remark" />
+    </resultMap>
+    <sql id="selectVo">select id, name, strategy, moh_sound, time_base_score, max_wait_time, max_wait_time_with_no_agent, tier_rules_apply, discard_abandoned_after, abandoned_resume_allowed, enabled, remark from t_pbx_queue</sql>
+    <select id="selectTPbxQueueList" parameterType="TPbxQueue" resultMap="TPbxQueueResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="id != null and id != ''">AND id = #{id}</if>
+            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="strategy != null and strategy != ''">AND strategy = #{strategy}</if>
+            <if test="mohSound != null and mohSound != ''">AND moh_sound = #{mohSound}</if>
+            <if test="timeBaseScore != null and timeBaseScore != ''">AND time_base_score = #{timeBaseScore}</if>
+            <if test="maxWaitTime != null and maxWaitTime != ''">AND max_wait_time = #{maxWaitTime}</if>
+            <if test="maxWaitTimeWithNoAgent != null and maxWaitTimeWithNoAgent != ''">AND max_wait_time_with_no_agent = #{maxWaitTimeWithNoAgent}</if>
+            <if test="tierRulesApply != null and tierRulesApply != ''">AND tier_rules_apply = #{tierRulesApply}</if>
+            <if test="discardAbandonedAfter != null and discardAbandonedAfter != ''">AND discard_abandoned_after = #{discardAbandonedAfter}</if>
+            <if test="abandonedResumeAllowed != null and abandonedResumeAllowed != ''">AND abandoned_resume_allowed = #{abandonedResumeAllowed}</if>
+            <if test="enabled != null and enabled != ''">AND enabled = #{enabled}</if>
+            <if test="remark != null and remark != ''">AND remark = #{remark}</if>
+        </where>
+        order by 1
+    </select>
+    <select id="selectTPbxQueueById" parameterType="String" resultMap="TPbxQueueResult">
+        <include refid="selectVo"/> where id = #{id}
+    </select>
+    <insert id="insertTPbxQueue" parameterType="TPbxQueue">
+        insert into t_pbx_queue
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="strategy != null">strategy,</if>
+            <if test="mohSound != null">moh_sound,</if>
+            <if test="timeBaseScore != null">time_base_score,</if>
+            <if test="maxWaitTime != null">max_wait_time,</if>
+            <if test="maxWaitTimeWithNoAgent != null">max_wait_time_with_no_agent,</if>
+            <if test="tierRulesApply != null">tier_rules_apply,</if>
+            <if test="discardAbandonedAfter != null">discard_abandoned_after,</if>
+            <if test="abandonedResumeAllowed != null">abandoned_resume_allowed,</if>
+            <if test="enabled != null">enabled,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="strategy != null">#{strategy},</if>
+            <if test="mohSound != null">#{mohSound},</if>
+            <if test="timeBaseScore != null">#{timeBaseScore},</if>
+            <if test="maxWaitTime != null">#{maxWaitTime},</if>
+            <if test="maxWaitTimeWithNoAgent != null">#{maxWaitTimeWithNoAgent},</if>
+            <if test="tierRulesApply != null">#{tierRulesApply},</if>
+            <if test="discardAbandonedAfter != null">#{discardAbandonedAfter},</if>
+            <if test="abandonedResumeAllowed != null">#{abandonedResumeAllowed},</if>
+            <if test="enabled != null">#{enabled},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+    <update id="updateTPbxQueue" parameterType="TPbxQueue">
+        update t_pbx_queue
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="strategy != null">strategy = #{strategy},</if>
+            <if test="mohSound != null">moh_sound = #{mohSound},</if>
+            <if test="timeBaseScore != null">time_base_score = #{timeBaseScore},</if>
+            <if test="maxWaitTime != null">max_wait_time = #{maxWaitTime},</if>
+            <if test="maxWaitTimeWithNoAgent != null">max_wait_time_with_no_agent = #{maxWaitTimeWithNoAgent},</if>
+            <if test="tierRulesApply != null">tier_rules_apply = #{tierRulesApply},</if>
+            <if test="discardAbandonedAfter != null">discard_abandoned_after = #{discardAbandonedAfter},</if>
+            <if test="abandonedResumeAllowed != null">abandoned_resume_allowed = #{abandonedResumeAllowed},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <delete id="deleteTPbxQueueById" parameterType="String">delete from t_pbx_queue where id = #{id}</delete>
+    <delete id="deleteTPbxQueueByIds" parameterType="String">
+        delete from t_pbx_queue where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+</mapper>

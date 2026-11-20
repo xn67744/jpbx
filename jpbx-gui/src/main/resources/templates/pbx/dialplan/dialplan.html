@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head><th:block th:include="include :: header('拨号计划列表')" /></head>
+<body class="gray-bg">
+<div class="container-div">
+  <div class="row">
+    <div class="btn-group-sm" id="toolbar" role="group">
+      <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="pbx:dialplan:add"><i class="fa fa-plus"></i> 添加</a>
+      <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="pbx:dialplan:edit"><i class="fa fa-edit"></i> 修改</a>
+      <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="pbx:dialplan:remove"><i class="fa fa-remove"></i> 删除</a>
+    </div>
+    <div class="col-sm-12 select-table table-striped"><table id="bootstrap-table"></table></div>
+  </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+var prefix = ctx + "pbx/dialplan";
+$(function() {
+  $.table.init({
+    url: prefix + "/list",
+    createUrl: prefix + "/add",
+    updateUrl: prefix + "/edit/{id}",
+    removeUrl: prefix + "/remove",
+    modalName: "拨号计划",
+    columns: [
+      {checkbox: true},
+      {field: 'id', visible: false},
+      {field: 'name', title: '名称'},
+      {field: 'context', title: '上下文'},
+      {field: 'conditionField', title: '条件字段'},
+      {field: 'conditionExpr', title: '表达式'},
+      {field: 'sortOrder', title: '排序'},
+      {field: 'enabled', title: '启用'},
+      {field: 'remark', title: '备注'}
+    ]
+  });
+});
+</script>
+</body></html>

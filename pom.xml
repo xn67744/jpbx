@@ -14,7 +14,12 @@
         <av.version>0.0.1-SNAPSHOT</av.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <java.version>21</java.version>
+        <maven.compiler.release>21</maven.compiler.release>
+        <!-- Spring Framework 5.3.x 最新补丁版，覆盖 Boot 2.5.15 自带的 5.3.27，解决 JDK21 下 CGLIB/ASM 兼容 -->
+        <spring-framework.version>5.3.39</spring-framework.version>
+        <!-- Boot 2.5.15 管理的 Lombok 1.18.22 不识别 class file 65，此处强制覆盖 -->
+        <lombok.version>1.18.36</lombok.version>
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
         <shiro.version>1.13.0</shiro.version>
         <thymeleaf.extras.shiro.version>2.1.0</thymeleaf.extras.shiro.version>
@@ -34,7 +39,16 @@
     <!-- 依赖声明 -->
     <dependencyManagement>
         <dependencies>
-        
+
+            <!-- Spring Framework BOM：必须声明在 spring-boot-dependencies 之前（导入型 BOM 先声明者生效） -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${spring-framework.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <!-- SpringBoot的依赖配置-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -42,6 +56,14 @@
                 <version>2.5.15</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- Lombok：显式声明以覆盖 Boot BOM 中的旧版本 -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>provided</scope>
             </dependency>
             
             <!-- 阿里数据库连接池 -->
@@ -221,11 +243,18 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <release>${maven.compiler.release}</release>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                    <parameters>true</parameters>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>

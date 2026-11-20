@@ -3,72 +3,92 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>登录JPBX系统</title>
-    <meta name="description" content="JPBX后台管理框架">
-    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
-    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
-    <link href="../static/css/style.min.css" th:href="@{/css/style.min.css}" rel="stylesheet"/>
-    <link href="../static/css/login.min.css" th:href="@{/css/login.min.css}" rel="stylesheet"/>
-    <link href="../static/av/css/av-ui.css" th:href="@{/av/css/av-ui.css?v=4.7.8}" rel="stylesheet"/>
-    <!-- 360浏览器急速模式 -->
+    <title>登录 - JPBX FreeSWITCH 管理平台</title>
+    <meta name="description" content="JPBX —— FreeSWITCH 图形化配置与运维平台">
     <meta name="renderer" content="webkit">
-    <!-- 避免IE使用兼容模式 -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="shortcut icon" href="../static/favicon.ico" th:href="@{favicon.ico}"/>
-    <style type="text/css">label.error { position:inherit;  }</style>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}"/>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/animate.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/style.min.css}" rel="stylesheet"/>
+    <link th:href="@{/av/css/av-ui.css?v=4.7.8}" rel="stylesheet"/>
+    <link th:href="@{/av/css/pbx-theme.css?v=20261119b}" rel="stylesheet"/>
+    <style type="text/css">label.error { position: inherit; }</style>
     <script>
-        if(window.top!==window.self){alert('未登录或登录超时。请重新登录');window.top.location=window.location};
+        if (window.top !== window.self) { alert('未登录或登录超时。请重新登录'); window.top.location = window.location; }
     </script>
 </head>
-<body class="signin">
-    <div class="signinpanel">
-        <div class="row">
-            <div class="col-sm-7">
-                <div class="signin-info">
-                    <div class="logopanel m-b">
-                        <h1><img alt="[ JPBX ]" src="../static/av.png" th:src="@{/ruoyi.png}"></h1>
-                    </div>
-                    <div class="m-b"></div>
-                    <h4>欢迎使用 <strong>JPBX 后台管理系统</strong></h4>
-                    <strong th:if="${isAllowRegister}">还没有账号？ <a th:href="@{/register}">立即注册&raquo;</a></strong>
-                </div>
-            </div>
-            <div class="col-sm-5">
-                <form id="signupForm" autocomplete="off">
-                    <h4 class="no-margins">登录：</h4>
-                    <input type="text"     name="username" class="form-control uname"     placeholder="用户名" value="admin"    />
-                    <input type="password" name="password" class="form-control pword"     placeholder="密码"   value="admin123" />
-					<div class="row m-t" th:if="${captchaEnabled==true}">
-						<div class="col-xs-6">
-						    <input type="text" name="validateCode" class="form-control code" placeholder="验证码" maxlength="5" />
-						</div>
-						<div class="col-xs-6">
-							<a href="javascript:void(0);" title="点击更换验证码">
-								<img th:src="@{/captcha/captchaImage(type=${captchaType})}" class="imgcode" width="85%"/>
-							</a>
-						</div>
-					</div>
-                    <div class="checkbox-custom" th:if="${isRemembered}" th:classappend="${captchaEnabled==false} ? 'm-t'">
-				        <input type="checkbox" id="rememberme" name="rememberme"> <label for="rememberme">记住我</label>
-				    </div>
-                    <button class="btn btn-success btn-block" id="btnSubmit" data-loading="正在验证登录，请稍候...">登录</button>
-                </form>
+<body class="pbx-login">
+<div class="pbx-login-wrap">
+
+    <div class="pbx-login-brand">
+        <div class="pbx-brand-row">
+            <img th:src="@{/img/logo/jpbx-logo-512.png}" src="../static/img/logo/jpbx-logo-512.png" alt="JPBX">
+            <div>
+                <div class="pbx-brand-name">JPBX</div>
+                <div class="pbx-brand-ver">FreeSWITCH 管理平台 · v[[${version}]]</div>
             </div>
         </div>
-        <div class="signup-footer">
-            <div class="pull-left">
-                Copyright © 2018-2023 ruoyi.vip All Rights Reserved. <br>
+        <h2>让每一通电话都清晰可控</h2>
+        <p>基于 mod_xml_curl 动态下发配置，配合 ESL 热生效，分机、网关、拨号方案、IVR、队列、会议室与语音留言全部在浏览器里完成配置，常规变更无需重启 FreeSWITCH。</p>
+        <ul>
+            <li><i class="fa fa-check-circle"></i> 配置即生效：保存后自动 reloadxml / reloadacl</li>
+            <li><i class="fa fa-check-circle"></i> 全量话务：路由、DID、IVR、队列、会议一体管理</li>
+            <li><i class="fa fa-check-circle"></i> 实时运维：通道、注册、模块与 ESL 控制台</li>
+        </ul>
+    </div>
+
+    <div class="pbx-login-panel">
+        <div class="pbx-login-card">
+            <h3>登录</h3>
+            <div class="pbx-login-tip">请使用管理员账号进入配置台</div>
+
+            <form id="signupForm" autocomplete="off">
+                <input type="text" name="username" class="form-control uname" placeholder="用户名" value="admin"/>
+                <input type="password" name="password" class="form-control pword" placeholder="密码" value="admin123"/>
+
+                <div class="row" th:if="${captchaEnabled == true}" style="margin:0 -5px 14px;">
+                    <div class="col-xs-6" style="padding:0 5px;">
+                        <input type="text" name="validateCode" class="form-control code" placeholder="验证码" maxlength="5" style="margin-bottom:0;">
+                    </div>
+                    <div class="col-xs-6" style="padding:0 5px;">
+                        <a href="javascript:void(0);" title="点击更换验证码">
+                            <img th:src="@{/captcha/captchaImage(type=${captchaType})}" class="imgcode" alt="验证码"/>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="checkbox-custom" th:if="${isRemembered}" style="margin-bottom:14px;">
+                    <input type="checkbox" id="rememberme" name="rememberme">
+                    <label for="rememberme">记住我</label>
+                </div>
+
+                <button class="btn btn-primary btn-block" id="btnSubmit" data-loading="正在验证登录，请稍候...">登 录</button>
+            </form>
+
+            <div th:if="${isAllowRegister}" style="margin-top:14px;font-size:13px;color:#5B6675;">
+                还没有账号？<a th:href="@{/register}">立即注册</a>
+            </div>
+
+            <div class="pbx-login-foot">
+                JPBX · FreeSWITCH 图形化管理平台<br>Copyright © 2026 JPBX
             </div>
         </div>
     </div>
-<script th:inline="javascript"> var ctx = [[@{/}]]; var captchaType = [[${captchaType}]]; var captchaEnabled = [[${captchaEnabled}]];</script>
+</div>
+
+<script th:inline="javascript">
+    var ctx = [[@{/}]];
+    var captchaType = [[${captchaType}]];
+    var captchaEnabled = [[${captchaEnabled}]];
+</script>
 <!--[if lte IE 8]><script>window.location.href=ctx+'html/ie.html';</script><![endif]-->
-<!-- 全局js -->
-<script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
-<script src="../static/ajax/libs/validate/jquery.validate.min.js" th:src="@{/ajax/libs/validate/jquery.validate.min.js}"></script>
-<script src="../static/ajax/libs/layer/layer.min.js" th:src="@{/ajax/libs/layer/layer.min.js}"></script>
-<script src="../static/ajax/libs/blockUI/jquery.blockUI.js" th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
-<script src="../static/av/js/av-ui.js" th:src="@{/av/js/av-ui.js?v=4.7.8}"></script>
-<script src="../static/av/login.js" th:src="@{/av/login.js}"></script>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/ajax/libs/validate/jquery.validate.min.js}"></script>
+<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+<script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+<script th:src="@{/av/js/av-ui.js?v=4.7.8}"></script>
+<script th:src="@{/av/login.js}"></script>
 </body>
 </html>

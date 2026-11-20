@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxTierMapper">
+    <resultMap type="TPbxTier" id="TPbxTierResult">
+        <result property="id" column="id" />
+        <result property="queueName" column="queue_name" />
+        <result property="agentName" column="agent_name" />
+        <result property="level" column="level" />
+        <result property="position" column="position" />
+    </resultMap>
+    <sql id="selectVo">select id, queue_name, agent_name, level, position from t_pbx_tier</sql>
+    <select id="selectTPbxTierList" parameterType="TPbxTier" resultMap="TPbxTierResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="id != null and id != ''">AND id = #{id}</if>
+            <if test="queueName != null and queueName != ''">AND queue_name = #{queueName}</if>
+            <if test="agentName != null and agentName != ''">AND agent_name = #{agentName}</if>
+            <if test="level != null and level != ''">AND level = #{level}</if>
+            <if test="position != null and position != ''">AND position = #{position}</if>
+        </where>
+        order by 1
+    </select>
+    <select id="selectTPbxTierById" parameterType="String" resultMap="TPbxTierResult">
+        <include refid="selectVo"/> where id = #{id}
+    </select>
+    <insert id="insertTPbxTier" parameterType="TPbxTier">
+        insert into t_pbx_tier
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="queueName != null">queue_name,</if>
+            <if test="agentName != null">agent_name,</if>
+            <if test="level != null">level,</if>
+            <if test="position != null">position,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="queueName != null">#{queueName},</if>
+            <if test="agentName != null">#{agentName},</if>
+            <if test="level != null">#{level},</if>
+            <if test="position != null">#{position},</if>
+        </trim>
+    </insert>
+    <update id="updateTPbxTier" parameterType="TPbxTier">
+        update t_pbx_tier
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="queueName != null">queue_name = #{queueName},</if>
+            <if test="agentName != null">agent_name = #{agentName},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="position != null">position = #{position},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <delete id="deleteTPbxTierById" parameterType="String">delete from t_pbx_tier where id = #{id}</delete>
+    <delete id="deleteTPbxTierByIds" parameterType="String">
+        delete from t_pbx_tier where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+</mapper>

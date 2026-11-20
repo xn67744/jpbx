@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxDialplanActionMapper">
+    <resultMap type="TPbxDialplanAction" id="TPbxDialplanActionResult">
+        <result property="id" column="id" />
+        <result property="dialplanId" column="dialplan_id" />
+        <result property="application" column="application" />
+        <result property="data" column="data" />
+        <result property="inlineFlag" column="inline_flag" />
+        <result property="sortOrder" column="sort_order" />
+    </resultMap>
+    <sql id="selectVo">select id, dialplan_id, application, data, inline_flag, sort_order from t_pbx_dialplan_action</sql>
+    <select id="selectTPbxDialplanActionList" parameterType="TPbxDialplanAction" resultMap="TPbxDialplanActionResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="id != null and id != ''">AND id = #{id}</if>
+            <if test="dialplanId != null and dialplanId != ''">AND dialplan_id = #{dialplanId}</if>
+            <if test="application != null and application != ''">AND application = #{application}</if>
+            <if test="data != null and data != ''">AND data = #{data}</if>
+            <if test="inlineFlag != null and inlineFlag != ''">AND inline_flag = #{inlineFlag}</if>
+            <if test="sortOrder != null and sortOrder != ''">AND sort_order = #{sortOrder}</if>
+        </where>
+        order by 1
+    </select>
+    <select id="selectTPbxDialplanActionById" parameterType="String" resultMap="TPbxDialplanActionResult">
+        <include refid="selectVo"/> where id = #{id}
+    </select>
+    <insert id="insertTPbxDialplanAction" parameterType="TPbxDialplanAction">
+        insert into t_pbx_dialplan_action
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="dialplanId != null">dialplan_id,</if>
+            <if test="application != null">application,</if>
+            <if test="data != null">data,</if>
+            <if test="inlineFlag != null">inline_flag,</if>
+            <if test="sortOrder != null">sort_order,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="dialplanId != null">#{dialplanId},</if>
+            <if test="application != null">#{application},</if>
+            <if test="data != null">#{data},</if>
+            <if test="inlineFlag != null">#{inlineFlag},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+        </trim>
+    </insert>
+    <update id="updateTPbxDialplanAction" parameterType="TPbxDialplanAction">
+        update t_pbx_dialplan_action
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dialplanId != null">dialplan_id = #{dialplanId},</if>
+            <if test="application != null">application = #{application},</if>
+            <if test="data != null">data = #{data},</if>
+            <if test="inlineFlag != null">inline_flag = #{inlineFlag},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <delete id="deleteTPbxDialplanActionById" parameterType="String">delete from t_pbx_dialplan_action where id = #{id}</delete>
+    <delete id="deleteTPbxDialplanActionByIds" parameterType="String">
+        delete from t_pbx_dialplan_action where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+    <delete id="deleteByDialplanId" parameterType="String">delete from t_pbx_dialplan_action where dialplan_id = #{dialplanId}</delete>
+</mapper>

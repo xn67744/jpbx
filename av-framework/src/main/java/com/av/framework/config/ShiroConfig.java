@@ -295,9 +295,8 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/login", "anon,captchaValidate");
         // 注册相关
         filterChainDefinitionMap.put("/register", "anon,captchaValidate");
-        //api取消认证
+        // FreeSWITCH xml_curl 回调（另有 token/IP 校验）
         filterChainDefinitionMap.put("/pbx/api/**", "anon");
-        filterChainDefinitionMap.put("/pbx/route/**", "anon");
         // 系统权限列表
         // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
 

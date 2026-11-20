@@ -14,16 +14,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="username"    column="username"    />
         <result property="password"    column="password"    />
         <result property="type"    column="type"    />
+        <result property="profile" column="profile" />
+        <result property="proxy" column="proxy" />
+        <result property="fromUser" column="from_user" />
+        <result property="fromDomain" column="from_domain" />
+        <result property="expireSeconds" column="expire_seconds" />
+        <result property="enabled" column="enabled" />
+        <result property="selected" column="selected" />
     </resultMap>
 
     <sql id="selectTPbxGatewayVo">
-        select id, name, realm, register, transport, retry_seconds, username, password, type
+        select id, name, realm, register, transport, retry_seconds, username, password, type,
+               profile, proxy, from_user, from_domain, expire_seconds, enabled
         <if test="routeId != null and routeId != ''">
         , CASE
         WHEN EXISTS (
             SELECT 1
-            FROM "public"."t_pbx_route" r
-            WHERE ',' || r.gateway_id || ',' LIKE '%,' || r.id || ',%'
+            FROM t_pbx_route r
+            WHERE (',' || COALESCE(r.gateway_id, '') || ',') LIKE ('%,' || t_pbx_gateway.id || ',%')
             AND r.id = #{routeId}
         ) THEN 1
         ELSE 0
@@ -59,6 +67,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="username != null">username,</if>
             <if test="password != null">password,</if>
             <if test="type != null">type,</if>
+            <if test="profile != null">profile,</if>
+            <if test="proxy != null">proxy,</if>
+            <if test="fromUser != null">from_user,</if>
+            <if test="fromDomain != null">from_domain,</if>
+            <if test="expireSeconds != null">expire_seconds,</if>
+            <if test="enabled != null">enabled,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -70,6 +84,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="username != null">#{username},</if>
             <if test="password != null">#{password},</if>
             <if test="type != null">#{type},</if>
+            <if test="profile != null">#{profile},</if>
+            <if test="proxy != null">#{proxy},</if>
+            <if test="fromUser != null">#{fromUser},</if>
+            <if test="fromDomain != null">#{fromDomain},</if>
+            <if test="expireSeconds != null">#{expireSeconds},</if>
+            <if test="enabled != null">#{enabled},</if>
          </trim>
     </insert>
 
@@ -84,6 +104,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="username != null">username = #{username},</if>
             <if test="password != null">password = #{password},</if>
             <if test="type != null">type = #{type},</if>
+            <if test="profile != null">profile = #{profile},</if>
+            <if test="proxy != null">proxy = #{proxy},</if>
+            <if test="fromUser != null">from_user = #{fromUser},</if>
+            <if test="fromDomain != null">from_domain = #{fromDomain},</if>
+            <if test="expireSeconds != null">expire_seconds = #{expireSeconds},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
         </trim>
         where id = #{id}
     </update>

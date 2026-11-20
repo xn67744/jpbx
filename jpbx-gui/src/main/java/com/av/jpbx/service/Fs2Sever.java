@@ -11,46 +11,42 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * @author nan.xie
- * @create 2021/12/6 11:20
- * @desc
- **/
+ * 启动并保持 ESL 连接。
+ */
 @Slf4j
 @Service("freeswitch")
 @Order(value = 5)
 public class Fs2Sever implements CommandLineRunner {
 
-
     @Autowired
     private FSConfigure fsConfigure;
-
 
     @Autowired
     private EslListenerServer eslServer;
 
+    @Autowired
+    private FsEslClient fsEslClient;
+
+    private final AtomicBoolean keepAliveStarted = new AtomicBoolean(false);
 
     @Async
     @Override
     public void run(String... arg0) {
-        /**
-         * 1、判断需要对接加载哪些服务
-         * 2、启动客户端的端口连接（TCP,UDP,WS）
-         */
         try {
             connectServer();
-        }catch(Exception e){
-            log.error("****************启动**************** ESL 服务失败！");
-            e.printStackTrace();
-        }finally {
+        } catch (Exception e) {
+            log.error("启动 ESL 服务失败", e);
+        } finally {
             keepAlive();
         }
-
     }
 
     public void connectServer() {
-        eslServer.start(fsConfigure.getEslHost(), fsConfigure.getEslInBoundPort(), fsConfigure.getEslpwd(), fsConfigure.getEslOutBoundPort());
+        eslServer.start(fsConfigure.getEslHost(), fsConfigure.getEslInBoundPort(),
+                fsConfigure.getEslpwd(), fsConfigure.getEslOutBoundPort());
     }
 
     public void releaseServer() {
@@ -58,20 +54,23 @@ public class Fs2Sever implements CommandLineRunner {
     }
 
     public void keepAlive() {
-        ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(1);
-        threadPool.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                if(null == EslListenerServer.client || !EslListenerServer.client.canSend()) {
-                    log.warn("服务断开，正在重连");
-                    try {
-                        eslServer.start(fsConfigure.getEslHost(), fsConfigure.getEslInBoundPort(), fsConfigure.getEslpwd(), fsConfigure.getEslOutBoundPort());
-                    }catch(Exception e){
-                        e.printStackTrace();
-                        log.error("连接失败");
-                    }
+        if (!keepAliveStarted.compareAndSet(false, true)) {
+            return;
+        }
+        ScheduledExecutorService threadPool = Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread t = new Thread(r, "fs-esl-keepalive");
+            t.setDaemon(true);
+            return t;
+        });
+        threadPool.scheduleAtFixedRate(() -> {
+            if (!fsEslClient.isConnected()) {
+                log.warn("ESL 断开，正在重连...");
+                try {
+                    connectServer();
+                } catch (Exception e) {
+                    log.error("ESL 重连失败: {}", e.getMessage());
                 }
             }
-        }, 3, 60, TimeUnit.SECONDS); // 3s 之后执行
+        }, 3, 60, TimeUnit.SECONDS);
     }
 }

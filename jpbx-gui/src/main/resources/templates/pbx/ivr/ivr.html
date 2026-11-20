@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head><th:block th:include="include :: header('IVR菜单列表')" /></head>
+<body class="gray-bg">
+<div class="container-div">
+  <div class="row">
+    <div class="btn-group-sm" id="toolbar" role="group">
+      <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="pbx:ivr:add"><i class="fa fa-plus"></i> 添加</a>
+      <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="pbx:ivr:edit"><i class="fa fa-edit"></i> 修改</a>
+      <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="pbx:ivr:remove"><i class="fa fa-remove"></i> 删除</a>
+    </div>
+    <div class="col-sm-12 select-table table-striped"><table id="bootstrap-table"></table></div>
+  </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+var prefix = ctx + "pbx/ivr";
+var editFlag = [[${@permission.hasPermi('pbx:ivr:edit')}]];
+var removeFlag = [[${@permission.hasPermi('pbx:ivr:remove')}]];
+$(function() {
+  $.table.init({
+    url: prefix + "/list",
+    createUrl: prefix + "/add",
+    updateUrl: prefix + "/edit/{id}",
+    removeUrl: prefix + "/remove",
+    modalName: "IVR菜单",
+    columns: [
+      {checkbox: true},
+      {field: 'id', visible: false},
+      {field: 'name', title: '名称'},
+      {field: 'remark', title: '备注'},
+      {title: '操作', align: 'center', formatter: function(v,r,i){
+        return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + r.id + '\')"><i class="fa fa-edit"></i>编辑</a> '
+             + '<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + r.id + '\')"><i class="fa fa-remove"></i>删除</a>';
+      }}
+    ]
+  });
+});
+</script>
+</body></html>

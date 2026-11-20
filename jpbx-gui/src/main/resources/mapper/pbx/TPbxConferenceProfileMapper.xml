@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxConferenceProfileMapper">
+    <resultMap type="TPbxConferenceProfile" id="TPbxConferenceProfileResult">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="rate" column="rate" />
+        <result property="interval" column="interval" />
+        <result property="energyLevel" column="energy_level" />
+        <result property="callerControls" column="caller_controls" />
+        <result property="paramsJson" column="params_json" />
+        <result property="remark" column="remark" />
+    </resultMap>
+    <sql id="selectVo">select id, name, rate, interval, energy_level, caller_controls, params_json, remark from t_pbx_conference_profile</sql>
+    <select id="selectTPbxConferenceProfileList" parameterType="TPbxConferenceProfile" resultMap="TPbxConferenceProfileResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="id != null and id != ''">AND id = #{id}</if>
+            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="rate != null and rate != ''">AND rate = #{rate}</if>
+            <if test="interval != null and interval != ''">AND interval = #{interval}</if>
+            <if test="energyLevel != null and energyLevel != ''">AND energy_level = #{energyLevel}</if>
+            <if test="callerControls != null and callerControls != ''">AND caller_controls = #{callerControls}</if>
+            <if test="paramsJson != null and paramsJson != ''">AND params_json = #{paramsJson}</if>
+            <if test="remark != null and remark != ''">AND remark = #{remark}</if>
+        </where>
+        order by 1
+    </select>
+    <select id="selectTPbxConferenceProfileById" parameterType="String" resultMap="TPbxConferenceProfileResult">
+        <include refid="selectVo"/> where id = #{id}
+    </select>
+    <insert id="insertTPbxConferenceProfile" parameterType="TPbxConferenceProfile">
+        insert into t_pbx_conference_profile
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="rate != null">rate,</if>
+            <if test="interval != null">interval,</if>
+            <if test="energyLevel != null">energy_level,</if>
+            <if test="callerControls != null">caller_controls,</if>
+            <if test="paramsJson != null">params_json,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="rate != null">#{rate},</if>
+            <if test="interval != null">#{interval},</if>
+            <if test="energyLevel != null">#{energyLevel},</if>
+            <if test="callerControls != null">#{callerControls},</if>
+            <if test="paramsJson != null">#{paramsJson},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+    <update id="updateTPbxConferenceProfile" parameterType="TPbxConferenceProfile">
+        update t_pbx_conference_profile
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="rate != null">rate = #{rate},</if>
+            <if test="interval != null">interval = #{interval},</if>
+            <if test="energyLevel != null">energy_level = #{energyLevel},</if>
+            <if test="callerControls != null">caller_controls = #{callerControls},</if>
+            <if test="paramsJson != null">params_json = #{paramsJson},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <delete id="deleteTPbxConferenceProfileById" parameterType="String">delete from t_pbx_conference_profile where id = #{id}</delete>
+    <delete id="deleteTPbxConferenceProfileByIds" parameterType="String">
+        delete from t_pbx_conference_profile where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxAclListMapper">
+    <resultMap type="TPbxAclList" id="TPbxAclListResult">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="defaultType" column="default_type" />
+        <result property="remark" column="remark" />
+    </resultMap>
+    <sql id="selectVo">select id, name, default_type, remark from t_pbx_acl_list</sql>
+    <select id="selectTPbxAclListList" parameterType="TPbxAclList" resultMap="TPbxAclListResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="id != null and id != ''">AND id = #{id}</if>
+            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="defaultType != null and defaultType != ''">AND default_type = #{defaultType}</if>
+            <if test="remark != null and remark != ''">AND remark = #{remark}</if>
+        </where>
+        order by 1
+    </select>
+    <select id="selectTPbxAclListById" parameterType="String" resultMap="TPbxAclListResult">
+        <include refid="selectVo"/> where id = #{id}
+    </select>
+    <insert id="insertTPbxAclList" parameterType="TPbxAclList">
+        insert into t_pbx_acl_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="defaultType != null">default_type,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="defaultType != null">#{defaultType},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+    <update id="updateTPbxAclList" parameterType="TPbxAclList">
+        update t_pbx_acl_list
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="defaultType != null">default_type = #{defaultType},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <delete id="deleteTPbxAclListById" parameterType="String">delete from t_pbx_acl_list where id = #{id}</delete>
+    <delete id="deleteTPbxAclListByIds" parameterType="String">
+        delete from t_pbx_acl_list where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+</mapper>

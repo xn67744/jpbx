@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="freeswitch/xml">
+  <section name="configuration">
+    <configuration name="conference.conf" description="Audio Conference">
+      <advertise>
+#if($conferences)
+#foreach($c in $conferences)
+        <room name="${c.name}" status="FreeSWITCH"/>
+#end
+#end
+      </advertise>
+      <caller-controls>
+        <group name="default">
+          <control action="mute" digits="0"/>
+          <control action="deaf mute" digits="*"/>
+          <control action="energy up" digits="9"/>
+          <control action="energy dn" digits="8"/>
+          <control action="energy equ" digits="7"/>
+          <control action="vol talk up" digits="3"/>
+          <control action="vol talk zero" digits="2"/>
+          <control action="vol talk dn" digits="1"/>
+          <control action="vol listen up" digits="6"/>
+          <control action="vol listen zero" digits="5"/>
+          <control action="vol listen dn" digits="4"/>
+          <control action="hangup" digits="#"/>
+        </group>
+      </caller-controls>
+      <profiles>
+#if($profiles && $profiles.size() > 0)
+#foreach($p in $profiles)
+        <profile name="${p.name}">
+          <param name="rate" value="#if($p.rate)${p.rate}#{else}8000#end"/>
+          <param name="interval" value="#if($p.interval)${p.interval}#{else}20#end"/>
+          <param name="energy-level" value="#if($p.energyLevel)${p.energyLevel}#{else}300#end"/>
+          <param name="caller-controls" value="#if($p.callerControls)${p.callerControls}#{else}default#end"/>
+          <param name="comfort-noise" value="true"/>
+          <param name="muted-sound" value="conference/conf-muted.wav"/>
+          <param name="unmuted-sound" value="conference/conf-unmuted.wav"/>
+          <param name="alone-sound" value="conference/conf-alone.wav"/>
+          <param name="enter-sound" value="tone_stream://%(200,0,500,600,700)"/>
+          <param name="exit-sound" value="tone_stream://%(500,0,300,200,100,50,25)"/>
+          <param name="kicked-sound" value="conference/conf-kicked.wav"/>
+          <param name="locked-sound" value="conference/conf-locked.wav"/>
+          <param name="is-locked-sound" value="conference/conf-is-locked.wav"/>
+          <param name="is-unlocked-sound" value="conference/conf-is-unlocked.wav"/>
+          <param name="pin-sound" value="conference/conf-pin.wav"/>
+          <param name="bad-pin-sound" value="conference/conf-bad-pin.wav"/>
+        </profile>
+#end
+#else
+        <profile name="default">
+          <param name="rate" value="8000"/>
+          <param name="interval" value="20"/>
+          <param name="energy-level" value="300"/>
+          <param name="caller-controls" value="default"/>
+          <param name="comfort-noise" value="true"/>
+          <param name="muted-sound" value="conference/conf-muted.wav"/>
+          <param name="unmuted-sound" value="conference/conf-unmuted.wav"/>
+          <param name="alone-sound" value="conference/conf-alone.wav"/>
+          <param name="enter-sound" value="tone_stream://%(200,0,500,600,700)"/>
+          <param name="exit-sound" value="tone_stream://%(500,0,300,200,100,50,25)"/>
+        </profile>
+#end
+      </profiles>
+    </configuration>
+  </section>
+</document>

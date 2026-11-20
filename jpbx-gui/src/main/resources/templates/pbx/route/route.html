@@ -124,6 +124,21 @@
                     visible: true
                 },
                 {
+                    field: 'destinationType',
+                    title: '目的地',
+                    visible: true,
+                    formatter: function(value, row, index) {
+                        if (!value) {
+                            return '';
+                        }
+                        var labels = {
+                            extension: '分机', ivr: 'IVR', queue: '队列', conference: '会议室',
+                            voicemail: '语音信箱', gateway: '中继', app: '自定义'
+                        };
+                        return (labels[value] || value) + (row.destinationValue ? ' → ' + row.destinationValue : '');
+                    }
+                },
+                {
                     field: 'calleeCheck',
                     title: '被叫检测',
                     visible: false

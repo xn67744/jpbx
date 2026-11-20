@@ -8,9 +8,9 @@
         <form class="form-horizontal m" id="form-user-add">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">呼叫号码：</label>
+                    <label class="col-sm-3 control-label is-required">呼叫号码：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="number" id="number" class="form-control" placeholder="请输入文本">
+                        <input type="text" name="number" id="number" class="form-control" placeholder="如 1001" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -22,13 +22,16 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">域（domain）：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="domain" id="domain" class="form-control" placeholder="请输入文本">
+                        <select name="domain" id="domain" class="form-control">
+                            <option th:each="d : ${domains}" th:value="${d.name}" th:text="${d.name}"
+                                    th:selected="${d.name == defaultDomain}"></option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">密码：</label>
+                    <label class="col-sm-3 control-label is-required">密码：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="password" id="password" class="form-control" placeholder="请输入文本">
+                        <input type="text" name="password" id="password" class="form-control" placeholder="SIP 注册密码" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -61,7 +64,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">账户等级：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="level" class="form-control" placeholder="请输入文本">
+                        <input type="number" name="level" class="form-control" placeholder="请输入数字" value="0">
                     </div>
                 </div>
             </div>

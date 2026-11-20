@@ -12,6 +12,8 @@
  Target Server Version : 140001 (140001)
  File Encoding         : 65001
 
+-- JPBX 统一初始化脚本（含系统表 + 业务表 + 菜单）
+
  Date: 02/02/2024 11:52:16
 */
 
@@ -324,16 +326,16 @@ COMMENT ON TABLE "public"."sys_dept" IS '部门表';
 -- ----------------------------
 -- Records of sys_dept
 -- ----------------------------
-INSERT INTO "public"."sys_dept" VALUES (100, 0, '0', '若依科技', 0, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
-INSERT INTO "public"."sys_dept" VALUES (101, 100, '0,100', '深圳总公司', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
-INSERT INTO "public"."sys_dept" VALUES (102, 100, '0,100', '长沙分公司', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
-INSERT INTO "public"."sys_dept" VALUES (103, 101, '0,100,101', '研发部门', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
-INSERT INTO "public"."sys_dept" VALUES (104, 101, '0,100,101', '市场部门', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
-INSERT INTO "public"."sys_dept" VALUES (105, 101, '0,100,101', '测试部门', 3, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
-INSERT INTO "public"."sys_dept" VALUES (106, 101, '0,100,101', '财务部门', 4, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
-INSERT INTO "public"."sys_dept" VALUES (107, 101, '0,100,101', '运维部门', 5, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
-INSERT INTO "public"."sys_dept" VALUES (108, 102, '0,100,102', '市场部门', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
-INSERT INTO "public"."sys_dept" VALUES (109, 102, '0,100,102', '财务部门', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
+INSERT INTO "public"."sys_dept" VALUES (100, 0, '0', 'JPBX 科技', 0, '管理员', '15888888888', 'admin@jpbx.local', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
+INSERT INTO "public"."sys_dept" VALUES (101, 100, '0,100', '深圳总公司', 1, '管理员', '15888888888', 'admin@jpbx.local', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
+INSERT INTO "public"."sys_dept" VALUES (102, 100, '0,100', '长沙分公司', 2, '管理员', '15888888888', 'admin@jpbx.local', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
+INSERT INTO "public"."sys_dept" VALUES (103, 101, '0,100,101', '研发部门', 1, '管理员', '15888888888', 'admin@jpbx.local', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
+INSERT INTO "public"."sys_dept" VALUES (104, 101, '0,100,101', '市场部门', 2, '管理员', '15888888888', 'admin@jpbx.local', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
+INSERT INTO "public"."sys_dept" VALUES (105, 101, '0,100,101', '测试部门', 3, '管理员', '15888888888', 'admin@jpbx.local', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
+INSERT INTO "public"."sys_dept" VALUES (106, 101, '0,100,101', '财务部门', 4, '管理员', '15888888888', 'admin@jpbx.local', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
+INSERT INTO "public"."sys_dept" VALUES (107, 101, '0,100,101', '运维部门', 5, '管理员', '15888888888', 'admin@jpbx.local', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
+INSERT INTO "public"."sys_dept" VALUES (108, 102, '0,100,102', '市场部门', 1, '管理员', '15888888888', 'admin@jpbx.local', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
+INSERT INTO "public"."sys_dept" VALUES (109, 102, '0,100,102', '财务部门', 2, '管理员', '15888888888', 'admin@jpbx.local', '0', '0', 'admin', '2024-02-01 08:33:26.688292', '', NULL);
 
 -- ----------------------------
 -- Table structure for sys_dict_data
@@ -545,7 +547,7 @@ COMMENT ON TABLE "public"."sys_menu" IS '菜单权限表';
 INSERT INTO "public"."sys_menu" VALUES (1, '系统管理', 0, 1, '#', '', 'M', 0, 1, '', 'fa fa-gear', 'admin', '2024-02-01 08:38:31.814779', '', NULL, '系统管理目录');
 INSERT INTO "public"."sys_menu" VALUES (2, '系统监控', 0, 2, '#', '', 'M', 0, 1, '', 'fa fa-video-camera', 'admin', '2024-02-01 08:38:31.825846', '', NULL, '系统监控目录');
 INSERT INTO "public"."sys_menu" VALUES (3, '系统工具', 0, 3, '#', '', 'M', 0, 1, '', 'fa fa-bars', 'admin', '2024-02-01 08:38:31.835851', '', NULL, '系统工具目录');
-INSERT INTO "public"."sys_menu" VALUES (4, '若依官网', 0, 4, 'http://ruoyi.vip', 'menuBlank', 'C', 0, 1, '', 'fa fa-location-arrow', 'admin', '2024-02-01 08:38:31.84588', '', NULL, '若依官网地址');
+INSERT INTO "public"."sys_menu" VALUES (4, '运维控制台', 0, 4, '/pbx/ops', '', 'C', 0, 1, '', 'fa fa-desktop', 'admin', '2024-02-01 08:38:31.8', '', NULL);
 INSERT INTO "public"."sys_menu" VALUES (100, '用户管理', 1, 1, '/system/user', '', 'C', 0, 1, 'system:user:view', 'fa fa-user-o', 'admin', '2024-02-01 08:38:31.86086', '', NULL, '用户管理菜单');
 INSERT INTO "public"."sys_menu" VALUES (101, '角色管理', 1, 2, '/system/role', '', 'C', 0, 1, 'system:role:view', 'fa fa-user-secret', 'admin', '2024-02-01 08:38:31.870864', '', NULL, '角色管理菜单');
 INSERT INTO "public"."sys_menu" VALUES (102, '菜单管理', 1, 3, '/system/menu', '', 'C', 0, 1, 'system:menu:view', 'fa fa-th-list', 'admin', '2024-02-01 08:38:31.881854', '', NULL, '菜单管理菜单');
@@ -650,9 +652,9 @@ COMMENT ON TABLE "public"."sys_notice" IS '通知公告表';
 -- ----------------------------
 -- Records of sys_notice
 -- ----------------------------
-INSERT INTO "public"."sys_notice" VALUES (1, '温馨提醒：2018-07-01 若依新版本发布啦', '2', '新版本内容', '0', 'admin', '2024-02-01 09:03:15.332133', '', NULL, '管理员');
-INSERT INTO "public"."sys_notice" VALUES (2, '维护通知：2018-07-01 若依系统凌晨维护', '1', '维护内容', '0', 'admin', '2024-02-01 09:03:15.342273', '', NULL, '管理员');
-INSERT INTO "public"."sys_notice" VALUES (3, '若依开源框架介绍', '1', '<p><span style=\"color: rgb(230, 0, 0);\">项目介绍</span></p><p><font color=\"#333333\">RuoYi开源项目是为企业用户定制的后台脚手架框架，为企业打造的一站式解决方案，降低企业开发成本，提升开发效率。主要包括用户管理、角色管理、部门管理、菜单管理、参数管理、字典管理、</font><span style=\"color: rgb(51, 51, 51);\">岗位管理</span><span style=\"color: rgb(51, 51, 51);\">、定时任务</span><span style=\"color: rgb(51, 51, 51);\">、</span><span style=\"color: rgb(51, 51, 51);\">服务监控、登录日志、操作日志、代码生成等功能。其中，还支持多数据源、数据权限、国际化、Redis缓存、Docker部署、滑动验证码、第三方认证登录、分布式事务、</span><font color=\"#333333\">分布式文件存储</font><span style=\"color: rgb(51, 51, 51);\">、分库分表处理等技术特点。</span></p><p><img src=\"https://foruda.gitee.com/images/1705030583977401651/5ed5db6a_1151004.png\" style=\"width: 64px;\"><br></p><p><span style=\"color: rgb(230, 0, 0);\">官网及演示</span></p><p><span style=\"color: rgb(51, 51, 51);\">若依官网地址：&nbsp;</span><a href=\"http://ruoyi.vip\" target=\"_blank\">http://ruoyi.vip</a><a href=\"http://ruoyi.vip\" target=\"_blank\"></a></p><p><span style=\"color: rgb(51, 51, 51);\">若依文档地址：&nbsp;</span><a href=\"http://doc.ruoyi.vip\" target=\"_blank\">http://doc.ruoyi.vip</a><br></p><p><span style=\"color: rgb(51, 51, 51);\">演示地址【不分离版】：&nbsp;</span><a href=\"http://demo.ruoyi.vip\" target=\"_blank\">http://demo.ruoyi.vip</a></p><p><span style=\"color: rgb(51, 51, 51);\">演示地址【分离版本】：&nbsp;</span><a href=\"http://vue.ruoyi.vip\" target=\"_blank\">http://vue.ruoyi.vip</a></p><p><span style=\"color: rgb(51, 51, 51);\">演示地址【微服务版】：&nbsp;</span><a href=\"http://cloud.ruoyi.vip\" target=\"_blank\">http://cloud.ruoyi.vip</a></p><p><span style=\"color: rgb(51, 51, 51);\">演示地址【移动端版】：&nbsp;</span><a href=\"http://h5.ruoyi.vip\" target=\"_blank\">http://h5.ruoyi.vip</a></p><p><br style=\"color: rgb(48, 49, 51); font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 12px;\"></p>', '0', 'admin', '2024-02-01 09:03:15.352157', '', NULL, '管理员');
+INSERT INTO "public"."sys_notice" VALUES (1, '配置变更提醒：保存后自动热生效', '2', 'JPBX 在保存配置后会自动执行 reloadxml / reloadacl，常规变更无需重启 FreeSWITCH。', '0', 'admin', '2024-02-01 09:03:15.332133', '', NULL, '管理员');
+INSERT INTO "public"."sys_notice" VALUES (2, '维护通知：计划内升级请提前备份配置', '1', '升级前请导出数据库与 /usr/local/freeswitch/conf 下的自定义配置，升级窗口建议安排在话务低谷。', '0', 'admin', '2024-02-01 09:03:15.342273', '', NULL, '管理员');
+INSERT INTO "public"."sys_notice" VALUES (3, 'JPBX 平台介绍', '1', '<p>JPBX 是面向 FreeSWITCH 的图形化配置与运维平台，覆盖呼叫账户、网关、拨号方案、IVR、队列、会议室、语音留言与实时运维。</p>', '0', 'admin', '2024-02-01 09:03:15.352157', '', NULL, '管理员');
 
 -- ----------------------------
 -- Table structure for sys_oper_log
@@ -683,11 +685,11 @@ COMMENT ON TABLE "public"."sys_oper_log" IS '操作日志记录';
 -- ----------------------------
 -- Records of sys_oper_log
 -- ----------------------------
-INSERT INTO "public"."sys_oper_log" VALUES (1, '重置密码', 2, 'com.ruoyi.web.controller.system.SysProfileController.resetPwd()', 'POST', 1, 'admin', '研发部门', '/system/user/profile/resetPwd', '127.0.0.1', '内网IP', '{"userId":["1"],"loginName":["admin"]}', '{"msg":"操作成功","code":0}', 0, NULL, '2024-02-01 18:20:13.103852', 93);
-INSERT INTO "public"."sys_oper_log" VALUES (2, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.changeStatus()', 'POST', 1, 'admin', '研发部门', '/system/role/changeStatus', '127.0.0.1', '内网IP', '{"roleId":["2"],"status":["1"]}', '{"msg":"操作成功","code":0}', 0, NULL, '2024-02-01 19:14:26.191785', 292);
-INSERT INTO "public"."sys_oper_log" VALUES (3, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.changeStatus()', 'POST', 1, 'admin', '研发部门', '/system/role/changeStatus', '127.0.0.1', '内网IP', '{"roleId":["2"],"status":["0"]}', '{"msg":"操作成功","code":0}', 0, NULL, '2024-02-01 19:14:28.927463', 15);
-INSERT INTO "public"."sys_oper_log" VALUES (4, '角色管理', 5, 'com.ruoyi.web.controller.system.SysRoleController.export()', 'POST', 1, 'admin', '研发部门', '/system/role/export', '127.0.0.1', '内网IP', '{"roleName":[""],"roleKey":[""],"status":[""],"params[beginTime]":[""],"params[endTime]":[""],"orderByColumn":["roleSort"],"isAsc":["asc"]}', '{"msg":"186a4d58-65a7-43c2-bbb1-01c6ad7c57cd_角色数据.xlsx","code":0}', 0, NULL, '2024-02-01 19:14:38.212781', 1638);
-INSERT INTO "public"."sys_oper_log" VALUES (5, '登录日志', 9, 'com.ruoyi.web.controller.monitor.SysLogininforController.clean()', 'POST', 1, 'admin', '研发部门', '/monitor/logininfor/clean', '127.0.0.1', '内网IP', '', '{"msg":"操作成功","code":0}', 0, NULL, '2024-02-01 19:21:41.048325', 25);
+INSERT INTO "public"."sys_oper_log" VALUES (1, '重置密码', 2, 'com.av.web.controller.system.SysProfileController.resetPwd()', 'POST', 1, 'admin', '研发部门', '/system/user/profile/resetPwd', '127.0.0.1', '内网IP', '{"userId":["1"],"loginName":["admin"]}', '{"msg":"操作成功","code":0}', 0, NULL, '2024-02-01 18:20:13.103852', 93);
+INSERT INTO "public"."sys_oper_log" VALUES (2, '角色管理', 2, 'com.av.web.controller.system.SysRoleController.changeStatus()', 'POST', 1, 'admin', '研发部门', '/system/role/changeStatus', '127.0.0.1', '内网IP', '{"roleId":["2"],"status":["1"]}', '{"msg":"操作成功","code":0}', 0, NULL, '2024-02-01 19:14:26.191785', 292);
+INSERT INTO "public"."sys_oper_log" VALUES (3, '角色管理', 2, 'com.av.web.controller.system.SysRoleController.changeStatus()', 'POST', 1, 'admin', '研发部门', '/system/role/changeStatus', '127.0.0.1', '内网IP', '{"roleId":["2"],"status":["0"]}', '{"msg":"操作成功","code":0}', 0, NULL, '2024-02-01 19:14:28.927463', 15);
+INSERT INTO "public"."sys_oper_log" VALUES (4, '角色管理', 5, 'com.av.web.controller.system.SysRoleController.export()', 'POST', 1, 'admin', '研发部门', '/system/role/export', '127.0.0.1', '内网IP', '{"roleName":[""],"roleKey":[""],"status":[""],"params[beginTime]":[""],"params[endTime]":[""],"orderByColumn":["roleSort"],"isAsc":["asc"]}', '{"msg":"186a4d58-65a7-43c2-bbb1-01c6ad7c57cd_角色数据.xlsx","code":0}', 0, NULL, '2024-02-01 19:14:38.212781', 1638);
+INSERT INTO "public"."sys_oper_log" VALUES (5, '登录日志', 9, 'com.av.web.controller.monitor.SysLogininforController.clean()', 'POST', 1, 'admin', '研发部门', '/monitor/logininfor/clean', '127.0.0.1', '内网IP', '', '{"msg":"操作成功","code":0}', 0, NULL, '2024-02-01 19:21:41.048325', 25);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -941,8 +943,8 @@ COMMENT ON TABLE "public"."sys_user" IS '用户信息表';
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO "public"."sys_user" VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '', '8e6d98b90472783cc73c17047ddccf36', '222222', '0', '0', '127.0.0.1', NULL, NULL, 'admin', '2024-02-01 08:33:27.003334', '', NULL, '测试员');
-INSERT INTO "public"."sys_user" VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', 'b23677ba8f76398a7dcbb7d00810d6eb', 'f4df7e', '0', '0', '127.0.0.1', '2024-02-02 02:41:54.737', '2024-02-01 18:20:13.685', 'admin', '2024-02-01 08:33:27.003334', '', '2024-02-02 02:41:54.125061', '管理员');
+INSERT INTO "public"."sys_user" VALUES (2, 105, 'ry', '管理员', '00', 'ry@qq.com', '15666666666', '1', '', '8e6d98b90472783cc73c17047ddccf36', '222222', '0', '0', '127.0.0.1', NULL, NULL, 'admin', '2024-02-01 08:33:27.003334', '', NULL, '测试员');
+INSERT INTO "public"."sys_user" VALUES (1, 103, 'admin', '管理员', '00', 'ry@163.com', '15888888888', '1', '', 'b23677ba8f76398a7dcbb7d00810d6eb', 'f4df7e', '0', '0', '127.0.0.1', '2024-02-02 02:41:54.737', '2024-02-01 18:20:13.685', 'admin', '2024-02-01 08:33:27.003334', '', '2024-02-02 02:41:54.125061', '管理员');
 
 -- ----------------------------
 -- Table structure for sys_user_online
@@ -1226,3 +1228,578 @@ ALTER TABLE "public"."sys_user_post" ADD CONSTRAINT "sys_user_post_pkey" PRIMARY
 -- Primary Key structure for table sys_user_role
 -- ----------------------------
 ALTER TABLE "public"."sys_user_role" ADD CONSTRAINT "sys_user_role_pkey" PRIMARY KEY ("user_id", "role_id");
+
+-- =============================================================================
+-- Part 2: PBX 业务表结构（原 pbx_schema.sql）
+-- =============================================================================
+
+-- JPBX FreeSWITCH 1.11 业务表结构 (PostgreSQL)
+-- 在 youpbx 库执行
+
+-- 系统配置
+CREATE TABLE IF NOT EXISTS t_pbx_sysconf (
+    id                varchar(64) PRIMARY KEY,
+    local_ip          varchar(64),
+    remote_ip         varchar(64),
+    external_port     varchar(16),
+    internal_port     varchar(16),
+    start_rtp_port    varchar(16),
+    end_rtp_port      varchar(16),
+    audio_code        varchar(128),
+    video_code        varchar(128),
+    frame_rate        varchar(32),
+    bit_rate          bigint,
+    ice_start         boolean DEFAULT false,
+    stun_address      varchar(128),
+    audio_record      boolean DEFAULT true,
+    video_record      boolean DEFAULT false,
+    audio_record_path varchar(256),
+    video_record_path varchar(256),
+    sound_file_path   varchar(256),
+    freeswitch_path   varchar(256),
+    freeswitch_log_path varchar(256),
+    ws_port           varchar(16),
+    wss_port          varchar(16),
+    cdr_db_info       varchar(512),
+    remark            varchar(500)
+);
+
+-- SIP 域名
+CREATE TABLE IF NOT EXISTS t_pbx_domain (
+    id          varchar(64) PRIMARY KEY,
+    name        varchar(128) NOT NULL UNIQUE,
+    parse       smallint DEFAULT 1,
+    alias       smallint DEFAULT 0,
+    enabled     smallint DEFAULT 1,
+    remark      varchar(500)
+);
+
+-- 分机
+CREATE TABLE IF NOT EXISTS t_pbx_user (
+    id          varchar(64) PRIMARY KEY,
+    name        varchar(128),
+    number      varchar(64) NOT NULL,
+    domain      varchar(128),
+    password    varchar(128),
+    type        int DEFAULT 0,
+    video       varchar(8) DEFAULT '1',
+    audio       varchar(8) DEFAULT '0',
+    level       int DEFAULT 0,
+    vm_password varchar(64),
+    toll_allow  varchar(128) DEFAULT 'domestic,international,local',
+    callgroup   varchar(64),
+    user_context varchar(64) DEFAULT 'default',
+    enabled     smallint DEFAULT 1,
+    remark      varchar(500)
+);
+CREATE INDEX IF NOT EXISTS idx_pbx_user_number ON t_pbx_user(number);
+CREATE INDEX IF NOT EXISTS idx_pbx_user_domain ON t_pbx_user(domain);
+
+-- 分组
+CREATE TABLE IF NOT EXISTS t_pbx_group (
+    id          varchar(64) PRIMARY KEY,
+    name        varchar(128) NOT NULL,
+    domain      varchar(128),
+    remark      varchar(500)
+);
+
+CREATE TABLE IF NOT EXISTS t_pbx_group_user (
+    id          varchar(64) PRIMARY KEY,
+    group_id    varchar(64) NOT NULL,
+    user_id     varchar(64) NOT NULL,
+    user_number varchar(64)
+);
+CREATE INDEX IF NOT EXISTS idx_pbx_group_user_gid ON t_pbx_group_user(group_id);
+
+-- 网关
+CREATE TABLE IF NOT EXISTS t_pbx_gateway (
+    id            varchar(64) PRIMARY KEY,
+    name          varchar(128),
+    realm         varchar(256),
+    register      int DEFAULT 0,
+    transport     varchar(16) DEFAULT 'udp',
+    retry_seconds int DEFAULT 30,
+    username      varchar(128),
+    password      varchar(128),
+    type          int DEFAULT 0,
+    profile       varchar(64) DEFAULT 'external',
+    proxy         varchar(256),
+    from_user     varchar(128),
+    from_domain   varchar(128),
+    expire_seconds int DEFAULT 600,
+    enabled       smallint DEFAULT 1,
+    remark        varchar(500)
+);
+
+-- 旧版路由（保留兼容，同时用于生成 dialplan）
+CREATE TABLE IF NOT EXISTS t_pbx_route (
+    id                varchar(64) PRIMARY KEY,
+    reg               varchar(256),
+    type              bigint,
+    inbound_model     bigint,
+    gateway_id        varchar(512),
+    gateway_name      varchar(512),
+    caller_pre        varchar(64),
+    caller_pre_remove bigint,
+    callee_pre        varchar(64),
+    callee_pre_remove bigint,
+    did               varchar(64),
+    callee_check      varchar(64),
+    transform         varchar(128),
+    name              varchar(128),
+    destination_type  varchar(32),
+    destination_value varchar(128),
+    context           varchar(64) DEFAULT 'default',
+    enabled           smallint DEFAULT 1,
+    sort_order        int DEFAULT 100,
+    remark            varchar(500)
+);
+
+-- 老库升级：DID 路由的目的地（extension/ivr/queue/conference/voicemail/gateway/app）
+ALTER TABLE t_pbx_route ADD COLUMN IF NOT EXISTS destination_type  varchar(32);
+ALTER TABLE t_pbx_route ADD COLUMN IF NOT EXISTS destination_value varchar(128);
+
+CREATE TABLE IF NOT EXISTS t_pbx_change_number (
+    id              varchar(64) PRIMARY KEY,
+    type            int,
+    caller_reg      varchar(256),
+    changed_caller  varchar(128),
+    callee_reg      varchar(256),
+    changed_callee  varchar(128),
+    "order"         int,
+    caller          varchar(128),
+    route_id        varchar(64)
+);
+
+-- 标准拨号计划
+CREATE TABLE IF NOT EXISTS t_pbx_dialplan (
+    id              varchar(64) PRIMARY KEY,
+    name            varchar(128) NOT NULL,
+    context         varchar(64) NOT NULL DEFAULT 'default',
+    condition_field varchar(64) DEFAULT 'destination_number',
+    condition_expr  varchar(256) NOT NULL,
+    continue_flag   smallint DEFAULT 0,
+    enabled         smallint DEFAULT 1,
+    sort_order      int DEFAULT 100,
+    remark          varchar(500)
+);
+
+CREATE TABLE IF NOT EXISTS t_pbx_dialplan_action (
+    id              varchar(64) PRIMARY KEY,
+    dialplan_id     varchar(64) NOT NULL,
+    application     varchar(64) NOT NULL,
+    data            varchar(512),
+    inline_flag     smallint DEFAULT 0,
+    sort_order      int DEFAULT 10
+);
+CREATE INDEX IF NOT EXISTS idx_pbx_dp_action_dp ON t_pbx_dialplan_action(dialplan_id);
+
+-- ACL
+CREATE TABLE IF NOT EXISTS t_pbx_acl_list (
+    id          varchar(64) PRIMARY KEY,
+    name        varchar(128) NOT NULL UNIQUE,
+    default_type varchar(16) DEFAULT 'deny',
+    remark      varchar(500)
+);
+
+CREATE TABLE IF NOT EXISTS t_pbx_acl_node (
+    id          varchar(64) PRIMARY KEY,
+    list_id     varchar(64) NOT NULL,
+    cidr        varchar(64) NOT NULL,
+    node_type   varchar(16) DEFAULT 'allow',
+    domain      varchar(128),
+    sort_order  int DEFAULT 10
+);
+
+-- IVR
+CREATE TABLE IF NOT EXISTS t_pbx_ivr (
+    id              varchar(64) PRIMARY KEY,
+    name            varchar(128) NOT NULL UNIQUE,
+    greet_long      varchar(256),
+    greet_short     varchar(256),
+    invalid_sound   varchar(256),
+    exit_sound      varchar(256),
+    timeout         int DEFAULT 10000,
+    max_failures    int DEFAULT 3,
+    max_timeouts    int DEFAULT 3,
+    digit_len       int DEFAULT 1,
+    inter_digit     int DEFAULT 2000,
+    enabled         smallint DEFAULT 1,
+    remark          varchar(500)
+);
+
+CREATE TABLE IF NOT EXISTS t_pbx_ivr_entry (
+    id          varchar(64) PRIMARY KEY,
+    ivr_id      varchar(64) NOT NULL,
+    digits      varchar(32) NOT NULL,
+    action      varchar(64) NOT NULL,
+    param       varchar(256),
+    sort_order  int DEFAULT 10
+);
+
+-- Callcenter
+CREATE TABLE IF NOT EXISTS t_pbx_queue (
+    id                  varchar(64) PRIMARY KEY,
+    name                varchar(128) NOT NULL UNIQUE,
+    strategy            varchar(64) DEFAULT 'longest-idle-agent',
+    moh_sound           varchar(256),
+    time_base_score     varchar(32) DEFAULT 'system',
+    max_wait_time       int DEFAULT 0,
+    max_wait_time_with_no_agent int DEFAULT 0,
+    tier_rules_apply    smallint DEFAULT 0,
+    discard_abandoned_after int DEFAULT 60,
+    abandoned_resume_allowed smallint DEFAULT 0,
+    enabled             smallint DEFAULT 1,
+    remark              varchar(500)
+);
+
+CREATE TABLE IF NOT EXISTS t_pbx_agent (
+    id              varchar(64) PRIMARY KEY,
+    name            varchar(128) NOT NULL UNIQUE,
+    contact         varchar(256) NOT NULL,
+    status          varchar(32) DEFAULT 'Logged Out',
+    type            varchar(32) DEFAULT 'callback',
+    max_no_answer   int DEFAULT 3,
+    wrap_up_time    int DEFAULT 10,
+    reject_delay_time int DEFAULT 10,
+    busy_delay_time int DEFAULT 60,
+    enabled         smallint DEFAULT 1,
+    remark          varchar(500)
+);
+
+CREATE TABLE IF NOT EXISTS t_pbx_tier (
+    id          varchar(64) PRIMARY KEY,
+    queue_name  varchar(128) NOT NULL,
+    agent_name  varchar(128) NOT NULL,
+    level       int DEFAULT 1,
+    position    int DEFAULT 1
+);
+
+-- Conference
+CREATE TABLE IF NOT EXISTS t_pbx_conference (
+    id              varchar(64) PRIMARY KEY,
+    name            varchar(128) NOT NULL UNIQUE,
+    profile         varchar(64) DEFAULT 'default',
+    pin             varchar(32),
+    max_members     int DEFAULT 50,
+    record          smallint DEFAULT 0,
+    enabled         smallint DEFAULT 1,
+    remark          varchar(500)
+);
+
+CREATE TABLE IF NOT EXISTS t_pbx_conference_profile (
+    id          varchar(64) PRIMARY KEY,
+    name        varchar(128) NOT NULL UNIQUE,
+    rate        int DEFAULT 8000,
+    interval    int DEFAULT 20,
+    energy_level int DEFAULT 300,
+    caller_controls varchar(64) DEFAULT 'default',
+    params_json text,
+    remark      varchar(500)
+);
+
+-- Voicemail 元数据（留言文件列表）
+CREATE TABLE IF NOT EXISTS t_pbx_voicemail (
+    id          varchar(64) PRIMARY KEY,
+    user_number varchar(64),
+    domain      varchar(128),
+    file_path   varchar(512),
+    caller      varchar(64),
+    created_at  timestamp DEFAULT CURRENT_TIMESTAMP,
+    read_flag   smallint DEFAULT 0,
+    duration    int DEFAULT 0
+);
+
+-- CDR（与 mod_cdr_pg_csv 对齐，若已存在可跳过）
+CREATE TABLE IF NOT EXISTS cdr (
+    local_ip_v4         varchar(64),
+    caller_id_name      varchar(128),
+    caller_id_number    varchar(64),
+    destination_number  varchar(64),
+    context             varchar(64),
+    start_stamp         timestamp,
+    answer_stamp        timestamp,
+    end_stamp           timestamp,
+    duration            int,
+    billsec             int,
+    hangup_cause        varchar(64),
+    uuid                varchar(64),
+    bleg_uuid           varchar(64),
+    accountcode         varchar(64),
+    read_codec          varchar(32),
+    write_codec         varchar(32),
+    ani                 varchar(64)
+);
+
+-- 兼容旧表增加字段（已存在时忽略错误可手工执行）
+ALTER TABLE t_pbx_user ADD COLUMN IF NOT EXISTS vm_password varchar(64);
+ALTER TABLE t_pbx_user ADD COLUMN IF NOT EXISTS toll_allow varchar(128) DEFAULT 'domestic,international,local';
+ALTER TABLE t_pbx_user ADD COLUMN IF NOT EXISTS callgroup varchar(64);
+ALTER TABLE t_pbx_user ADD COLUMN IF NOT EXISTS user_context varchar(64) DEFAULT 'default';
+ALTER TABLE t_pbx_user ADD COLUMN IF NOT EXISTS enabled smallint DEFAULT 1;
+ALTER TABLE t_pbx_gateway ADD COLUMN IF NOT EXISTS profile varchar(64) DEFAULT 'external';
+ALTER TABLE t_pbx_gateway ADD COLUMN IF NOT EXISTS proxy varchar(256);
+ALTER TABLE t_pbx_gateway ADD COLUMN IF NOT EXISTS from_user varchar(128);
+ALTER TABLE t_pbx_gateway ADD COLUMN IF NOT EXISTS from_domain varchar(128);
+ALTER TABLE t_pbx_gateway ADD COLUMN IF NOT EXISTS expire_seconds int DEFAULT 600;
+ALTER TABLE t_pbx_gateway ADD COLUMN IF NOT EXISTS enabled smallint DEFAULT 1;
+ALTER TABLE t_pbx_route ADD COLUMN IF NOT EXISTS context varchar(64) DEFAULT 'default';
+ALTER TABLE t_pbx_route ADD COLUMN IF NOT EXISTS enabled smallint DEFAULT 1;
+ALTER TABLE t_pbx_route ADD COLUMN IF NOT EXISTS sort_order int DEFAULT 100;
+ALTER TABLE t_pbx_sysconf ADD COLUMN IF NOT EXISTS cdr_db_info varchar(512);
+
+-- FreeSWITCH 配置参数（按段+键存储，不直接改 XML 文件）
+CREATE TABLE IF NOT EXISTS t_pbx_fs_param (
+    id          varchar(64) PRIMARY KEY,
+    section     varchar(128) NOT NULL,
+    param_key   varchar(128) NOT NULL,
+    param_value text,
+    UNIQUE(section, param_key)
+);
+CREATE INDEX IF NOT EXISTS idx_pbx_fs_param_section ON t_pbx_fs_param(section);
+
+
+-- =============================================================================
+-- Part 3: PBX 菜单与权限（原 pbx_menu.sql）
+-- =============================================================================
+
+-- JPBX 菜单与权限（PostgreSQL / JPBX sys_menu）
+-- 请按实际菜单 ID 规则调整；以下使用 2100 段避免与默认菜单冲突
+
+-- 一级：PBX
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, remark)
+SELECT 2100, 'PBX管理', 0, 5, '#', 'M', '0', '', 'fa fa-phone', 'admin', now(), 'FreeSWITCH'
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2100);
+
+-- 分机
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2101, '分机管理', 2100, 1, '/pbx/user', 'C', '0', 'pbx:user:view', 'fa fa-user', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2101);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, create_by, create_time)
+SELECT 21011, '分机查询', 2101, 1, '#', 'F', '0', 'pbx:user:list', 'admin', now() WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id=21011);
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, create_by, create_time)
+SELECT 21012, '分机新增', 2101, 2, '#', 'F', '0', 'pbx:user:add', 'admin', now() WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id=21012);
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, create_by, create_time)
+SELECT 21013, '分机修改', 2101, 3, '#', 'F', '0', 'pbx:user:edit', 'admin', now() WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id=21013);
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, create_by, create_time)
+SELECT 21014, '分机删除', 2101, 4, '#', 'F', '0', 'pbx:user:remove', 'admin', now() WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id=21014);
+
+-- 域名 / 分组 / 网关 / 路由 / 拨号计划 / 系统 / ACL / IVR / 队列 / 坐席 / 会议 / 留言 / 运维 / 录音 / CDR / 日志
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2102, 'SIP域名', 2100, 2, '/pbx/domain', 'C', '0', 'pbx:domain:view', 'fa fa-globe', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2102);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2103, '分机组', 2100, 3, '/pbx/group', 'C', '0', 'pbx:group:view', 'fa fa-users', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2103);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2104, '中继网关', 2100, 4, '/pbx/gateway', 'C', '0', 'pbx:gateway:view', 'fa fa-sitemap', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2104);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2105, '路由管理', 2100, 5, '/pbx/route', 'C', '0', 'pbx:route:view', 'fa fa-share-alt', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2105);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2106, '拨号计划', 2100, 6, '/pbx/dialplan', 'C', '0', 'pbx:dialplan:view', 'fa fa-list-alt', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2106);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2107, '系统配置', 2100, 7, '/pbx/sysconf', 'C', '0', 'pbx:sysconf:view', 'fa fa-cogs', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2107);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2120, 'FS参数配置', 2100, 7, '/pbx/fsconf', 'C', '0', 'pbx:fsconf:view', 'fa fa-sliders', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2120);
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, create_by, create_time)
+SELECT 21201, 'FS参数查询', 2120, 1, '#', 'F', '0', 'pbx:fsconf:list', 'admin', now() WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id=21201);
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, create_by, create_time)
+SELECT 21202, 'FS参数编辑', 2120, 2, '#', 'F', '0', 'pbx:fsconf:edit', 'admin', now() WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id=21202);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2108, 'ACL', 2100, 8, '/pbx/acl', 'C', '0', 'pbx:acl:view', 'fa fa-shield', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2108);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2109, 'IVR菜单', 2100, 9, '/pbx/ivr', 'C', '0', 'pbx:ivr:view', 'fa fa-keyboard-o', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2109);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2110, '呼叫队列', 2100, 10, '/pbx/queue', 'C', '0', 'pbx:queue:view', 'fa fa-headphones', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2110);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2111, '坐席管理', 2100, 11, '/pbx/agent', 'C', '0', 'pbx:agent:view', 'fa fa-headset', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2111);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2112, '会议室', 2100, 12, '/pbx/conference', 'C', '0', 'pbx:conference:view', 'fa fa-comments', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2112);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2113, '语音留言', 2100, 13, '/pbx/voicemail', 'C', '0', 'pbx:voicemail:view', 'fa fa-envelope', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2113);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2114, '实时运维', 2100, 14, '/pbx/ops', 'C', '0', 'pbx:ops:view', 'fa fa-dashboard', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2114);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2115, '录音管理', 2100, 15, '/pbx/record', 'C', '0', 'pbx:record:view', 'fa fa-file-audio-o', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2115);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2116, '通话记录', 2100, 16, '/pbx/call/view', 'C', '0', 'pbx:call:view', 'fa fa-history', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2116);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time)
+SELECT 2117, 'FS日志', 2100, 17, '/pbx/log/view', 'C', '0', 'pbx:log:view', 'fa fa-file-text', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2117);
+
+-- 通用按钮权限（为新菜单补充 list/add/edit/remove）
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, create_by, create_time)
+SELECT 21141, '运维查询', 2114, 1, '#', 'F', '0', 'pbx:ops:list', 'admin', now() WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id=21141);
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, create_by, create_time)
+SELECT 21142, '运维操作', 2114, 2, '#', 'F', '0', 'pbx:ops:edit', 'admin', now() WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id=21142);
+
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, create_by, create_time)
+SELECT 21151, '录音查询', 2115, 1, '#', 'F', '0', 'pbx:record:list', 'admin', now() WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id=21151);
+
+-- =============================================================
+-- PBX 菜单分组：运行查看（只读） / 分机与账号 / 路由与网关 / 呼叫应用 / 系统设置
+-- ID 2130-2134 为分组菜单，叶子菜单 parent_id 指向对应分组
+-- =============================================================
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, remark)
+SELECT 2130, '运行查看', 2100, 1, '#', 'M', '0', '', 'fa fa-eye', 'admin', now(), '实时状态与历史记录（只读）'
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2130);
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, remark)
+SELECT 2131, '分机与账号', 2100, 2, '#', 'M', '0', '', 'fa fa-user-circle', 'admin', now(), '分机、域名、分组与语音信箱配置'
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2131);
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, remark)
+SELECT 2132, '路由与网关', 2100, 3, '#', 'M', '0', '', 'fa fa-sitemap', 'admin', now(), '中继、路由、拨号计划与接入控制'
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2132);
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, remark)
+SELECT 2133, '呼叫应用', 2100, 4, '#', 'M', '0', '', 'fa fa-exchange', 'admin', now(), 'IVR、队列、坐席与会议配置'
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2133);
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, remark)
+SELECT 2134, '系统设置', 2100, 5, '#', 'M', '0', '', 'fa fa-cogs', 'admin', now(), '平台与 FreeSWITCH 基础参数'
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2134);
+
+UPDATE sys_menu SET parent_id = 2130, order_num = 1 WHERE menu_id = 2114;
+UPDATE sys_menu SET parent_id = 2130, order_num = 2 WHERE menu_id = 2116;
+UPDATE sys_menu SET parent_id = 2130, order_num = 3 WHERE menu_id = 2115;
+UPDATE sys_menu SET parent_id = 2130, order_num = 4 WHERE menu_id = 2117;
+UPDATE sys_menu SET parent_id = 2131, order_num = 1 WHERE menu_id = 2101;
+UPDATE sys_menu SET parent_id = 2131, order_num = 2 WHERE menu_id = 2102;
+UPDATE sys_menu SET parent_id = 2131, order_num = 3 WHERE menu_id = 2103;
+UPDATE sys_menu SET parent_id = 2131, order_num = 4 WHERE menu_id = 2113;
+UPDATE sys_menu SET parent_id = 2132, order_num = 1 WHERE menu_id = 2104;
+UPDATE sys_menu SET parent_id = 2132, order_num = 2 WHERE menu_id = 2105;
+UPDATE sys_menu SET parent_id = 2132, order_num = 3 WHERE menu_id = 2106;
+UPDATE sys_menu SET parent_id = 2132, order_num = 4 WHERE menu_id = 2108;
+UPDATE sys_menu SET parent_id = 2133, order_num = 1 WHERE menu_id = 2109;
+UPDATE sys_menu SET parent_id = 2133, order_num = 2 WHERE menu_id = 2110;
+UPDATE sys_menu SET parent_id = 2133, order_num = 3 WHERE menu_id = 2111;
+UPDATE sys_menu SET parent_id = 2133, order_num = 4 WHERE menu_id = 2112;
+UPDATE sys_menu SET parent_id = 2134, order_num = 1 WHERE menu_id = 2107;
+UPDATE sys_menu SET parent_id = 2134, order_num = 2 WHERE menu_id = 2120;
+
+-- 呼叫流程看板（运行查看分组下）
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, remark)
+SELECT 2135, '呼叫流程看板', 2130, 5, '/pbx/flow', 'C', '0', 'pbx:flow:view', 'fa fa-sitemap', 'admin', now(), '号码匹配→路由→拨号计划→目的地可视化'
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 2135);
+INSERT INTO sys_menu(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, create_by, create_time)
+SELECT 21351, '看板查询', 2135, 1, '#', 'F', '0', 'pbx:flow:list', 'admin', now()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE menu_id = 21351);
+
+-- 授权：超级管理员角色（role_id=1）拥有全部菜单与按钮权限
+-- 注意：JPBX的 *:*:* 万能权限只对 user_id=1 生效，其他账号即使拥有该角色，
+--       权限也来自 sys_role_menu，因此必须全量授权，否则会出现「有角色但缺菜单/按钮」。
+INSERT INTO sys_role_menu(role_id, menu_id)
+SELECT 1, m.menu_id FROM sys_menu m
+WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu rm WHERE rm.role_id=1 AND rm.menu_id=m.menu_id);
+
+-- 授权：把 PBX 整棵菜单树（含各页面下的按钮权限）授予普通角色（role_id=2）
+-- 按需调整 role_id，或按同样写法再给其他角色授权
+WITH RECURSIVE pbx_menu AS (
+    SELECT menu_id FROM sys_menu WHERE menu_id = 2100
+    UNION ALL
+    SELECT m.menu_id FROM sys_menu m
+    JOIN pbx_menu p ON m.parent_id = p.menu_id
+)
+INSERT INTO sys_role_menu(role_id, menu_id)
+SELECT 2, p.menu_id FROM pbx_menu p
+WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu rm WHERE rm.role_id=2 AND rm.menu_id=p.menu_id);
+
+-- 演示账号 ry（user_id=2）加入超级管理员角色，与 admin 拥有相同的菜单与权限
+INSERT INTO sys_user_role(user_id, role_id)
+SELECT 2, 1
+WHERE EXISTS (SELECT 1 FROM sys_user WHERE user_id = 2)
+  AND NOT EXISTS (SELECT 1 FROM sys_user_role WHERE user_id = 2 AND role_id = 1);
+
+-- ----------------------------
+-- 字典：呼叫账户类型（pbx_account_type）
+-- 页面 templates/pbx/user/add.html、edit.html、user.html 依赖该字典渲染「账号类型」，
+-- 字典缺失时下拉为空、新增账户 type 写为 NULL，帐户不会下发到 FreeSWITCH directory。
+-- 需要更多类型时，在「系统管理 -> 字典管理 -> 呼叫账户类型」里追加即可。
+-- ----------------------------
+INSERT INTO sys_dict_type(dict_id, dict_name, dict_type, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_id), 0) + 1 FROM sys_dict_type), '呼叫账户类型', 'pbx_account_type', '0', 'admin', now(), '呼叫账户管理-账号类型'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_type WHERE dict_type = 'pbx_account_type');
+
+INSERT INTO sys_dict_data(dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_code), 0) + 1 FROM sys_dict_data), 1, '分机', '0', 'pbx_account_type', '', 'primary', 'Y', '0', 'admin', now(), '注册到 FreeSWITCH 的普通分机'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'pbx_account_type' AND dict_value = '0');
+
+-- ----------------------------
+-- 字典：中继类型 / 中继传输类型 / 路由类型 / 呼入模式
+-- 对应页面 templates/pbx/gateway/*.html、templates/pbx/route/*.html 的下拉框，
+-- 缺失时下拉为空、字段以 NULL 入库，FreeSWITCH 侧 sofia/dialplan 会出现空参数。
+-- ----------------------------
+INSERT INTO sys_dict_type(dict_id, dict_name, dict_type, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_id), 0) + 1 FROM sys_dict_type), '中继类型', 'pbx_gateway_type', '0', 'admin', now(), '呼叫中继-中继类型'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_type WHERE dict_type = 'pbx_gateway_type');
+INSERT INTO sys_dict_data(dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_code), 0) + 1 FROM sys_dict_data), 1, '对等中继（不注册）', '0', 'pbx_gateway_type', '', 'primary', 'Y', '0', 'admin', now(), 'register=false'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'pbx_gateway_type' AND dict_value = '0');
+INSERT INTO sys_dict_data(dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_code), 0) + 1 FROM sys_dict_data), 2, '注册中继（向对端注册）', '1', 'pbx_gateway_type', '', 'success', 'N', '0', 'admin', now(), 'register=true，需填写账户/密码'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'pbx_gateway_type' AND dict_value = '1');
+
+INSERT INTO sys_dict_type(dict_id, dict_name, dict_type, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_id), 0) + 1 FROM sys_dict_type), '中继传输类型', 'pbx_gateway_translate_type', '0', 'admin', now(), '呼叫中继-传输类型(sofia register-transport)'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_type WHERE dict_type = 'pbx_gateway_translate_type');
+INSERT INTO sys_dict_data(dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_code), 0) + 1 FROM sys_dict_data), 1, 'UDP', 'udp', 'pbx_gateway_translate_type', '', 'primary', 'Y', '0', 'admin', now(), NULL
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'pbx_gateway_translate_type' AND dict_value = 'udp');
+INSERT INTO sys_dict_data(dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_code), 0) + 1 FROM sys_dict_data), 2, 'TCP', 'tcp', 'pbx_gateway_translate_type', '', 'info', 'N', '0', 'admin', now(), NULL
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'pbx_gateway_translate_type' AND dict_value = 'tcp');
+INSERT INTO sys_dict_data(dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_code), 0) + 1 FROM sys_dict_data), 3, 'TLS', 'tls', 'pbx_gateway_translate_type', '', 'warning', 'N', '0', 'admin', now(), NULL
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'pbx_gateway_translate_type' AND dict_value = 'tls');
+
+INSERT INTO sys_dict_type(dict_id, dict_name, dict_type, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_id), 0) + 1 FROM sys_dict_type), '路由类型', 'pbx_route_type', '0', 'admin', now(), '路由管理-路由类型'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_type WHERE dict_type = 'pbx_route_type');
+INSERT INTO sys_dict_data(dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_code), 0) + 1 FROM sys_dict_data), 1, '呼出（走中继）', '1', 'pbx_route_type', '', 'primary', 'Y', '0', 'admin', now(), 'context=default，按匹配前缀出局'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'pbx_route_type' AND dict_value = '1');
+INSERT INTO sys_dict_data(dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_code), 0) + 1 FROM sys_dict_data), 2, '呼入（中继接入）', '2', 'pbx_route_type', '', 'success', 'N', '0', 'admin', now(), 'context=public，按 DID 匹配'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'pbx_route_type' AND dict_value = '2');
+INSERT INTO sys_dict_data(dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_code), 0) + 1 FROM sys_dict_data), 3, '内部分机（bridge user）', '0', 'pbx_route_type', '', 'info', 'N', '0', 'admin', now(), 'context=default，直接 bridge 本地分机'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'pbx_route_type' AND dict_value = '0');
+
+INSERT INTO sys_dict_type(dict_id, dict_name, dict_type, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_id), 0) + 1 FROM sys_dict_type), '呼入模式', 'pbx_route_inbound_model', '0', 'admin', now(), '路由管理-呼入模式'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_type WHERE dict_type = 'pbx_route_inbound_model');
+INSERT INTO sys_dict_data(dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_code), 0) + 1 FROM sys_dict_data), 1, '普通呼入（按被叫号码）', '1', 'pbx_route_inbound_model', '', 'primary', 'Y', '0', 'admin', now(), NULL
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'pbx_route_inbound_model' AND dict_value = '1');
+INSERT INTO sys_dict_data(dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark)
+SELECT (SELECT COALESCE(MAX(dict_code), 0) + 1 FROM sys_dict_data), 2, 'DID 呼入（按 DID 号码）', '2', 'pbx_route_inbound_model', '', 'success', 'N', '0', 'admin', now(), '需要填写 DID 号码'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'pbx_route_inbound_model' AND dict_value = '2');

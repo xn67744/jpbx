@@ -1,0 +1,2 @@
+## 辅助：优先使用参数字典 params，否则回退 fallback
+## 用法见各 conf 模板中的 #if($params)

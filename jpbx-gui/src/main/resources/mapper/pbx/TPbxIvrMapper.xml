@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxIvrMapper">
+    <resultMap type="TPbxIvr" id="TPbxIvrResult">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="greetLong" column="greet_long" />
+        <result property="greetShort" column="greet_short" />
+        <result property="invalidSound" column="invalid_sound" />
+        <result property="exitSound" column="exit_sound" />
+        <result property="timeout" column="timeout" />
+        <result property="maxFailures" column="max_failures" />
+        <result property="maxTimeouts" column="max_timeouts" />
+        <result property="digitLen" column="digit_len" />
+        <result property="interDigit" column="inter_digit" />
+        <result property="enabled" column="enabled" />
+        <result property="remark" column="remark" />
+    </resultMap>
+    <sql id="selectVo">select id, name, greet_long, greet_short, invalid_sound, exit_sound, timeout, max_failures, max_timeouts, digit_len, inter_digit, enabled, remark from t_pbx_ivr</sql>
+    <select id="selectTPbxIvrList" parameterType="TPbxIvr" resultMap="TPbxIvrResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="id != null and id != ''">AND id = #{id}</if>
+            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="greetLong != null and greetLong != ''">AND greet_long = #{greetLong}</if>
+            <if test="greetShort != null and greetShort != ''">AND greet_short = #{greetShort}</if>
+            <if test="invalidSound != null and invalidSound != ''">AND invalid_sound = #{invalidSound}</if>
+            <if test="exitSound != null and exitSound != ''">AND exit_sound = #{exitSound}</if>
+            <if test="timeout != null and timeout != ''">AND timeout = #{timeout}</if>
+            <if test="maxFailures != null and maxFailures != ''">AND max_failures = #{maxFailures}</if>
+            <if test="maxTimeouts != null and maxTimeouts != ''">AND max_timeouts = #{maxTimeouts}</if>
+            <if test="digitLen != null and digitLen != ''">AND digit_len = #{digitLen}</if>
+            <if test="interDigit != null and interDigit != ''">AND inter_digit = #{interDigit}</if>
+            <if test="enabled != null and enabled != ''">AND enabled = #{enabled}</if>
+            <if test="remark != null and remark != ''">AND remark = #{remark}</if>
+        </where>
+        order by 1
+    </select>
+    <select id="selectTPbxIvrById" parameterType="String" resultMap="TPbxIvrResult">
+        <include refid="selectVo"/> where id = #{id}
+    </select>
+    <insert id="insertTPbxIvr" parameterType="TPbxIvr">
+        insert into t_pbx_ivr
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="greetLong != null">greet_long,</if>
+            <if test="greetShort != null">greet_short,</if>
+            <if test="invalidSound != null">invalid_sound,</if>
+            <if test="exitSound != null">exit_sound,</if>
+            <if test="timeout != null">timeout,</if>
+            <if test="maxFailures != null">max_failures,</if>
+            <if test="maxTimeouts != null">max_timeouts,</if>
+            <if test="digitLen != null">digit_len,</if>
+            <if test="interDigit != null">inter_digit,</if>
+            <if test="enabled != null">enabled,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="greetLong != null">#{greetLong},</if>
+            <if test="greetShort != null">#{greetShort},</if>
+            <if test="invalidSound != null">#{invalidSound},</if>
+            <if test="exitSound != null">#{exitSound},</if>
+            <if test="timeout != null">#{timeout},</if>
+            <if test="maxFailures != null">#{maxFailures},</if>
+            <if test="maxTimeouts != null">#{maxTimeouts},</if>
+            <if test="digitLen != null">#{digitLen},</if>
+            <if test="interDigit != null">#{interDigit},</if>
+            <if test="enabled != null">#{enabled},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+    <update id="updateTPbxIvr" parameterType="TPbxIvr">
+        update t_pbx_ivr
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="greetLong != null">greet_long = #{greetLong},</if>
+            <if test="greetShort != null">greet_short = #{greetShort},</if>
+            <if test="invalidSound != null">invalid_sound = #{invalidSound},</if>
+            <if test="exitSound != null">exit_sound = #{exitSound},</if>
+            <if test="timeout != null">timeout = #{timeout},</if>
+            <if test="maxFailures != null">max_failures = #{maxFailures},</if>
+            <if test="maxTimeouts != null">max_timeouts = #{maxTimeouts},</if>
+            <if test="digitLen != null">digit_len = #{digitLen},</if>
+            <if test="interDigit != null">inter_digit = #{interDigit},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <delete id="deleteTPbxIvrById" parameterType="String">delete from t_pbx_ivr where id = #{id}</delete>
+    <delete id="deleteTPbxIvrByIds" parameterType="String">
+        delete from t_pbx_ivr where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+</mapper>

@@ -26,6 +26,7 @@
 						<li>
 							<a class="btn btn-primary btn-rounded btn-sm" onclick="watch()"><i class="fa fa-search"></i>&nbsp;查看日志</a>
 							<a class="btn btn-warning btn-rounded btn-sm" onclick="watchCurrent()"><i class="fa fa-refresh"></i>&nbsp;查看当前日志</a>
+							<a class="btn btn-default btn-rounded btn-sm" onclick="clearScreen()"><i class="fa fa-eraser"></i>&nbsp;清屏</a>
 						</li>
 					</ul>
 				</div>
@@ -33,7 +34,7 @@
 		</div>
 		&nbsp;
 		<div class="col-sm-12">
-			<div class="col-sm-12" id="content" style="overflow-y: auto;" />
+			<div class="col-sm-12" id="content" style="overflow-y:auto;max-height:calc(100vh - 220px);" />
 		</div>
 	</div>
 </div>
@@ -49,7 +50,8 @@
                 url: prefix + "/watchLog?beginDate="+$("#startTime").val()+"&endDate="+$("#endTime").val(),
                 method: 'GET',
                 success: function (data) {
-                    $("#content").html(data)
+                    $("#content").html(data);
+                    scrollLogBottom();
                 },
                 error: function(){
                 	alert('日志获取失败!')
@@ -63,12 +65,22 @@
                 url: prefix + "/watchLog",
                 method: 'GET',
                 success: function (data) {
-                    $("#content").html(data)
+                    $("#content").html(data);
+                    scrollLogBottom();
                 },
                 error: function(){
                 	alert('日志获取失败!')
                 }
             })
+		}
+		/** 日志按时间正序返回，加载后直接定位到最新的行 */
+		function scrollLogBottom(){
+		    var el = $("#content");
+		    if (el.length) { el.scrollTop(el[0].scrollHeight); }
+		}
+		/** 清屏只清浏览器里的显示，不动 FS 日志文件 */
+		function clearScreen(){
+		    $("#content").html('<div style="color:#8FA3BD;padding:10px;">已清屏。点「查看当前日志」可重新加载最新 1000 行。</div>');
 		}
 </script>
 </body>

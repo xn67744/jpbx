@@ -13,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import com.av.common.config.AVConfig;
 import com.av.common.core.controller.BaseController;
 import com.av.common.core.domain.AjaxResult;
 import com.av.common.core.text.Convert;
@@ -49,6 +50,8 @@ public class SysLoginController extends BaseController
         mmap.put("isRemembered", rememberMe);
         // 是否开启用户注册
         mmap.put("isAllowRegister", Convert.toBool(configService.getKey("sys.account.registerUser"), false));
+        // 版本号（登录页品牌区展示）
+        mmap.put("version", AVConfig.getVersion());
         return "login";
     }
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="freeswitch/xml">
+  <section name="configuration">
+    <configuration name="acl.conf" description="Network Lists">
+      <network-lists>
+#if($lists)
+#foreach($list in $lists)
+        <list name="${list.name}" default="#if($list.defaultType)${list.defaultType}#{else}deny#end">
+#if($list.nodes)
+#foreach($node in $list.nodes)
+          <node type="#if($node.nodeType)${node.nodeType}#{else}allow#end" cidr="${node.cidr}"#if($node.domain && $node.domain != '') domain="${node.domain}"#end/>
+#end
+#end
+        </list>
+#end
+#end
+        <list name="lan" default="allow">
+          <node type="deny" cidr="0.0.0.0/0"/>
+          <node type="allow" cidr="10.0.0.0/8"/>
+          <node type="allow" cidr="172.16.0.0/12"/>
+          <node type="allow" cidr="192.168.0.0/16"/>
+          <node type="allow" cidr="127.0.0.1/32"/>
+        </list>
+      </network-lists>
+    </configuration>
+  </section>
+</document>

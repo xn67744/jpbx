@@ -5,10 +5,10 @@ av:
   # 版本
   version: 0.0.1
   # 版权年份
-  copyrightYear: 2023
+  copyrightYear: 2026
   # 实例演示开关
   demoEnabled: true
-  # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
+  # 文件路径 示例（ Windows配置D:/jpbx/uploadPath，Linux配置 /home/jpbx/uploadPath）
   profile: E:/downloads/uploadPath
   # 获取ip地址开关
   addressEnabled: false

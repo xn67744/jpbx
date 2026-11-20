@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="freeswitch/xml">
+  <section name="dialplan" description="JPBX Dialplan">
+    <context name="$xml.escape($context)">
+#if($extensions)
+#foreach($ext in $extensions)
+      <extension name="$xml.escape($ext.name)"#if($ext.continueFlag == 1) continue="true"#end>
+        <condition field="#if($ext.conditionField)$xml.escape($ext.conditionField)#{else}destination_number#end" expression="$xml.escape($ext.conditionExpr)">
+#if($ext.actions)
+#foreach($act in $ext.actions)
+          <action application="$xml.escape($act.application)"#if($act.data) data="$xml.escape($act.data)"#end#if($act.inlineFlag == 1) inline="true"#end/>
+#end
+#end
+        </condition>
+      </extension>
+#end
+#end
+#if($routes)
+#foreach($route in $routes)
+      <extension name="route_$xml.escape($route.name)">
+        <condition field="destination_number" expression="$xml.escape($route.dialplanExpr)">
+#foreach($act in $route.actions)
+          <action application="$xml.escape($act.application)"#if($act.data && $act.data != '') data="$xml.escape($act.data)"#end/>
+#end
+        </condition>
+      </extension>
+#end
+#end
+#if($localDial)
+      <extension name="local_extension">
+        <condition field="destination_number" expression="^($xml.escape($localDial))$">
+          <action application="export" data="dialed_extension=$1"/>
+          <action application="bind_meta_app" data="1 b s execute_extension::dx XML features"/>
+          <action application="set" data="ringback=#[[${us-ring}]]#"/>
+          <action application="set" data="transfer_ringback=#[[$${hold_music}]]#"/>
+          <action application="set" data="call_timeout=30"/>
+          <action application="set" data="hangup_after_bridge=true"/>
+          <action application="set" data="continue_on_fail=true"/>
+          <action application="hash" data="insert/#[[${domain_name}]]#-call_return/#[[${dialed_extension}]]#/#[[${caller_id_number}]]#"/>
+          <action application="hash" data="insert/#[[${domain_name}]]#-last_dial_ext/#[[${dialed_extension}]]#/#[[${uuid}]]#"/>
+          <action application="set" data="called_party_callgroup=#[[${user_data(${dialed_extension}@${domain_name} var callgroup)}]]#"/>
+          <action application="hash" data="insert/#[[${domain_name}]]#-last_dial_ext/#[[${called_party_callgroup}]]#/#[[${uuid}]]#"/>
+          <action application="hash" data="insert/#[[${domain_name}]]#-last_dial_ext/global/#[[${uuid}]]#"/>
+#if($recordPath && $recordPath != '')
+          <action application="set" data="RECORD_TITLE=Recording #[[${destination_number}]]# #[[${caller_id_number}]]# #[[${strftime(%Y-%m-%d %H:%M)}]]#"/>
+          <action application="set" data="record_path=$xml.escape($recordPath)/#[[${strftime(%Y/%m/%d)}]]#"/>
+          <action application="set" data="record_name=#[[${uuid}]]#.wav"/>
+          <action application="set" data="record_append=false"/>
+          <action application="set" data="media_bug_answer_req=true"/>
+          <action application="export" data="execute_on_answer=record_session #[[${record_path}]]#/#[[${record_name}]]#"/>
+#end
+          <action application="bridge" data="user/#[[${dialed_extension}]]#@#[[${domain_name}]]#"/>
+          <action application="answer"/>
+          <action application="sleep" data="1000"/>
+          <action application="voicemail" data="default #[[${domain_name}]]# #[[${dialed_extension}]]#"/>
+        </condition>
+      </extension>
+#end
+#if($conferences)
+#foreach($conf in $conferences)
+      <extension name="conf_$xml.escape($conf.name)">
+        <condition field="destination_number" expression="^$xml.escape($conf.name)$">
+#if($conf.pin && $conf.pin != '')
+          <action application="set" data="conference_member_flags=mintwo"/>
+          <action application="conference" data="$xml.escape($conf.name)@#if($conf.profile)$xml.escape($conf.profile)#{else}default#end+flags{mintwo}+$xml.escape($conf.pin)"/>
+#else
+          <action application="conference" data="$xml.escape($conf.name)@#if($conf.profile)$xml.escape($conf.profile)#{else}default#end"/>
+#end
+        </condition>
+      </extension>
+#end
+#end
+#if($queues)
+#foreach($q in $queues)
+      <extension name="queue_$xml.escape($q.name)">
+        <condition field="destination_number" expression="^queue_$xml.escape($q.name)$|^$xml.escape($q.name)$">
+          <action application="callcenter" data="$xml.escape($q.name)"/>
+        </condition>
+      </extension>
+#end
+#end
+#if($ivrs)
+#foreach($ivr in $ivrs)
+      <extension name="ivr_$xml.escape($ivr.name)">
+        <condition field="destination_number" expression="^ivr_$xml.escape($ivr.name)$">
+          <action application="answer"/>
+          <action application="sleep" data="500"/>
+          <action application="ivr" data="$xml.escape($ivr.name)"/>
+        </condition>
+      </extension>
+#end
+#end
+    </context>
+  </section>
+</document>

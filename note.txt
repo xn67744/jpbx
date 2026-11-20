@@ -1,1 +1,7 @@
-您必须确保sofia.conf.xml中的“accept-blind-reg”参数设置为“false” ，否则您的 Web 应用程序将不会被调用。
+FreeSWITCH 对接注意：
+
+1. sofia profile 必须设置 accept-blind-reg=false，否则注册不会走 xml_curl directory。
+2. 完整下载、安装与对接步骤见：doc/FreeSWITCH对接与安装说明.md
+3. 项目功能与开发约定见：doc/项目说明.md
+4. 架构说明见：doc/架构设计.md
+5. 业务配置保存后由 ESL 热生效，无需重启 FreeSWITCH（例外项见对接文档）。

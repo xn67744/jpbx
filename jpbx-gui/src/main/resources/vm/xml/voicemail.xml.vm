@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="freeswitch/xml">
+  <section name="configuration">
+    <configuration name="voicemail.conf" description="Voicemail">
+      <settings>
+        <param name="file-extension" value="wav"/>
+      </settings>
+      <profiles>
+        <profile name="default">
+          <param name="file-extension" value="wav"/>
+          <param name="terminator-key" value="#"/>
+          <param name="max-login-attempts" value="3"/>
+          <param name="digit-timeout" value="10000"/>
+          <param name="max-record-len" value="300"/>
+          <param name="tone-spec" value="%(1000, 0, 640)"/>
+          <param name="storage-dir" value="#if($storageDir)${storageDir}#{else}$${storage_dir}#end"/>
+          <param name="callback-dialplan" value="XML"/>
+          <param name="callback-context" value="default"/>
+          <param name="record-silence-threshold" value="200"/>
+          <param name="record-silence-hits" value="2"/>
+          <param name="web-template-file" value="web-vm.tpl"/>
+          <email>
+            <param name="template-file" value="voicemail.tpl"/>
+            <param name="notify-template-file" value="notify-voicemail.tpl"/>
+            <param name="date-fmt" value="%A, %B %d %Y, %I %M %p"/>
+            <param name="email-from" value="${voicemail_account}@${voicemail_domain}"/>
+          </email>
+        </profile>
+      </profiles>
+    </configuration>
+  </section>
+</document>

@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.av.jpbx.mapper.TPbxUserMapper">
-    
+
     <resultMap type="TPbxUser" id="TPbxUserResult">
-        <result property="id"    column="id"    />
-        <result property="name"    column="name"    />
-        <result property="number"    column="number"    />
-        <result property="domain"    column="domain"    />
-        <result property="password"    column="password"    />
-        <result property="type"    column="type"    />
-        <result property="video"    column="video"    />
-        <result property="audio"    column="audio"    />
-        <result property="level"    column="level"    />
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="number" column="number"/>
+        <result property="domain" column="domain"/>
+        <result property="password" column="password"/>
+        <result property="type" column="type"/>
+        <result property="video" column="video"/>
+        <result property="audio" column="audio"/>
+        <result property="level" column="level"/>
+        <result property="vmPassword" column="vm_password"/>
+        <result property="tollAllow" column="toll_allow"/>
+        <result property="callgroup" column="callgroup"/>
+        <result property="userContext" column="user_context"/>
+        <result property="enabled" column="enabled"/>
     </resultMap>
 
     <sql id="selectTPbxUserVo">
-        select id, name, number, domain, password, type, video, audio, level from t_pbx_user
+        select id, name, number, domain, password, type, video, audio, level,
+               vm_password, toll_allow, callgroup, user_context, enabled
+        from t_pbx_user
     </sql>
 
     <select id="selectTPbxUserList" parameterType="TPbxUser" resultMap="TPbxUserResult">
@@ -27,25 +32,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="name != null and name != ''">AND name = #{name}</if>
             <if test="number != null and number != ''">AND number = #{number}</if>
             <if test="domain != null and domain != ''">AND domain = #{domain}</if>
-            <if test="password != null and password != ''">AND password = #{password}</if>
             <if test="type != null">AND type = #{type}</if>
             <if test="audio != null and audio != ''">AND audio = #{audio}</if>
             <if test="video != null and video != ''">AND video = #{video}</if>
             <if test="level != null">AND level = #{level}</if>
+            <if test="enabled != null">AND enabled = #{enabled}</if>
             <if test="numbers != null">
                 AND number in
-                <foreach item="item" collection="numbers" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
+                <foreach item="item" collection="numbers" open="(" separator="," close=")">#{item}</foreach>
             </if>
         </where>
+        order by number
     </select>
-    
+
     <select id="selectTPbxUserById" parameterType="String" resultMap="TPbxUserResult">
         <include refid="selectTPbxUserVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertTPbxUser" parameterType="TPbxUser">
         insert into t_pbx_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -58,7 +62,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="video != null">video,</if>
             <if test="audio != null">audio,</if>
             <if test="level != null">level,</if>
-         </trim>
+            <if test="vmPassword != null">vm_password,</if>
+            <if test="tollAllow != null">toll_allow,</if>
+            <if test="callgroup != null">callgroup,</if>
+            <if test="userContext != null">user_context,</if>
+            <if test="enabled != null">enabled,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
             <if test="name != null">#{name},</if>
@@ -69,7 +78,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="video != null">#{video},</if>
             <if test="audio != null">#{audio},</if>
             <if test="level != null">#{level},</if>
-         </trim>
+            <if test="vmPassword != null">#{vmPassword},</if>
+            <if test="tollAllow != null">#{tollAllow},</if>
+            <if test="callgroup != null">#{callgroup},</if>
+            <if test="userContext != null">#{userContext},</if>
+            <if test="enabled != null">#{enabled},</if>
+        </trim>
     </insert>
 
     <update id="updateTPbxUser" parameterType="TPbxUser">
@@ -83,6 +97,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="video != null">video = #{video},</if>
             <if test="audio != null">audio = #{audio},</if>
             <if test="level != null">level = #{level},</if>
+            <if test="vmPassword != null">vm_password = #{vmPassword},</if>
+            <if test="tollAllow != null">toll_allow = #{tollAllow},</if>
+            <if test="callgroup != null">callgroup = #{callgroup},</if>
+            <if test="userContext != null">user_context = #{userContext},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
         </trim>
         where id = #{id}
     </update>
@@ -92,10 +111,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteTPbxUserByIds" parameterType="String">
-        delete from t_pbx_user where id in 
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
-        </foreach>
+        delete from t_pbx_user where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
     </delete>
-
 </mapper>

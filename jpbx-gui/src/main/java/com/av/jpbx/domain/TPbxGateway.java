@@ -58,11 +58,22 @@ public class TPbxGateway extends BaseEntity
     /**关联路由id**/
     private String routeId;
 
+    /** Sofia profile，默认 external */
+    private String profile;
+
+    private String proxy;
+
+    private String fromUser;
+
+    private String fromDomain;
+
+    private Integer expireSeconds;
+
+    private Integer enabled;
+
     public void setType(Integer type)
     {
         this.type = type;
-        register = type == 0?0:1;
+        register = type == 0 ? 0 : 1;
     }
-
-
 }

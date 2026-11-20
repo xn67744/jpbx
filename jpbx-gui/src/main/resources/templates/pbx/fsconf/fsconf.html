@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('FreeSWITCH 配置参数')" />
+    <style>
+        .fs-layout { display:flex; min-height: 640px; }
+        .fs-nav { width: 240px; border-right:1px solid #E3E8EF; padding:10px; background:#F7F9FC; }
+        .fs-nav .nav-item { display:block; padding:10px 12px; margin-bottom:4px; border-radius:4px; color:#333; cursor:pointer; }
+        .fs-nav .nav-item:hover { background:#E8F1FB; }
+        .fs-nav .nav-item.active { background:#1E63B8; color:#fff; }
+        .fs-main { flex:1; padding:15px 20px; }
+        .fs-section-desc { color:#676a6c; margin-bottom:16px; line-height:1.6; background:#F7F9FC; padding:12px; border-left:3px solid #1E63B8; }
+        .fs-group-title { font-weight:600; margin:18px 0 10px; padding-bottom:6px; border-bottom:1px dashed #E3E8EF; color:#1E63B8; }
+        .fs-help { display:block; color:#888; font-size:12px; margin-top:4px; line-height:1.5; }
+        .fs-example { color:#1E63B8; }
+        .fs-apply-hint { color:#B77718; }
+        .has-error .form-control { border-color:#ed5565; }
+        .field-error { color:#ed5565; font-size:12px; margin-top:3px; display:none; }
+        .field-error.show { display:block; }
+        .param-label { font-weight:600; }
+        .param-key { font-weight:normal; color:#999; font-size:12px; }
+        #saveBar { position:sticky; bottom:0; background:#fff; border-top:1px solid #E3E8EF; padding:12px 0; margin-top:20px; }
+        .readonly-tip { color:#999; font-style:italic; }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="container-div" style="padding:0;">
+    <div class="fs-layout">
+        <div class="fs-nav" id="sectionNav">
+            <div class="m-b-sm"><strong>配置段</strong></div>
+            <!-- filled by js -->
+        </div>
+        <div class="fs-main">
+            <h3 id="sectionTitle">请选择配置段</h3>
+            <div class="fs-section-desc" id="sectionDesc">配置以「参数名 / 参数值」维护，保存后通过 xml_curl 动态生成 XML 并 ESL 热生效，不会直接改 FreeSWITCH 磁盘上的 conf 文件。</div>
+            <form id="fsParamForm" class="form-horizontal" onsubmit="return false;">
+                <div id="paramFields"></div>
+            </form>
+            <div id="saveBar" shiro:hasPermission="pbx:fsconf:edit">
+                <button type="button" class="btn btn-primary" onclick="doValidateThenSave(true)"><i class="fa fa-check"></i> 保存并热生效</button>
+                <button type="button" class="btn btn-white" onclick="doValidateThenSave(false)"><i class="fa fa-save"></i> 仅保存</button>
+                <button type="button" class="btn btn-info" onclick="doValidateOnly()"><i class="fa fa-search"></i> 仅校验</button>
+                <span id="saveMsg" class="m-l-md text-success"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+var prefix = ctx + "pbx/fsconf";
+var currentSection = null;
+var currentMeta = null;
+
+$(function () {
+    loadSections();
+});
+
+function loadSections() {
+    $.get(prefix + "/sections", function (res) {
+        if (res.code !== 0) { $.modal.msgError(res.msg); return; }
+        var html = '';
+        (res.data || []).forEach(function (s, idx) {
+            html += '<a class="nav-item" data-code="'+s.code+'" onclick="selectSection(\''+s.code+'\')">'+s.title+'</a>';
+        });
+        $('#sectionNav').append(html);
+        if (res.data && res.data.length) {
+            selectSection(res.data[0].code);
+        }
+    });
+}
+
+function selectSection(code) {
+    $('.fs-nav .nav-item').removeClass('active');
+    $('.fs-nav .nav-item[data-code="'+code+'"]').addClass('active');
+    $.get(prefix + "/section", {code: code}, function (res) {
+        if (res.code !== 0) { $.modal.msgError(res.msg); return; }
+        currentSection = code;
+        currentMeta = res.data;
+        renderSection(res.data);
+        $('#saveMsg').text('');
+    });
+}
+
+function renderSection(section) {
+    $('#sectionTitle').text(section.title);
+    $('#sectionDesc').html(section.description + '<br/><span class="fs-apply-hint">热生效方式：' + (section.applyType || '') + '</span>');
+    var groups = {};
+    (section.params || []).forEach(function (p) {
+        var g = p.group || '其他';
+        if (!groups[g]) groups[g] = [];
+        groups[g].push(p);
+    });
+    var html = '';
+    Object.keys(groups).forEach(function (g) {
+        html += '<div class="fs-group-title">'+g+'</div>';
+        groups[g].forEach(function (p) {
+            html += renderField(p);
+        });
+    });
+    $('#paramFields').html(html);
+}
+
+function renderField(p) {
+    var req = p.required ? ' is-required' : '';
+    var readonly = (p.applyHint === 'docs' || p.key === 'hint');
+    var input = '';
+    var val = p.value != null ? p.value : (p.defaultValue || '');
+    if (p.type === 'BOOLEAN') {
+        input = '<select class="form-control" name="'+p.key+'" '+(readonly?'disabled':'')+'>'
+            + '<option value="true"'+(val==='true'?' selected':'')+'>true</option>'
+            + '<option value="false"'+(val==='false'?' selected':'')+'>false</option></select>';
+    } else if (p.type === 'ENUM' && p.enumOptions) {
+        input = '<select class="form-control" name="'+p.key+'" '+(readonly?'disabled':'')+'>';
+        p.enumOptions.split(',').forEach(function (opt) {
+            opt = $.trim(opt);
+            input += '<option value="'+opt+'"'+(val===opt?' selected':'')+'>'+opt+'</option>';
+        });
+        input += '</select>';
+    } else if (p.type === 'TEXT') {
+        input = '<textarea class="form-control" name="'+p.key+'" rows="3" '+(readonly?'readonly':'')+'>'+escapeHtml(val)+'</textarea>';
+    } else {
+        var ph = p.example ? ('示例: ' + p.example) : '';
+        input = '<input class="form-control" name="'+p.key+'" value="'+escapeAttr(val)+'" placeholder="'+escapeAttr(ph)+'" '+(readonly?'readonly':'')+'/>';
+    }
+    return '<div class="form-group" data-key="'+p.key+'">'
+        + '<label class="col-sm-3 control-label'+req+'"><span class="param-label">'+escapeHtml(p.title)+'</span><br/><span class="param-key">'+p.key+'</span></label>'
+        + '<div class="col-sm-8">'
+        + input
+        + '<span class="field-error" data-for="'+p.key+'"></span>'
+        + '<span class="fs-help">'+escapeHtml(p.description||'')
+        + (p.example ? ('<br/><span class="fs-example">示例：'+escapeHtml(p.example)+'</span>') : '')
+        + (p.defaultValue ? ('　默认：'+escapeHtml(p.defaultValue)) : '')
+        + (p.applyHint ? ('　<span class="fs-apply-hint">生效：'+escapeHtml(p.applyHint)+'</span>') : '')
+        + (readonly ? '<br/><span class="readonly-tip">此项仅说明，请在 FreeSWITCH 本机或对应菜单维护</span>' : '')
+        + '</span></div></div>';
+}
+
+function collectValues() {
+    var values = {};
+    $('#fsParamForm').find('input,select,textarea').each(function () {
+        var name = $(this).attr('name');
+        if (name) values[name] = $(this).val();
+    });
+    return values;
+}
+
+function clearErrors() {
+    $('.form-group').removeClass('has-error');
+    $('.field-error').removeClass('show').text('');
+}
+
+function showErrors(errors) {
+    clearErrors();
+    (errors || []).forEach(function (e) {
+        var $g = $('.form-group[data-key="'+e.key+'"]');
+        $g.addClass('has-error');
+        $g.find('.field-error[data-for="'+e.key+'"]').addClass('show').text(e.message);
+    });
+    if (errors && errors.length) {
+        var first = $('.form-group.has-error').first();
+        if (first.length) {
+            $('html,body').animate({scrollTop: first.offset().top - 80}, 200);
+        }
+    }
+}
+
+function clientValidate() {
+    var errors = [];
+    if (!currentMeta) return errors;
+    (currentMeta.params || []).forEach(function (p) {
+        if (p.applyHint === 'docs' || p.key === 'hint') return;
+        var $el = $('[name="'+p.key+'"]');
+        var val = ($el.val() || '').trim();
+        if (p.required && !val) {
+            errors.push({key:p.key, title:p.title, message:'必填项不能为空'});
+            return;
+        }
+        if (!val) return;
+        if ((p.type === 'PORT' || p.type === 'INTEGER') && !/^-?\d+$/.test(val)) {
+            errors.push({key:p.key, title:p.title, message:'必须是整数'});
+            return;
+        }
+        if (p.type === 'PORT' || p.type === 'INTEGER') {
+            var n = parseInt(val, 10);
+            if (p.min != null && n < p.min) errors.push({key:p.key, title:p.title, message:'不能小于 '+p.min});
+            if (p.max != null && n > p.max) errors.push({key:p.key, title:p.title, message:'不能大于 '+p.max});
+        }
+        if (p.type === 'IP' && !/^(?:\d{1,3}\.){3}\d{1,3}$/.test(val)) {
+            errors.push({key:p.key, title:p.title, message:'IP 格式不正确，示例: '+(p.example||'')});
+        }
+        if (p.pattern) {
+            try {
+                var re = new RegExp(p.pattern);
+                if (!re.test(val)) {
+                    errors.push({key:p.key, title:p.title, message: p.patternMessage || ('格式不正确，示例: '+(p.example||''))});
+                }
+            } catch (ignore) {}
+        }
+    });
+    // RTP 交叉校验
+    if (currentSection === 'switch.conf') {
+        var s = parseInt(($('[name="rtp-start-port"]').val()||''),10);
+        var e = parseInt(($('[name="rtp-end-port"]').val()||''),10);
+        if (!isNaN(s) && !isNaN(e) && s >= e) {
+            errors.push({key:'rtp-end-port', title:'RTP 结束端口', message:'必须大于 RTP 起始端口'});
+        }
+    }
+    return errors;
+}
+
+function doValidateOnly() {
+    var local = clientValidate();
+    if (local.length) {
+        showErrors(local);
+        $.modal.msgError('前端校验失败：'+local.length+' 项');
+        return;
+    }
+    $.ajax({
+        url: prefix + '/validate',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({section: currentSection, values: collectValues()}),
+        success: function (res) {
+            if (res.code === 0) {
+                clearErrors();
+                $.modal.msgSuccess('校验通过');
+            } else {
+                showErrors(res.errors || []);
+                $.modal.msgError(res.msg || '校验失败');
+            }
+        }
+    });
+}
+
+function doValidateThenSave(apply) {
+    var local = clientValidate();
+    if (local.length) {
+        showErrors(local);
+        $.modal.msgError('请先修正标红项（'+local.length+'）');
+        return;
+    }
+    $.ajax({
+        url: prefix + '/save',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({section: currentSection, apply: !!apply, values: collectValues()}),
+        success: function (res) {
+            if (res.code === 0) {
+                clearErrors();
+                $('#saveMsg').text(apply ? '已保存并热生效' : '已保存');
+                $.modal.msgSuccess(res.msg || '成功');
+            } else {
+                showErrors(res.errors || []);
+                $.modal.msgError(res.msg || '保存失败');
+            }
+        }
+    });
+}
+
+function escapeHtml(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function escapeAttr(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+</script>
+</body>
+</html>

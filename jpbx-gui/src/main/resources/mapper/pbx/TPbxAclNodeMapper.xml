@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxAclNodeMapper">
+    <resultMap type="TPbxAclNode" id="TPbxAclNodeResult">
+        <result property="id" column="id" />
+        <result property="listId" column="list_id" />
+        <result property="cidr" column="cidr" />
+        <result property="nodeType" column="node_type" />
+        <result property="domain" column="domain" />
+        <result property="sortOrder" column="sort_order" />
+    </resultMap>
+    <sql id="selectVo">select id, list_id, cidr, node_type, domain, sort_order from t_pbx_acl_node</sql>
+    <select id="selectTPbxAclNodeList" parameterType="TPbxAclNode" resultMap="TPbxAclNodeResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="id != null and id != ''">AND id = #{id}</if>
+            <if test="listId != null and listId != ''">AND list_id = #{listId}</if>
+            <if test="cidr != null and cidr != ''">AND cidr = #{cidr}</if>
+            <if test="nodeType != null and nodeType != ''">AND node_type = #{nodeType}</if>
+            <if test="domain != null and domain != ''">AND domain = #{domain}</if>
+            <if test="sortOrder != null and sortOrder != ''">AND sort_order = #{sortOrder}</if>
+        </where>
+        order by 1
+    </select>
+    <select id="selectTPbxAclNodeById" parameterType="String" resultMap="TPbxAclNodeResult">
+        <include refid="selectVo"/> where id = #{id}
+    </select>
+    <insert id="insertTPbxAclNode" parameterType="TPbxAclNode">
+        insert into t_pbx_acl_node
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="listId != null">list_id,</if>
+            <if test="cidr != null">cidr,</if>
+            <if test="nodeType != null">node_type,</if>
+            <if test="domain != null">domain,</if>
+            <if test="sortOrder != null">sort_order,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="listId != null">#{listId},</if>
+            <if test="cidr != null">#{cidr},</if>
+            <if test="nodeType != null">#{nodeType},</if>
+            <if test="domain != null">#{domain},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+        </trim>
+    </insert>
+    <update id="updateTPbxAclNode" parameterType="TPbxAclNode">
+        update t_pbx_acl_node
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="listId != null">list_id = #{listId},</if>
+            <if test="cidr != null">cidr = #{cidr},</if>
+            <if test="nodeType != null">node_type = #{nodeType},</if>
+            <if test="domain != null">domain = #{domain},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <delete id="deleteTPbxAclNodeById" parameterType="String">delete from t_pbx_acl_node where id = #{id}</delete>
+    <delete id="deleteTPbxAclNodeByIds" parameterType="String">
+        delete from t_pbx_acl_node where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+    <delete id="deleteByListId" parameterType="String">delete from t_pbx_acl_node where list_id = #{listId}</delete>
+</mapper>

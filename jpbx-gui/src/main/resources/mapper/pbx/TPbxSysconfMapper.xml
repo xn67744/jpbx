@@ -27,10 +27,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="wssPort"    column="wss_port"    />
         <result property="freeswitchPath"    column="freeswitch_path"    />
         <result property="freeswitchLogPath"    column="freeswitch_log_path"    />
+        <result property="cdrDbInfo" column="cdr_db_info" />
     </resultMap>
 
     <sql id="selectTPbxSysconfVo">
-        select id, local_ip, remote_ip, external_port, internal_port, start_rtp_port, end_rtp_port, audio_code, video_code, frame_rate, bit_rate, ice_start, stun_address, audio_record, video_record, sound_file_path, audio_record_path, video_record_path, freeswitch_path,freeswitch_log_path,ws_port,wss_port from t_pbx_sysconf
+        select id, local_ip, remote_ip, external_port, internal_port, start_rtp_port, end_rtp_port, audio_code, video_code, frame_rate, bit_rate, ice_start, stun_address, audio_record, video_record, sound_file_path, audio_record_path, video_record_path, freeswitch_path,freeswitch_log_path,ws_port,wss_port,cdr_db_info from t_pbx_sysconf
     </sql>
 
     <select id="selectTPbxSysconfList" parameterType="TPbxSysconf" resultMap="TPbxSysconfResult">
@@ -70,6 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="wssPort != null">wss_port,</if>
             <if test="freeswitchPath != null">freeswitch_path,</if>
             <if test="freeswitchLogPath != null">freeswitch_log_path,</if>
+            <if test="cdrDbInfo != null">cdr_db_info,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -94,6 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="wssPort != null">#{wssPort},</if>
             <if test="freeswitchPath != null">#{freeswitchPath},</if>
             <if test="freeswitchLogPath != null">#{freeswitchLogPath},</if>
+            <if test="cdrDbInfo != null">#{cdrDbInfo},</if>
          </trim>
     </insert>
 
@@ -121,6 +124,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="freeswitchLogPath != null">freeswitch_log_path = #{freeswitchLogPath},</if>
             <if test="wsPort != null">ws_port = #{wsPort},</if>
             <if test="wssPort != null">wss_port = #{wssPort},</if>
+            <if test="cdrDbInfo != null">cdr_db_info = #{cdrDbInfo},</if>
         </trim>
         where id = #{id}
     </update>

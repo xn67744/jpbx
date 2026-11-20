@@ -3,11 +3,33 @@
   <section name="configuration" description="Various Configuration">
   <configuration name="cdr_pg_csv.conf" description="CDR PG CSV Format">
     <settings>
-      <param name="db-info" value="host=124.221.186.6 port=5432 dbname=youpbx user=postgres password=abX123ads connect_timeout=10" />
+      #if($params && $params.get('db-info') && $params.get('db-info') != '')
+      <param name="db-info" value="$params.get('db-info')"/>
+      #elseif($cdrDbInfo && $cdrDbInfo != '')
+      <param name="db-info" value="${cdrDbInfo}"/>
+      #else
+      <param name="db-info" value="host=127.0.0.1 port=5432 dbname=youpbx user=postgres password=postgres connect_timeout=10"/>
+      #end
+      #if($params && $params.get('db-table') && $params.get('db-table') != '')
+      <param name="db-table" value="$params.get('db-table')"/>
+      #else
       <param name="db-table" value="cdr"/>
+      #end
+      #if($params && $params.get('legs') && $params.get('legs') != '')
+      <param name="legs" value="$params.get('legs')"/>
+      #else
       <param name="legs" value="a"/>
+      #end
+      #if($params && $params.get('spool-format') && $params.get('spool-format') != '')
+      <param name="spool-format" value="$params.get('spool-format')"/>
+      #else
       <param name="spool-format" value="csv"/>
+      #end
+      #if($params && $params.get('rotate-on-hup') && $params.get('rotate-on-hup') != '')
+      <param name="rotate-on-hup" value="$params.get('rotate-on-hup')"/>
+      #else
       <param name="rotate-on-hup" value="true"/>
+      #end
     </settings>
     <schema>
       <field var="local_ip_v4"/>
@@ -26,7 +48,6 @@
       <field var="accountcode"/>
       <field var="read_codec"/>
       <field var="write_codec"/>
-      <!-- <field var="sip_hangup_disposition"/> -->
       <field var="ani"/>
     </schema>
     </configuration>

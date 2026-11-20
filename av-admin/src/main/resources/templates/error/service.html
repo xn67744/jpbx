@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RuoYi - 500</title>
-	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
-    <link th:href="@{/css/animate.min.css}" rel="stylesheet"/>
-    <link th:href="@{/css/style.min.css}" rel="stylesheet"/>
+    <title>操作异常 - JPBX</title>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}"/>
+    <link th:href="@{/css/bootstrap.min.css?v=3.3.7}" rel="stylesheet"/>
+    <link th:href="@{/css/font-awesome.min.css?v=4.7.0}" rel="stylesheet"/>
+    <link th:href="@{/av/css/pbx-theme.css?v=20261119b}" rel="stylesheet"/>
 </head>
-<body class="gray-bg">
-    <div class="middle-box text-center animated fadeInDown">
-        <h3 class="font-bold">操作异常！</h3>
-
-        <div class="error-desc">
-            [[${errorMessage}]]
-        </div>
-    </div>
+<body class="pbx-error">
+<div class="pbx-error-card">
+    <img class="pbx-error-logo" th:src="@{/img/logo/jpbx-logo-512.png}" alt="JPBX"/>
+    <div class="pbx-error-code"><i class="fa fa-exclamation-triangle"></i></div>
+    <h3>操作异常</h3>
+    <p>[[${errorMessage}]]</p>
+    <a href="javascript:history.back()" class="btn btn-primary"><i class="fa fa-reply"></i> 返回上一页</a>
+</div>
 </body>
 </html>

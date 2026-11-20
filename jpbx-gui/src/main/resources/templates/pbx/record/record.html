@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head><th:block th:include="include :: header('录音管理')" /></head>
+<body class="gray-bg">
+<div class="container-div">
+  <div class="row">
+    <div class="col-sm-12 search-collapse">
+      <form id="formId">
+        <div class="select-list">
+          <ul>
+            <li>相对路径：<input type="text" name="path" id="path"/></li>
+            <li>
+              <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+            </li>
+          </ul>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-12 select-table table-striped"><table id="bootstrap-table"></table></div>
+  </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+var prefix = ctx + "pbx/record";
+$(function(){
+  $.table.init({
+    url: prefix + "/list",
+    modalName: "录音",
+    columns: [
+      {field:'name', title:'文件名'},
+      {field:'path', title:'路径'},
+      {field:'size', title:'大小'},
+      {field:'directory', title:'目录', formatter:function(v){return v?'是':'否';}},
+      {title:'操作', formatter:function(v,r){
+        if(r.directory){ return '<a onclick="enterDir(\''+r.path+'\')">进入</a>'; }
+        return '<a href="'+prefix+'/download?path='+encodeURIComponent(r.path)+'" target="_blank">下载</a>';
+      }}
+    ]
+  });
+});
+function enterDir(p){ $('#path').val(p); $.table.search(); }
+</script>
+</body></html>

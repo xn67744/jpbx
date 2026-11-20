@@ -1,0 +1,1101 @@
+/* ==========================================================================
+   JPBX 主题层 —— 浅色专业风 PBX 配置台
+   设计令牌 + 组件覆盖，加载顺序必须位于 style.min.css / av-ui.css 之后。
+   不修改任何第三方 minified 样式，全部通过覆盖实现，便于回滚。
+   ========================================================================== */
+
+:root {
+    --pbx-primary: #1E63B8;
+    --pbx-primary-dark: #17539B;
+    --pbx-primary-soft: #E8F1FB;
+    --pbx-accent: #0FA3A3;
+    --pbx-bg: #F5F7FA;
+    --pbx-bg-sub: #F7F9FC;
+    --pbx-surface: #FFFFFF;
+    --pbx-border: #E3E8EF;
+    --pbx-border-strong: #D7DEE8;
+    --pbx-text: #1F2937;
+    --pbx-text-sub: #5B6675;
+    --pbx-text-muted: #98A2B3;
+    --pbx-success: #12A594;
+    --pbx-warning: #E8A33D;
+    --pbx-danger: #D9485F;
+    --pbx-info: #3B82F6;
+    --pbx-console: #0F1724;
+    --pbx-radius: 8px;
+    --pbx-radius-sm: 6px;
+    --pbx-shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 6px 16px rgba(16, 24, 40, .06);
+    --pbx-shadow-pop: 0 8px 24px rgba(16, 24, 40, .12);
+    --pbx-sidebar-w: 220px;
+    --pbx-sidebar-collapsed: 64px;
+    --pbx-topbar-h: 56px;
+}
+
+/* ---------- 基础排版 ---------- */
+body,
+body.gray-bg {
+    font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    color: var(--pbx-text);
+    background-color: var(--pbx-bg);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 { font-weight: 600; color: var(--pbx-text); }
+h1 { font-size: 24px; }
+h2 { font-size: 20px; }
+h3 { font-size: 18px; }
+h4 { font-size: 16px; }
+h5 { font-size: 15px; }
+
+a { color: var(--pbx-primary); }
+a:hover, a:focus { color: var(--pbx-primary-dark); text-decoration: none; }
+
+hr { border-color: var(--pbx-border); }
+
+::selection { background: rgba(30, 99, 184, .16); }
+
+/* ---------- 主框架：侧边栏 ---------- */
+body.pbx #wrapper { background: var(--pbx-bg); }
+
+body.pbx .navbar-static-side {
+    width: var(--pbx-sidebar-w);
+    background: var(--pbx-surface) !important;
+    border-right: 1px solid var(--pbx-border);
+    box-shadow: none;
+}
+
+body.pbx .navbar-static-side .logo {
+    height: var(--pbx-topbar-h);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 18px;
+    border-bottom: 1px solid var(--pbx-border);
+    background: var(--pbx-surface);
+}
+
+body.pbx .navbar-static-side .logo .pbx-logo-mark {
+    width: 26px;
+    height: 26px;
+    flex: 0 0 26px;
+}
+
+body.pbx .navbar-static-side .logo .pbx-logo-text {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: .6px;
+    color: var(--pbx-primary);
+    line-height: 1;
+}
+
+body.pbx .navbar-static-side .logo .pbx-logo-sub {
+    display: block;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: .4px;
+    color: var(--pbx-text-muted);
+    margin-top: 3px;
+}
+
+body.pbx .navbar-static-side .sidebar-collapse { background: transparent; }
+
+body.pbx .nav > li { border: 0; }
+
+body.pbx .nav > li > a {
+    color: var(--pbx-text-sub) !important;
+    padding: 11px 18px;
+    font-size: 13.5px;
+    border-left: 3px solid transparent;
+    transition: background-color .15s ease, color .15s ease;
+}
+
+body.pbx .nav > li > a:hover,
+body.pbx .nav > li > a:focus {
+    background: var(--pbx-bg-sub) !important;
+    color: var(--pbx-primary) !important;
+}
+
+body.pbx .nav > li.active > a,
+body.pbx .nav > li > a.active {
+    background: var(--pbx-primary-soft) !important;
+    color: var(--pbx-primary) !important;
+    border-left-color: var(--pbx-primary);
+    font-weight: 600;
+}
+
+body.pbx .nav > li.active { background: transparent !important; border: 0; }
+
+body.pbx .nav > li > a > .fa { width: 18px; text-align: center; margin-right: 6px; opacity: .85; }
+
+body.pbx .nav-second-level li a,
+body.pbx .nav-third-level li a,
+body.pbx .nav-four-level li a {
+    color: var(--pbx-text-sub);
+    padding: 9px 18px 9px 44px;
+    font-size: 13px;
+    background: transparent;
+}
+
+body.pbx .nav-second-level li a:hover,
+body.pbx .nav-third-level li a:hover,
+body.pbx .nav-four-level li a:hover {
+    color: var(--pbx-primary);
+    background: var(--pbx-bg-sub);
+}
+
+body.pbx .nav-second-level li.active > a,
+body.pbx .nav-third-level li.active > a { color: var(--pbx-primary); font-weight: 600; }
+
+body.pbx .user-panel {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--pbx-border);
+    overflow: hidden;
+}
+
+body.pbx .user-panel .image img { width: 38px; height: 38px; border-radius: 50%; }
+body.pbx .user-panel .info { padding-left: 10px; }
+body.pbx .user-panel .info p { color: var(--pbx-text); font-weight: 600; margin: 2px 0 2px; }
+body.pbx .user-panel .info a { color: var(--pbx-text-muted); font-size: 12px; }
+
+/* 折叠态 */
+body.pbx.mini-navbar .navbar-static-side { width: var(--pbx-sidebar-collapsed); }
+body.pbx.mini-navbar .navbar-static-side .logo { padding: 0; justify-content: center; }
+body.pbx.mini-navbar .navbar-static-side .logo .pbx-logo-text { display: none; }
+
+/* ---------- 主框架：顶栏 ---------- */
+body.pbx .navbar-static-top {
+    background: var(--pbx-surface);
+    border-bottom: 1px solid var(--pbx-border) !important;
+    height: var(--pbx-topbar-h);
+    box-shadow: none;
+}
+
+body.pbx .navbar-static-top .navbar-minimalize {
+    color: var(--pbx-text-sub) !important;
+    font-size: 16px;
+    padding: 18px 16px;
+    display: inline-block;
+}
+
+body.pbx .navbar-static-top .navbar-minimalize:hover { color: var(--pbx-primary) !important; }
+
+body.pbx .navbar-top-links > li > a {
+    color: var(--pbx-text-sub) !important;
+    font-size: 13px;
+    padding: 18px 12px;
+    line-height: 20px;
+}
+
+body.pbx .navbar-top-links > li > a:hover { color: var(--pbx-primary) !important; background: transparent; }
+body.pbx .navbar-top-links .user-image { width: 26px; height: 26px; border-radius: 50%; margin-right: 6px; }
+
+body.pbx .navbar-top-links .dropdown-menu {
+    border: 1px solid var(--pbx-border);
+    border-radius: var(--pbx-radius);
+    box-shadow: var(--pbx-shadow-pop);
+    padding: 6px 0;
+}
+
+body.pbx .navbar-top-links .dropdown-menu > li > a { padding: 8px 18px; color: var(--pbx-text-sub); font-size: 13px; }
+body.pbx .navbar-top-links .dropdown-menu > li > a:hover { background: var(--pbx-primary-soft); color: var(--pbx-primary); }
+
+/* ---------- 主框架：页签 ---------- */
+body.pbx .content-tabs {
+    background: var(--pbx-surface);
+    border-bottom: 1px solid var(--pbx-border);
+    height: 38px;
+}
+
+body.pbx .content-tabs .roll-nav { width: 34px; height: 38px; line-height: 38px; color: var(--pbx-text-muted); background: var(--pbx-surface); }
+body.pbx .page-tabs .page-tabs-content { height: 38px; }
+body.pbx .page-tabs a.menuTab {
+    height: 38px;
+    line-height: 38px;
+    padding: 0 16px;
+    font-size: 12.5px;
+    color: var(--pbx-text-sub);
+    border-right: 1px solid var(--pbx-border);
+    background: var(--pbx-surface);
+}
+body.pbx .page-tabs a.menuTab.active {
+    color: var(--pbx-primary);
+    background: var(--pbx-primary-soft);
+    border-bottom: 2px solid var(--pbx-primary);
+}
+body.pbx .page-tabs a.menuTab .closeTab { color: var(--pbx-text-muted); }
+
+body.pbx .footer {
+    background: var(--pbx-surface);
+    border-top: 1px solid var(--pbx-border);
+    color: var(--pbx-text-muted);
+    font-size: 12px;
+    padding: 8px 16px;
+    height: auto;
+}
+
+body.pbx .mainContent { background: var(--pbx-bg); }
+
+/* ---------- 页面容器 ---------- */
+.container-div { padding: 14px 16px 0; }
+
+.ibox {
+    border: 1px solid var(--pbx-border);
+    border-radius: var(--pbx-radius);
+    box-shadow: var(--pbx-shadow);
+    background: var(--pbx-surface);
+    margin-bottom: 16px;
+    clear: both;
+}
+
+.ibox-title {
+    background: var(--pbx-surface);
+    border: 0;
+    border-bottom: 1px solid var(--pbx-border);
+    padding: 12px 16px;
+    min-height: auto;
+}
+
+.ibox-title h5 { font-size: 14px; font-weight: 600; margin: 6px 0; color: var(--pbx-text); }
+.ibox-content { padding: 16px; border: 0; background: var(--pbx-surface); }
+.ibox-content.no-padding { padding: 0; }
+
+.wrapper-content { padding: 16px; }
+.wrapper-content .ibox { margin-bottom: 16px; }
+
+/* 页面标题（PBX 业务页统一） */
+.pbx-page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 14px;
+}
+
+.pbx-page-header .pbx-page-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--pbx-text);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.pbx-page-header .pbx-page-desc {
+    font-size: 13px;
+    color: var(--pbx-text-muted);
+    margin-top: 4px;
+}
+
+/* ---------- 工具栏 ---------- */
+.container-div > .row > .btn-group-sm,
+#toolbar {
+    background: var(--pbx-surface);
+    border: 1px solid var(--pbx-border);
+    border-bottom: 0;
+    border-radius: var(--pbx-radius) var(--pbx-radius) 0 0;
+    padding: 10px 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.container-div > .row > .btn-group-sm .btn,
+#toolbar .btn { margin: 0; }
+
+/* ---------- 按钮 ---------- */
+.btn {
+    border-radius: var(--pbx-radius-sm);
+    font-size: 13px;
+    padding: 6px 14px;
+    border: 1px solid transparent;
+    transition: background-color .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease;
+}
+
+.btn-primary { background: var(--pbx-primary); border-color: var(--pbx-primary); color: #fff; }
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active {
+    background: var(--pbx-primary-dark) !important;
+    border-color: var(--pbx-primary-dark) !important;
+    box-shadow: 0 2px 8px rgba(30, 99, 184, .24);
+}
+
+.btn-success { background: var(--pbx-success); border-color: var(--pbx-success); color: #fff; }
+.btn-success:hover, .btn-success:focus { background: #0E8C7E !important; border-color: #0E8C7E !important; }
+
+.btn-danger { background: var(--pbx-danger); border-color: var(--pbx-danger); color: #fff; }
+.btn-danger:hover, .btn-danger:focus { background: #C03A50 !important; border-color: #C03A50 !important; }
+
+.btn-warning { background: var(--pbx-warning); border-color: var(--pbx-warning); color: #fff; }
+.btn-info { background: var(--pbx-info); border-color: var(--pbx-info); color: #fff; }
+
+.btn-default, .btn-white {
+    background: var(--pbx-surface);
+    border-color: var(--pbx-border-strong);
+    color: var(--pbx-text-sub);
+}
+.btn-default:hover, .btn-white:hover { border-color: var(--pbx-primary); color: var(--pbx-primary); }
+
+.btn-outline { background: transparent; border: 1px solid var(--pbx-primary); color: var(--pbx-primary); }
+.btn-outline:hover { background: var(--pbx-primary); color: #fff; }
+
+.btn-link { color: var(--pbx-primary); padding: 2px 4px; }
+.btn-link:hover { color: var(--pbx-primary-dark); text-decoration: underline; }
+
+.btn-xs { padding: 3px 10px; font-size: 12px; border-radius: 4px; }
+
+/* 禁用态统一为浅色，避免第三方皮肤的高饱和色 */
+.btn.disabled, .btn[disabled],
+fieldset[disabled] .btn { opacity: .5; box-shadow: none !important; }
+.btn-primary.disabled, .btn-primary[disabled],
+fieldset[disabled] .btn-primary { background: var(--pbx-primary) !important; border-color: var(--pbx-primary) !important; }
+.btn-success.disabled, .btn-success[disabled],
+fieldset[disabled] .btn-success { background: var(--pbx-success) !important; border-color: var(--pbx-success) !important; }
+.btn-danger.disabled, .btn-danger[disabled],
+fieldset[disabled] .btn-danger { background: var(--pbx-danger) !important; border-color: var(--pbx-danger) !important; }
+.btn-warning.disabled, .btn-warning[disabled],
+fieldset[disabled] .btn-warning { background: var(--pbx-warning) !important; border-color: var(--pbx-warning) !important; }
+.btn-info.disabled, .btn-info[disabled],
+fieldset[disabled] .btn-info { background: var(--pbx-info) !important; border-color: var(--pbx-info) !important; }
+
+/* ---------- 表格 ---------- */
+.bootstrap-table { background: var(--pbx-surface); }
+
+.fixed-table-toolbar {
+    background: var(--pbx-surface);
+    padding: 8px 12px 0;
+}
+
+.fixed-table-toolbar .columns,
+.fixed-table-toolbar .search { margin: 0; }
+
+.fixed-table-toolbar .btn-group > .btn { border-radius: var(--pbx-radius-sm); }
+
+.bootstrap-table .table {
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 0;
+}
+
+.bootstrap-table .table > thead > tr > th {
+    background: var(--pbx-bg-sub);
+    color: #475467;
+    font-size: 13px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--pbx-border);
+    border-top: 1px solid var(--pbx-border);
+    padding: 10px 12px;
+    white-space: nowrap;
+}
+
+.bootstrap-table .table > tbody > tr > td {
+    border-top: 1px solid #EEF2F7;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--pbx-text);
+    vertical-align: middle;
+}
+
+.bootstrap-table .table > tbody > tr:hover > td { background: #F3F7FD; }
+.bootstrap-table .table > tbody > tr.selected > td { background: var(--pbx-primary-soft); }
+
+.bootstrap-table .table > tbody > tr:last-child > td { border-bottom: 1px solid var(--pbx-border); }
+
+.fixed-table-pagination { padding: 8px 12px; border-top: 1px solid var(--pbx-border); }
+.fixed-table-pagination .pagination { margin: 4px 0; }
+.fixed-table-pagination .pagination > li > a,
+.fixed-table-pagination .pagination > li > span {
+    color: var(--pbx-text-sub);
+    border: 1px solid var(--pbx-border);
+    margin-left: 4px;
+    border-radius: 4px;
+    font-size: 12.5px;
+    padding: 5px 10px;
+}
+.fixed-table-pagination .pagination > .active > a,
+.fixed-table-pagination .pagination > .active > span,
+.fixed-table-pagination .pagination > li > a:hover {
+    background: var(--pbx-primary);
+    border-color: var(--pbx-primary);
+    color: #fff;
+}
+
+.fixed-table-pagination .pagination-detail { color: var(--pbx-text-muted); font-size: 12.5px; }
+
+/* 表格里的操作按钮更轻 */
+.bootstrap-table .btn-xs { padding: 2px 8px; }
+
+/* ---------- 查询区 ---------- */
+.form-search { padding: 0; }
+
+.form-search .form-group { margin-right: 8px; margin-bottom: 10px; }
+.form-search .control-label { display: none; }
+.form-search .form-control { height: 32px; font-size: 13px; }
+
+/* ---------- 表单 ---------- */
+.form-control {
+    height: 34px;
+    border: 1px solid var(--pbx-border-strong);
+    border-radius: var(--pbx-radius-sm);
+    box-shadow: none;
+    font-size: 13.5px;
+    color: var(--pbx-text);
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.form-control:focus {
+    border-color: var(--pbx-primary);
+    box-shadow: 0 0 0 3px rgba(30, 99, 184, .12);
+}
+
+.form-control::placeholder { color: var(--pbx-text-muted); }
+.form-control[disabled], .form-control[readonly] { background: var(--pbx-bg-sub); color: var(--pbx-text-muted); }
+
+textarea.form-control { height: auto; min-height: 76px; }
+
+select.form-control { padding: 4px 8px; }
+
+.form-horizontal .control-label {
+    font-weight: 500;
+    color: var(--pbx-text-sub);
+    font-size: 13.5px;
+    padding-top: 9px;
+}
+
+.form-horizontal .form-group { margin-bottom: 14px; margin-left: -10px; margin-right: -10px; }
+
+.help-block { font-size: 12px; color: var(--pbx-text-muted); margin: 5px 0 0; line-height: 1.6; }
+.help-block code { background: var(--pbx-bg-sub); color: var(--pbx-primary); border-radius: 3px; padding: 1px 4px; }
+
+label.error { color: var(--pbx-danger); font-size: 12px; font-weight: 400; margin-top: 4px; }
+
+.is-required:before {
+    content: "*";
+    color: var(--pbx-danger);
+    margin-right: 3px;
+    font-weight: 700;
+}
+
+/* 输入框组 */
+.input-group-addon { background: var(--pbx-bg-sub); border-color: var(--pbx-border-strong); color: var(--pbx-text-muted); }
+
+/* 复选框 / 单选 */
+.checkbox-custom label:before,
+.radio-custom label:before { border-color: var(--pbx-border-strong); }
+.checkbox-custom input[type="checkbox"]:checked + label:before,
+.radio-custom input[type="radio"]:checked + label:before {
+    background-color: var(--pbx-primary);
+    border-color: var(--pbx-primary);
+}
+
+/* iCheck */
+.icheckbox_square-green.checked,
+.iradio_square-green.checked { background-color: var(--pbx-primary); border-color: var(--pbx-primary); }
+
+/* ---------- 弹窗 ---------- */
+.modal-content {
+    border: 0;
+    border-radius: var(--pbx-radius);
+    box-shadow: var(--pbx-shadow-pop);
+    overflow: hidden;
+}
+
+.modal-header { border-bottom: 1px solid var(--pbx-border); padding: 14px 18px; }
+.modal-title { font-size: 16px; font-weight: 600; }
+.modal-body { padding: 18px; }
+.modal-footer { border-top: 1px solid var(--pbx-border); padding: 12px 18px; background: var(--pbx-bg-sub); }
+
+/* layer 弹层 */
+.layui-layer { border-radius: var(--pbx-radius) !important; box-shadow: var(--pbx-shadow-pop) !important; }
+.layui-layer-title { background: var(--pbx-surface) !important; border-bottom: 1px solid var(--pbx-border) !important; font-size: 15px !important; font-weight: 600 !important; color: var(--pbx-text) !important; }
+.layui-layer-btn .layui-layer-btn0 { background: var(--pbx-primary) !important; border-color: var(--pbx-primary) !important; border-radius: var(--pbx-radius-sm) !important; }
+.layui-layer-btn a { border-radius: var(--pbx-radius-sm) !important; }
+
+/* ---------- 徽标 / 状态 ---------- */
+.label { border-radius: 4px; font-weight: 500; font-size: 12px; padding: 2px 8px; }
+.label-primary { background: rgba(30, 99, 184, .12); color: var(--pbx-primary); }
+.label-success { background: rgba(18, 165, 148, .12); color: var(--pbx-success); }
+.label-warning { background: rgba(232, 163, 61, .14); color: #B77718; }
+.label-danger { background: rgba(217, 72, 95, .12); color: var(--pbx-danger); }
+.label-info { background: rgba(59, 130, 246, .12); color: var(--pbx-info); }
+.label-default { background: var(--pbx-bg-sub); color: var(--pbx-text-sub); }
+
+.pbx-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 12px;
+    line-height: 18px;
+}
+.pbx-badge.is-on { background: rgba(18, 165, 148, .12); color: var(--pbx-success); }
+.pbx-badge.is-off { background: var(--pbx-bg-sub); color: var(--pbx-text-muted); }
+
+/* ---------- 提示 ---------- */
+.alert { border-radius: var(--pbx-radius); border: 1px solid transparent; font-size: 13px; }
+.alert-info { background: var(--pbx-primary-soft); border-color: #CFE0F4; color: var(--pbx-primary-dark); }
+.alert-warning { background: #FDF6EA; border-color: #F3E0BC; color: #8A5B0B; }
+.alert-danger { background: #FCEFF1; border-color: #F3CFD5; color: #9A2C3E; }
+.alert-success { background: #EAF7F4; border-color: #C9EADF; color: #0B6E62; }
+
+/* ---------- 首页 / 概览卡片 ---------- */
+.pbx-hero {
+    background: linear-gradient(120deg, #EAF2FC 0%, #F7FBFB 62%, #E9F6F5 100%);
+    border: 1px solid var(--pbx-border);
+    border-left: 3px solid var(--pbx-primary);
+    border-radius: var(--pbx-radius);
+    color: var(--pbx-text);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--pbx-shadow);
+}
+
+.pbx-hero .pbx-hero-title { font-size: 20px; font-weight: 600; margin: 0 0 6px; color: var(--pbx-text); }
+.pbx-hero .pbx-hero-desc { font-size: 13px; color: var(--pbx-text-sub); margin: 0; }
+.pbx-hero .pbx-hero-mark { width: 56px; height: 56px; border-radius: 12px; }
+
+.pbx-stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 16px; }
+
+.pbx-stat {
+    background: var(--pbx-surface);
+    border: 1px solid var(--pbx-border);
+    border-radius: var(--pbx-radius);
+    padding: 16px;
+    box-shadow: var(--pbx-shadow);
+}
+
+.pbx-stat .pbx-stat-label { font-size: 12.5px; color: var(--pbx-text-muted); display: flex; align-items: center; gap: 6px; }
+.pbx-stat .pbx-stat-value { font-size: 26px; font-weight: 600; color: var(--pbx-text); margin-top: 8px; line-height: 1.1; }
+.pbx-stat .pbx-stat-foot { font-size: 12px; color: var(--pbx-text-muted); margin-top: 6px; }
+.pbx-stat .pbx-stat-value small { font-size: 12px; color: var(--pbx-text-muted); font-weight: 400; }
+
+.pbx-quick { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+
+.pbx-quick a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border: 1px solid var(--pbx-border);
+    border-radius: var(--pbx-radius-sm);
+    color: var(--pbx-text-sub);
+    font-size: 13px;
+    background: var(--pbx-surface);
+    transition: all .15s ease;
+}
+
+.pbx-quick a:hover {
+    border-color: var(--pbx-primary);
+    color: var(--pbx-primary);
+    box-shadow: 0 4px 12px rgba(30, 99, 184, .12);
+    transform: translateY(-1px);
+}
+
+.pbx-quick a .fa { color: var(--pbx-primary); }
+
+/* ---------- 终端/控制台 ---------- */
+.pbx-console {
+    background: var(--pbx-console);
+    color: #D7E1EE;
+    border-radius: var(--pbx-radius);
+    font-family: "JetBrains Mono", Consolas, "Courier New", monospace;
+    font-size: 12.5px;
+    line-height: 1.7;
+    padding: 14px 16px;
+    max-height: 420px;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.pbx-console .pbx-console-prompt { color: #5BD1C4; }
+
+/* ---------- 详情页 ---------- */
+.pbx-detail-list { margin: 0; }
+.pbx-detail-list dt { color: var(--pbx-text-muted); font-weight: 500; font-size: 13px; padding: 8px 0 2px; }
+.pbx-detail-list dd { color: var(--pbx-text); font-size: 13.5px; padding: 0 0 8px; margin: 0; border-bottom: 1px dashed #EEF2F7; }
+
+/* ---------- 登录页 ---------- */
+body.pbx-login {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--pbx-bg);
+    font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+}
+
+body.pbx-login .pbx-login-wrap { display: flex; min-height: 100vh; }
+
+body.pbx-login .pbx-login-brand {
+    flex: 1 1 52%;
+    background: linear-gradient(150deg, #1E63B8 0%, #1B6FC0 50%, #0FA3A3 100%);
+    color: #fff;
+    padding: 56px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+body.pbx-login .pbx-login-brand:after {
+    content: "";
+    position: absolute;
+    width: 620px;
+    height: 620px;
+    right: -220px;
+    bottom: -260px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, .16);
+    box-shadow: 0 0 0 60px rgba(255, 255, 255, .05), 0 0 0 120px rgba(255, 255, 255, .03);
+}
+
+body.pbx-login .pbx-login-brand .pbx-brand-row { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+body.pbx-login .pbx-login-brand img { width: 52px; height: 52px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0, 0, 0, .18); }
+body.pbx-login .pbx-login-brand .pbx-brand-name { font-size: 26px; font-weight: 700; letter-spacing: 1px; }
+body.pbx-login .pbx-login-brand .pbx-brand-ver { font-size: 12px; opacity: .8; letter-spacing: .5px; }
+body.pbx-login .pbx-login-brand h2 { color: #fff; font-size: 30px; font-weight: 600; margin: 0 0 12px; }
+body.pbx-login .pbx-login-brand p { font-size: 14px; line-height: 1.9; opacity: .9; max-width: 520px; margin: 0; }
+body.pbx-login .pbx-login-brand ul { list-style: none; padding: 0; margin: 22px 0 0; font-size: 13px; opacity: .92; }
+body.pbx-login .pbx-login-brand ul li { margin-bottom: 8px; }
+body.pbx-login .pbx-login-brand ul li .fa { margin-right: 8px; }
+
+body.pbx-login .pbx-login-panel {
+    flex: 0 0 480px;
+    background: var(--pbx-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+body.pbx-login .pbx-login-card { width: 100%; max-width: 360px; }
+body.pbx-login .pbx-login-card h3 { font-size: 22px; font-weight: 600; margin: 0 0 6px; }
+body.pbx-login .pbx-login-card .pbx-login-tip { font-size: 13px; color: var(--pbx-text-muted); margin-bottom: 26px; }
+body.pbx-login .pbx-login-card .form-control { height: 42px; margin-bottom: 14px; }
+body.pbx-login .pbx-login-card .btn-primary { height: 42px; font-size: 15px; width: 100%; }
+body.pbx-login .pbx-login-card .imgcode { height: 42px; width: 100%; border: 1px solid var(--pbx-border-strong); border-radius: var(--pbx-radius-sm); cursor: pointer; }
+body.pbx-login .pbx-login-foot { margin-top: 28px; font-size: 12px; color: var(--pbx-text-muted); text-align: center; }
+
+@media (max-width: 992px) {
+    body.pbx-login .pbx-login-brand { display: none; }
+    body.pbx-login .pbx-login-panel { flex: 1 1 100%; }
+}
+
+/* ---------- 错误页 ---------- */
+body.pbx-error {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--pbx-bg);
+    font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+}
+
+body.pbx-error .pbx-error-card {
+    width: 460px;
+    max-width: 92vw;
+    background: var(--pbx-surface);
+    border: 1px solid var(--pbx-border);
+    border-radius: 12px;
+    box-shadow: var(--pbx-shadow);
+    padding: 40px 36px;
+    text-align: center;
+}
+
+body.pbx-error .pbx-error-code {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1;
+    background: linear-gradient(120deg, #1E63B8, #0FA3A3);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+body.pbx-error h3 { font-size: 18px; margin: 14px 0 10px; }
+body.pbx-error p { color: var(--pbx-text-sub); font-size: 13.5px; line-height: 1.8; margin-bottom: 22px; }
+body.pbx-error .pbx-error-logo { width: 44px; height: 44px; margin-bottom: 6px; }
+
+/* ---------- 锁屏 ---------- */
+body.pbx-lock { background: var(--pbx-bg); min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif; }
+body.pbx-lock .pbx-lock-card { width: 380px; background: #fff; border: 1px solid var(--pbx-border); border-radius: 12px; box-shadow: var(--pbx-shadow); padding: 32px; text-align: center; }
+body.pbx-lock .pbx-lock-card img { width: 42px; height: 42px; margin-bottom: 12px; }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 1200px) {
+    .pbx-stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 992px) {
+    body.pbx .navbar-static-side { width: var(--pbx-sidebar-collapsed); }
+    .container-div { padding: 10px; }
+    .pbx-stat-grid { grid-template-columns: 1fr; }
+    .form-horizontal .control-label { text-align: left; padding-top: 0; padding-bottom: 4px; }
+}
+
+/* ---------- 滚动条 ---------- */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #C9D3E0; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #AEBBCB; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ---------- 侧边栏用户区 / 顶栏对齐 ---------- */
+body.pbx .user-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+}
+body.pbx .user-panel .pull-left { float: none !important; }
+body.pbx .user-panel > a { flex: 0 0 36px; }
+body.pbx .user-panel .image img { width: 36px; height: 36px; display: block; }
+body.pbx .user-panel .info { padding-left: 0; flex: 1 1 auto; min-width: 0; }
+body.pbx .user-panel .info p {
+    margin: 0 0 3px;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+body.pbx .user-panel .info a { display: inline-block; font-size: 12px; }
+
+body.pbx .navbar-top-links {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding-right: 6px;
+    height: var(--pbx-topbar-h);
+}
+body.pbx .navbar-top-links > li { float: none; }
+body.pbx .navbar-top-links > li > a { padding: 0 10px; line-height: var(--pbx-topbar-h); }
+body.pbx .navbar-top-links .open > a,
+body.pbx .navbar-top-links .open > a:hover { background: transparent; }
+
+body.pbx .content-tabs { display: flex; align-items: center; }
+body.pbx .content-tabs .page-tabs { flex: 1 1 auto; min-width: 0; }
+body.pbx .content-tabs .roll-nav { flex: 0 0 auto; }
+body.pbx .content-tabs .tabReload {
+    padding: 0 12px;
+    font-size: 12.5px;
+    line-height: 38px;
+    background: transparent;
+    border-left: 1px solid var(--pbx-border);
+    color: var(--pbx-text-sub);
+}
+body.pbx .content-tabs .tabReload:hover { color: var(--pbx-primary); }
+body.pbx .content-tabs .roll-nav:hover { color: var(--pbx-primary); }
+
+/* ---------- 品牌区 / 顶栏标题 ---------- */
+body.pbx .pbx-brand { display: block; text-decoration: none; }
+body.pbx .pbx-brand:hover { text-decoration: none; }
+body.pbx .pbx-logo-mark { width: 28px; height: 28px; border-radius: 7px; }
+body.pbx .pbx-topbar-title {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--pbx-text);
+    line-height: 56px;
+    vertical-align: top;
+    margin-left: 4px;
+}
+body.pbx.mini-navbar .navbar-static-side .logo .pbx-logo-sub { display: none; }
+
+/* ---------- 概览页 ---------- */
+.pbx-table-flat { margin-bottom: 0; }
+.pbx-table-flat > thead > tr > th {
+    background: var(--pbx-bg-sub);
+    color: #475467;
+    font-size: 13px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--pbx-border);
+    padding: 10px 14px;
+    white-space: nowrap;
+}
+.pbx-table-flat > tbody > tr > td {
+    padding: 10px 14px;
+    font-size: 13px;
+    border-top: 1px solid #EEF2F7;
+    vertical-align: middle;
+}
+.pbx-table-flat > tbody > tr:hover > td { background: #F3F7FD; }
+
+.pbx-empty { padding: 42px 16px; text-align: center; color: var(--pbx-text-muted); }
+.pbx-empty .fa { font-size: 30px; opacity: .45; display: block; margin-bottom: 10px; }
+.pbx-empty p { margin: 0; font-size: 13px; }
+
+.pbx-status-line { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--pbx-text-sub); margin-bottom: 8px; }
+.pbx-status-line strong { margin-left: auto; font-weight: 600; }
+.pbx-status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.pbx-status-dot.is-on { background: var(--pbx-success); box-shadow: 0 0 0 3px rgba(18, 165, 148, .16); }
+.pbx-status-dot.is-off { background: var(--pbx-danger); box-shadow: 0 0 0 3px rgba(217, 72, 95, .14); }
+
+.ibox-tools { float: right; padding-top: 0; }
+.ibox-title { overflow: hidden; }
+
+/* ---------- 锁屏页 ---------- */
+body.pbx-lock .pbx-lock-brand { font-size: 20px; font-weight: 700; letter-spacing: 1px; color: var(--pbx-primary); margin-bottom: 4px; }
+body.pbx-lock .pbx-lock-time { font-size: 34px; font-weight: 300; letter-spacing: 1px; color: var(--pbx-text); margin-bottom: 18px; }
+body.pbx-lock .pbx-lock-user { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; color: var(--pbx-text-sub); margin-bottom: 18px; }
+body.pbx-lock .pbx-lock-user img { width: 26px; height: 26px; border-radius: 50%; }
+body.pbx-lock .pbx-lock-card .form-control { height: 40px; margin-bottom: 12px; }
+body.pbx-lock .pbx-lock-card .btn-primary { height: 40px; }
+body.pbx-lock .pbx-lock-foot { margin-top: 18px; font-size: 12.5px; }
+
+/* ---------- 错误页动作 ---------- */
+body.pbx-error .pbx-error-code .fa { -webkit-text-fill-color: currentColor; }
+
+/* ---------- 列表页骨架（不改 DOM，仅覆盖间距与卡片） ---------- */
+.container-div > .row { margin-left: 0; margin-right: 0; height: auto; }
+.container-div > .row > [class*="col-"] { padding-left: 0; padding-right: 0; }
+
+.search-collapse,
+.select-table {
+    border: 1px solid var(--pbx-border);
+    border-radius: var(--pbx-radius);
+    box-shadow: var(--pbx-shadow);
+    margin-top: 0;
+    background: var(--pbx-surface);
+}
+
+.search-collapse { padding: 12px 14px 2px; margin-bottom: 10px; }
+.search-collapse form { margin: 0; }
+.search-collapse .select-list ul { margin: 0; padding: 0; }
+
+.select-list li { margin: 0 12px 10px 0; font-size: 13px; }
+.select-list li .btn { padding: 5px 14px; font-size: 13px; }
+.select-list .form-control { height: 32px; font-size: 13px; }
+
+/* 工具栏独立成条 */
+#toolbar {
+    border: 1px solid var(--pbx-border);
+    border-radius: var(--pbx-radius);
+    box-shadow: var(--pbx-shadow);
+    padding: 9px 12px;
+    margin-bottom: 10px;
+    background: var(--pbx-surface);
+}
+
+#toolbar .btn { padding: 5px 12px; font-size: 13px; }
+
+/* 工具栏首个按钮固定为主操作（品牌蓝） */
+#toolbar > .btn:first-child,
+#toolbar > a.btn:first-child {
+    background: var(--pbx-primary);
+    border-color: var(--pbx-primary);
+    color: #fff;
+}
+#toolbar > .btn:first-child:hover,
+#toolbar > a.btn:first-child:hover {
+    background: var(--pbx-primary-dark) !important;
+    border-color: var(--pbx-primary-dark) !important;
+}
+
+.select-table { padding: 0; overflow: hidden; }
+.select-table > .bootstrap-table { border: 0; }
+.select-table .fixed-table-toolbar { padding: 8px 12px 4px; }
+.select-table .fixed-table-toolbar .search .form-control { height: 32px; font-size: 13px; }
+.select-table .fixed-table-pagination { border-top: 1px solid var(--pbx-border); }
+
+/* 表格内编辑/删除按钮改为轻量文字按钮 */
+.bootstrap-table .table .btn-success.btn-xs,
+.bootstrap-table .table .btn-danger.btn-xs,
+.bootstrap-table .table .btn-primary.btn-xs {
+    background: transparent;
+    border-color: transparent;
+    padding: 2px 6px;
+}
+.bootstrap-table .table .btn-success.btn-xs { color: var(--pbx-primary); }
+.bootstrap-table .table .btn-danger.btn-xs { color: var(--pbx-danger); }
+.bootstrap-table .table .btn-primary.btn-xs { color: var(--pbx-info); }
+.bootstrap-table .table .btn-success.btn-xs:hover,
+.bootstrap-table .table .btn-primary.btn-xs:hover { background: var(--pbx-primary-soft); }
+.bootstrap-table .table .btn-danger.btn-xs:hover { background: rgba(217, 72, 95, .1); }
+
+/* 表单页容器 */
+.wrapper-content.ibox-content { border: 0; box-shadow: none; background: transparent; padding: 4px 0 0; }
+.wrapper-content.ibox-content > form { background: var(--pbx-surface); border: 1px solid var(--pbx-border); border-radius: var(--pbx-radius); box-shadow: var(--pbx-shadow); padding: 20px 20px 4px; }
+.wrapper-content.ibox-content > form.form-horizontal { padding-top: 22px; }
+
+/* 详情/只读信息卡 */
+.ibox .ibox-content dl { margin-bottom: 0; }
+
+/* 日志/终端输出区（深色终端卡片） */
+#content {
+    background: #0F1724;
+    color: #D6E2F0;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12.5px;
+    line-height: 1.65;
+    padding: 14px 16px;
+    border-radius: var(--pbx-radius);
+    border: 1px solid #1B2740;
+    max-height: calc(100vh - 210px);
+    min-height: 320px;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+#content pre,
+#content code {
+    background: transparent;
+    border: 0;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    white-space: pre-wrap;
+}
+
+/* ---------- 侧边栏层级强化：选中 > 分组展开 > 叶子 ---------- */
+body.pbx .nav > li.active > a {
+    background: linear-gradient(90deg, #1E63B8 0%, #2C76CC 100%) !important;
+    color: #fff !important;
+    border-left-color: #0F4E96;
+    box-shadow: inset 0 -1px 0 rgba(255,255,255,.12);
+}
+body.pbx .nav > li.active > a .fa,
+body.pbx .nav > li.active > a .arrow { color: #fff !important; opacity: 1; }
+
+body.pbx .nav-second-level > li > a {
+    padding: 10px 14px 10px 30px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: var(--pbx-text) !important;
+    border-left: 3px solid transparent;
+    border-radius: 0 6px 6px 0;
+    margin: 1px 10px 1px 0;
+}
+body.pbx .nav-second-level > li > a:hover {
+    background: #F1F6FD !important;
+    color: var(--pbx-primary-dark) !important;
+}
+body.pbx .nav-second-level > li.active > a {
+    background: linear-gradient(90deg, #E1EDFC 0%, #F1F7FF 100%) !important;
+    color: var(--pbx-primary-dark) !important;
+    border-left-color: var(--pbx-primary);
+    box-shadow: inset 0 0 0 1px rgba(30,99,184,.08);
+}
+body.pbx .nav-second-level > li > a > .fa.arrow { color: var(--pbx-primary); opacity: 1; }
+
+body.pbx .nav-third-level > li > a {
+    position: relative;
+    padding: 8px 12px 8px 50px !important;
+    margin: 0 10px 0 32px;
+    font-size: 12.5px !important;
+    font-weight: 400 !important;
+    color: var(--pbx-text-sub) !important;
+    border-left: 0 !important;
+    border-radius: 0 5px 5px 0;
+}
+body.pbx .nav-third-level > li > a::before {
+    content: '';
+    position: absolute;
+    left: -14px;
+    top: 0;
+    bottom: 0;
+    border-left: 1px dashed #D8E2EF;
+}
+body.pbx .nav-third-level > li > a:hover {
+    background: #F5F9FE !important;
+    color: var(--pbx-primary) !important;
+}
+body.pbx .nav-third-level > li.active > a {
+    background: #fff !important;
+    color: var(--pbx-primary) !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 6px rgba(16,24,40,.08), inset 3px 0 0 var(--pbx-primary);
+}
+body.pbx .nav-third-level > li.active > a::before { border-left-color: var(--pbx-primary); }
+
+body.pbx .nav-four-level > li > a { padding-left: 66px !important; font-size: 12px !important; }
+
+/* ---------- 首页信息层次 ---------- */
+.pbx-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 22px 26px;
+    background: linear-gradient(115deg, #E9F2FD 0%, #F9FCFF 55%, #E7F7F5 100%);
+}
+.pbx-hero::before {
+    content: '';
+    position: absolute;
+    right: 78px;
+    top: -76px;
+    width: 190px;
+    height: 190px;
+    border: 1px solid rgba(30,99,184,.10);
+    border-radius: 50%;
+    box-shadow: 0 0 0 26px rgba(30,99,184,.035), 0 0 0 54px rgba(30,99,184,.02);
+}
+.pbx-hero::after {
+    content: '';
+    position: absolute;
+    right: -34px;
+    bottom: -86px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: rgba(15,163,163,.07);
+}
+.pbx-hero > div { position: relative; z-index: 1; }
+.pbx-hero .pbx-hero-title { letter-spacing: .2px; }
+.pbx-hero .pbx-hero-mark {
+    position: relative;
+    z-index: 1;
+    width: 60px;
+    height: 60px;
+    border: 1px solid rgba(30,99,184,.12);
+    box-shadow: 0 8px 20px rgba(30,99,184,.18);
+}
+
+.pbx-stat { position: relative; overflow: hidden; transition: transform .15s ease, box-shadow .15s ease; }
+.pbx-stat::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--pbx-primary);
+    opacity: .8;
+}
+.pbx-stat:nth-child(2)::before { background: #0FA3A3; }
+.pbx-stat:nth-child(3)::before { background: #E8A33D; }
+.pbx-stat:nth-child(4)::before { background: #7C5CD6; }
+.pbx-stat:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(16,24,40,.10); }
+.pbx-stat .pbx-stat-label i {
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    text-align: center;
+    border-radius: 6px;
+    background: #E8F1FB;
+    color: var(--pbx-primary);
+    opacity: 1;
+    margin-right: 2px;
+}
+.pbx-stat:nth-child(2) .pbx-stat-label i { background: rgba(15,163,163,.12); color: #0FA3A3; }
+.pbx-stat:nth-child(3) .pbx-stat-label i { background: rgba(232,163,61,.14); color: #C98521; }
+.pbx-stat:nth-child(4) .pbx-stat-label i { background: rgba(124,92,214,.12); color: #7C5CD6; }
+
+.pbx-quick a { transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease; border-left: 3px solid transparent; }
+.pbx-quick a:hover { transform: translateX(2px); border-left-color: var(--pbx-primary); box-shadow: 0 4px 12px rgba(16,24,40,.07); }
+.pbx-quick a i { color: var(--pbx-primary); opacity: 1; }
+
+.ibox-title { border-bottom: 1px solid #EEF2F7; }
+.ibox-title h5 { font-weight: 600; }
+.ibox-title h5::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 13px;
+    margin-right: 8px;
+    vertical-align: -2px;
+    border-radius: 2px;
+    background: var(--pbx-primary);
+}

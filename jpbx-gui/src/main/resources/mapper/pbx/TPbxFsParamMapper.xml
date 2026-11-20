@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxFsParamMapper">
+
+    <resultMap type="TPbxFsParam" id="TPbxFsParamResult">
+        <result property="id" column="id"/>
+        <result property="section" column="section"/>
+        <result property="paramKey" column="param_key"/>
+        <result property="paramValue" column="param_value"/>
+    </resultMap>
+
+    <select id="selectBySection" resultMap="TPbxFsParamResult">
+        select id, section, param_key, param_value from t_pbx_fs_param where section = #{section}
+    </select>
+
+    <select id="selectBySectionAndKey" resultMap="TPbxFsParamResult">
+        select id, section, param_key, param_value from t_pbx_fs_param
+        where section = #{section} and param_key = #{paramKey}
+    </select>
+
+    <insert id="insertTPbxFsParam" parameterType="TPbxFsParam">
+        insert into t_pbx_fs_param(id, section, param_key, param_value)
+        values(#{id}, #{section}, #{paramKey}, #{paramValue})
+    </insert>
+
+    <update id="updateTPbxFsParam" parameterType="TPbxFsParam">
+        update t_pbx_fs_param set param_value = #{paramValue}
+        where section = #{section} and param_key = #{paramKey}
+    </update>
+
+    <delete id="deleteBySection" parameterType="String">
+        delete from t_pbx_fs_param where section = #{section}
+    </delete>
+
+    <!-- PostgreSQL upsert -->
+    <insert id="upsert" parameterType="TPbxFsParam">
+        insert into t_pbx_fs_param(id, section, param_key, param_value)
+        values(#{id}, #{section}, #{paramKey}, #{paramValue})
+        on conflict (section, param_key) do update set param_value = excluded.param_value
+    </insert>
+</mapper>

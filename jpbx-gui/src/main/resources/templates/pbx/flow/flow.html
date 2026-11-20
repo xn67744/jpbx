@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('呼叫流程看板')" />
+    <link rel="stylesheet" th:href="@{/av/css/pbx-flow.css?v=20261119}"/>
+</head>
+<body class="gray-bg">
+<div class="container-div flow-page">
+    <div class="row flow-toolbar-row">
+        <div class="col-sm-12">
+            <div class="page-header">
+                <div>
+                    <h4>呼叫流程看板</h4>
+                    <p>按实际生效配置展示「号码匹配 → 路由 → 拨号计划 → 目的地」的完整链路；点击节点可直接调整配置。</p>
+                </div>
+                <div class="btn-group-sm" id="toolbar">
+                    <a class="btn btn-primary" onclick="loadGraph()"><i class="fa fa-refresh"></i> 刷新看板</a>
+                    <a class="btn btn-warning" onclick="reloadXml()" shiro:hasPermission="pbx:ops:edit"><i class="fa fa-bolt"></i> 热生效</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="flow-test-card">
+                <div class="flow-test-title"><i class="fa fa-search"></i> 呼叫路径模拟</div>
+                <div class="flow-test-form">
+                    <label>被叫号码</label>
+                    <input type="text" id="testNumber" placeholder="例如 1132 或 9001"/>
+                    <label>主叫 IP</label>
+                    <input type="text" id="testIp" value="192.168.0.152" placeholder="用于 ACL 匹配"/>
+                    <button class="btn btn-primary btn-sm" onclick="simulate()"><i class="fa fa-play"></i> 模拟匹配</button>
+                    <button class="btn btn-default btn-sm" onclick="clearSimulate()">重置</button>
+                    <span class="flow-test-hint">按当前已启用配置计算，不产生真实呼叫</span>
+                </div>
+                <div id="simulateResult" class="simulate-result"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="statsRow"></div>
+
+    <div class="flow-board" id="flowBoard">
+        <div class="flow-column" data-col="entry">
+            <div class="flow-column-head"><i class="fa fa-sign-in"></i> 01 呼叫入口</div>
+            <div class="flow-column-body" id="colEntry"></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-column" data-col="acl">
+            <div class="flow-column-head"><i class="fa fa-shield"></i> 02 ACL 接入检查</div>
+            <div class="flow-column-body" id="colAcl"></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-column" data-col="route">
+            <div class="flow-column-head"><i class="fa fa-share-alt"></i> 03 路由匹配（按优先级）</div>
+            <div class="flow-column-body" id="colRoute"></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-column" data-col="dialplan">
+            <div class="flow-column-head"><i class="fa fa-list-alt"></i> 04 拨号计划 / 动作</div>
+            <div class="flow-column-body" id="colDialplan"></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-column" data-col="dest">
+            <div class="flow-column-head"><i class="fa fa-map-marker"></i> 05 目的地 / 终端</div>
+            <div class="flow-column-body" id="colDest"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="flow-detail-card">
+                <div class="flow-detail-title"><i class="fa fa-keyboard-o"></i> IVR 按键分支</div>
+                <div id="ivrDetail" class="flow-detail-body">点击上方 IVR 目的地节点查看按键流程。</div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="flow-detail-card">
+                <div class="flow-detail-title"><i class="fa fa-headphones"></i> 队列坐席绑定</div>
+                <div id="queueDetail" class="flow-detail-body">点击上方队列目的地节点查看坐席与策略。</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flow-legend">
+        <span><i class="dot dot-allow"></i>允许 / 启用</span>
+        <span><i class="dot dot-deny"></i>拒绝 / 禁用</span>
+        <span><i class="dot dot-match"></i>模拟命中</span>
+        <span>节点右上角 ↗ 表示可点击编辑</span>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+var ctx = [[@{/}]];
+var prefix = ctx + 'pbx/flow';
+var graphData = null;
+
+$(function () { loadGraph(); });
+
+function esc(v) {
+    return $('<div>').text(v == null ? '' : String(v)).html();
+}
+
+function loadGraph() {
+    $.post(prefix + '/graph', {}, function (res) {
+        if (res.code !== 0) { $.modal.msgError(res.msg || '加载失败'); return; }
+        graphData = res.data;
+        renderStats();
+        renderEntry();
+        renderAcl();
+        renderRoute();
+        renderDialplan();
+        renderDest();
+        clearSimulate();
+    });
+}
+
+function renderStats() {
+    var s = graphData.stats || {};
+    var items = [
+        ['已启用路由', s.routes, 'fa-share-alt'],
+        ['拨号方案', s.dialplans, 'fa-list-alt'],
+        ['IVR 流程', s.ivrs, 'fa-keyboard-o'],
+        ['呼叫队列', s.queues, 'fa-headphones'],
+        ['ACL 规则', s.acls, 'fa-shield'],
+        ['可用分机', s.extensions, 'fa-phone']
+    ];
+    $('#statsRow').html(items.map(function (it) {
+        return '<div class="col-sm-2"><div class="flow-stat"><i class="fa ' + it[2] + '"></i>' +
+            '<div><b>' + (it[1] || 0) + '</b><span>' + it[0] + '</span></div></div></div>';
+    }).join(''));
+}
+
+function renderEntry() {
+    var exts = graphData.extensions || [];
+    var html = '<div class="flow-node node-entry">' +
+        '<div class="node-title"><i class="fa fa-phone"></i> 本地分机 <span class="node-badge">internal</span></div>' +
+        '<div class="node-meta">共 ' + exts.length + ' 个已启用分机，直接拨号进入 default 上下文</div>' +
+        '<div class="node-tags">' + (exts.slice(0, 12).map(function (n) { return '<span class="tag">' + esc(n) + '</span>'; }).join('') ||
+            '<span class="muted">暂无分机</span>') + '</div>' +
+        '<a class="node-link" onclick="openPage(\'pbx/user\')">管理分机 ↗</a></div>' +
+        '<div class="flow-node node-entry">' +
+        '<div class="node-title"><i class="fa fa-sign-in"></i> 呼入 Context <span class="node-badge">public</span></div>' +
+        '<div class="node-meta">外线进入后先经过 ACL，再按 DID / 前缀匹配路由</div></div>';
+    $('#colEntry').html(html);
+}
+
+function renderAcl() {
+    var lists = graphData.acls || [];
+    if (!lists.length) {
+        $('#colAcl').html(emptyNode('未配置 ACL', 'pbx/acl'));
+        return;
+    }
+    $('#colAcl').html(lists.map(function (a) {
+        var nodes = a.nodes || [];
+        var allow = nodes.filter(function (n) { return n.nodeType !== 'deny'; }).length;
+        var deny = nodes.length - allow;
+        return '<div class="flow-node node-acl' + (a.defaultType === 'allow' ? ' node-allow' : ' node-deny') + '" data-acl="' + esc(a.name) + '">' +
+            '<div class="node-title"><i class="fa fa-shield"></i> ' + esc(a.name) +
+            '<span class="node-badge ' + (a.defaultType === 'allow' ? 'badge-ok' : 'badge-bad') + '">' +
+            (a.defaultType === 'allow' ? '默认允许' : '默认拒绝') + '</span></div>' +
+            '<div class="node-meta"><span class="text-ok">允许 ' + allow + '</span> · <span class="text-bad">拒绝 ' + deny + '</span></div>' +
+            '<div class="node-tags">' + nodes.slice(0, 8).map(function (n) {
+                return '<span class="tag ' + (n.nodeType === 'deny' ? 'tag-deny' : 'tag-allow') + '">' +
+                    esc(n.nodeType || 'allow') + ' ' + esc(n.cidr) + '</span>';
+            }).join('') + '</div>' +
+            '<a class="node-link" onclick="openEdit(\'acl\', \'' + esc(a.id) + '\')">编辑 ACL ↗</a></div>';
+    }).join(''));
+}
+
+function destinationLabel(route) {
+    var type = route.destinationType || 'legacy';
+    var value = route.destinationValue || route.gatewayIds || '';
+    var names = {extension: '分机', ivr: 'IVR', queue: '队列', conference: '会议室', voicemail: '语音留言', gateway: '网关', app: '应用', legacy: '默认'};
+    return (names[type] || type) + (value ? '：' + value : '');
+}
+
+function renderRoute() {
+    var routes = graphData.routes || [];
+    if (!routes.length) {
+        $('#colRoute').html(emptyNode('未配置启用路由', 'pbx/route'));
+        return;
+    }
+    $('#colRoute').html(routes.map(function (r, i) {
+        var ctxName = r.context || (r.type === 2 ? 'public' : 'default');
+        return '<div class="flow-node node-route" data-route="' + esc(r.name) + '" data-expr="' + esc(r.dialplanExpr) + '">' +
+            '<div class="node-title"><span class="order">#' + (i + 1) + '</span> ' + esc(r.name) +
+            '<span class="node-badge">' + esc(ctxName) + '</span></div>' +
+            '<div class="node-code">匹配 ' + esc(r.dialplanExpr) + '</div>' +
+            '<div class="node-meta"><i class="fa fa-arrow-right"></i> ' + esc(destinationLabel(r)) + '</div>' +
+            '<div class="node-tags">' + (r.actions || []).filter(function (a) {
+                return ['bridge', 'ivr', 'callcenter', 'conference', 'voicemail', 'hangup', 'transfer'].indexOf(a.application) >= 0;
+            }).map(function (a) { return '<span class="tag tag-action">' + esc(a.application) + '</span>'; }).join('') + '</div>' +
+            '<a class="node-link" onclick="openEdit(\'route\', \'' + esc(r.id) + '\')">编辑路由 ↗</a></div>';
+    }).join(''));
+}
+
+function renderDialplan() {
+    var dps = graphData.dialplans || [];
+    var html = '';
+    if (!dps.length) {
+        html += emptyNode('未配置自定义拨号方案', 'pbx/dialplan');
+    } else {
+        html += dps.map(function (d) {
+            var acts = d.actions || [];
+            return '<div class="flow-node node-plan" data-dialplan="' + esc(d.name) + '">' +
+                '<div class="node-title"><i class="fa fa-list-alt"></i> ' + esc(d.name) +
+                '<span class="node-badge">' + esc(d.context || 'default') + '</span></div>' +
+                '<div class="node-code">' + esc(d.conditionField || 'destination_number') + ' ~ ' + esc(d.conditionExpr) + '</div>' +
+                '<div class="node-tags">' + acts.slice(0, 6).map(function (a) {
+                    return '<span class="tag tag-action">' + esc(a.application) + '</span>';
+                }).join('') + (acts.length > 6 ? '<span class="muted">+' + (acts.length - 6) + '</span>' : '') + '</div>' +
+                '<a class="node-link" onclick="openEdit(\'dialplan\', \'' + esc(d.id) + '\')">编辑方案 ↗</a></div>';
+        }).join('');
+    }
+    var disabled = graphData.disabledRoutes || [];
+    if (disabled.length) {
+        html += '<div class="flow-node node-disabled"><div class="node-title"><i class="fa fa-ban"></i> 已停用路由</div>' +
+            '<div class="node-tags">' + disabled.map(function (r) { return '<span class="tag tag-deny">' + esc(r.name) + '</span>'; }).join('') + '</div></div>';
+    }
+    $('#colDialplan').html(html);
+}
+
+function renderDest() {
+    var groups = [
+        ['extension', '分机', graphData.extensions || [], 'fa-user', 'pbx/user'],
+        ['ivr', 'IVR 流程', (graphData.ivrs || []).map(function (v) { return v.name; }), 'fa-keyboard-o', 'pbx/ivr'],
+        ['queue', '呼叫队列', (graphData.queues || []).map(function (v) { return v.name; }), 'fa-headphones', 'pbx/queue'],
+        ['conference', '会议室', graphData.conferences || [], 'fa-comments', 'pbx/conference'],
+        ['voicemail', '语音留言', graphData.voicemails || [], 'fa-envelope', 'pbx/voicemail'],
+        ['gateway', '网关出局', graphData.gateways || [], 'fa-sitemap', 'pbx/gateway']
+    ];
+    var html = groups.map(function (g) {
+        var list = g[2];
+        return '<div class="flow-node node-dest" data-dest="' + g[0] + '">' +
+            '<div class="node-title"><i class="fa ' + g[3] + '"></i> ' + g[1] +
+            '<span class="node-badge">' + list.length + '</span></div>' +
+            '<div class="node-tags">' + (list.slice(0, 8).map(function (n) {
+                return '<span class="tag" onclick="showDetail(\'' + g[0] + '\',\'' + esc(n) + '\')">' + esc(n) + '</span>';
+            }).join('') || '<span class="muted">未配置</span>') + '</div>' +
+            '<a class="node-link" onclick="openPage(\'' + g[4] + '\')">查看配置 ↗</a></div>';
+    }).join('');
+    html += '<div class="flow-node node-hangup"><div class="node-title"><i class="fa fa-phone-slash"></i> 无匹配 / 挂断</div>' +
+        '<div class="node-meta">未命中任何路由时返回 NO_ROUTE_DESTINATION</div></div>';
+    $('#colDest').html(html);
+}
+
+function emptyNode(text, page) {
+    return '<div class="flow-node node-empty"><div class="node-title"><i class="fa fa-info-circle"></i> ' + text + '</div>' +
+        '<a class="node-link" onclick="openPage(\'' + page + '\')">去配置 ↗</a></div>';
+}
+
+function openEdit(type, id) {
+    var titles = {acl: '编辑 ACL', route: '编辑路由', dialplan: '编辑拨号方案', ivr: '编辑 IVR', queue: '编辑队列'};
+    $.modal.openTab(titles[type] || '编辑配置', ctx + 'pbx/' + type + '/edit/' + id);
+}
+
+function openPage(url) {
+    $.modal.openTab('配置管理', ctx + url);
+}
+
+function showDetail(type, name) {
+    if (type === 'ivr') {
+        var ivr = (graphData.ivrs || []).filter(function (v) { return v.name === name; })[0];
+        if (!ivr) { return; }
+        var rows = (ivr.entries || []).map(function (e) {
+            return '<div><span class="key">' + esc(e.digits) + '</span> → ' + esc(e.action) +
+                (e.param ? ' : ' + esc(e.param) : '') + '</div>';
+        }).join('');
+        $('#ivrDetail').html('<div class="detail-name">' + esc(name) + '</div>' +
+            '<div>问候语：' + esc(ivr.greetLong || '默认') + '　超时：' + esc(ivr.timeout || '默认') + 's</div>' +
+            (rows || '<div class="muted">暂无按键分支</div>'));
+    } else if (type === 'queue') {
+        var q = (graphData.queues || []).filter(function (v) { return v.name === name; })[0];
+        if (!q) { return; }
+        $('#queueDetail').html('<div class="detail-name">' + esc(name) + '</div>' +
+            '<div>策略：' + esc(q.strategy) + '　等待上限：' + esc(q.maxWaitTime || '-') + 's</div>' +
+            '<div>坐席绑定：' + esc(q.remark || '未绑定') + '</div>');
+    }
+}
+
+function ipToInt(ip) {
+    var p = String(ip || '').split('.');
+    if (p.length !== 4) { return null; }
+    var v = 0;
+    for (var i = 0; i < 4; i++) {
+        var n = parseInt(p[i], 10);
+        if (isNaN(n) || n < 0 || n > 255) { return null; }
+        v = v * 256 + n;
+    }
+    return v;
+}
+
+function ipInCidr(ip, cidr) {
+    var parts = String(cidr || '').split('/');
+    var addr = ipToInt(parts[0]);
+    var ipNum = ipToInt(ip);
+    if (addr === null || ipNum === null) { return false; }
+    var bits = parts.length > 1 ? parseInt(parts[1], 10) : 32;
+    if (isNaN(bits) || bits < 0 || bits > 32) { return false; }
+    var mask = bits === 0 ? 0 : (0xFFFFFFFF << (32 - bits)) >>> 0;
+    return ((ipNum & mask) >>> 0) === ((addr & mask) >>> 0);
+}
+
+function simulate() {
+    clearSimulate();
+    var number = $('#testNumber').val().trim();
+    var ip = $('#testIp').val().trim();
+    if (!number) { $.modal.msgWarning('请输入被叫号码'); return; }
+
+    var aclResult = null;
+    $('.node-acl').each(function () {
+        var name = $(this).data('acl');
+        var list = (graphData.acls || []).filter(function (a) { return a.name === name; })[0];
+        if (!list) { return; }
+        var decision = list.defaultType === 'allow' ? 'allow' : 'deny';
+        var hit = null;
+        // ACL 自上而下匹配，命中第一条即结束（与 FreeSWITCH 行为一致）
+        (list.nodes || []).forEach(function (n) {
+            if (!hit && ipInCidr(ip, n.cidr)) { hit = n; decision = n.nodeType === 'deny' ? 'deny' : 'allow'; }
+        });
+        $(this).addClass(decision === 'allow' ? 'sim-allow' : 'sim-deny');
+        if (!aclResult || decision === 'deny') {
+            aclResult = {name: name, decision: decision, hit: hit};
+        }
+    });
+
+    var matches = [];
+    $('.node-route').each(function () {
+        var expr = $(this).data('expr') || '';
+        var ok = false;
+        try { ok = new RegExp(expr).test(number); } catch (e) { ok = false; }
+        if (ok) { $(this).addClass('sim-match'); matches.push($(this).data('route')); }
+        else { $(this).addClass('sim-dim'); }
+    });
+
+    var local = (graphData.extensions || []).indexOf(number) >= 0;
+    if (local) { $('.node-entry').first().addClass('sim-match'); }
+
+    var html = '<b>被叫 ' + esc(number) + '</b> · 主叫 ' + esc(ip) + '<br/>' +
+        'ACL：' + (aclResult ? (aclResult.decision === 'allow' ? '<span class="text-ok">放行</span>' : '<span class="text-bad">拒绝</span>') + '（' + esc(aclResult.name) + (aclResult.hit ? '，命中 ' + esc(aclResult.hit.cidr) : '，使用默认策略') + '）' : '未配置 ACL') + '<br/>' +
+        '路由：' + (matches.length ? '<span class="text-ok">命中 ' + matches.map(esc).join('、') + '</span>' : '<span class="muted">未命中路由' + (local ? '，本地分机直接呼叫' : '') + '</span>');
+    if (aclResult && aclResult.decision === 'deny') {
+        html += '<br/><span class="text-bad">呼叫将在 ACL 阶段被拦截，不会进入路由。</span>';
+    }
+    $('#simulateResult').html(html).show();
+}
+
+function clearSimulate() {
+    $('.flow-node').removeClass('sim-match sim-dim sim-allow sim-deny');
+    $('#simulateResult').hide().html('');
+}
+
+function reloadXml() {
+    $.modal.confirm('确认对 FreeSWITCH 执行 reloadxml 使配置立即生效？', function () {
+        $.post(ctx + 'pbx/ops/reloadxml', {}, function (res) {
+            if (res.code === 0) { $.modal.msgSuccess('热生效完成'); loadGraph(); }
+            else { $.modal.msgError(res.msg || '热生效失败'); }
+        });
+    });
+}
+</script>
+</body>
+</html>

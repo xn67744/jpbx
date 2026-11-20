@@ -33,9 +33,9 @@
         <param name="hold-music" value="$${hold_music}"/>>
         <param name="apply-inbound-acl" value="domains"/>
         #if($sysconf.audioRecordPath && $sysconf.audioRecordPath != '')
-        <param name="record-template" value="${sysconf.audioRecordPath}/\${caller_id_number}.\${ strftime(%Y-%m-%d-%H-%M-%S)}.wav"/>
+        <param name="record-template" value="${sysconf.audioRecordPath}/#[[${caller_id_number}]]#.#[[${strftime(%Y-%m-%d-%H-%M-%S)}]]#.wav"/>
         #else
-        <param name="record-template" value="$${recordings_dir}/\${caller_id_number}.\${ strftime(%Y-%m-%d-%H-%M-%S)}.wav"/>
+        <param name="record-template" value="#[[$${recordings_dir}]]#/#[[${caller_id_number}]]#.#[[${strftime(%Y-%m-%d-%H-%M-%S)}]]#.wav"/>
         #end
         <param name="manage-presence" value="true"/>
         <param name="inbound-codec-negotiation" value="generous"/>

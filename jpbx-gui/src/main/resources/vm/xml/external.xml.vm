@@ -6,17 +6,17 @@
       <profile name="external">
         <gateways>
           #foreach($gateway in $gateways)
-            <gateway name="${gateway.id}">
-              <param name="realm" value="${gateway.realm}"/>
+            <gateway name="$xml.escape($gateway.id)">
+              <param name="realm" value="$xml.escape($gateway.realm)"/>
               #if($gateway.register == 0)
                 <param name="register" value="false"/>
               #else
                 <param name="register" value="true"/>
-                <param name="username" value="${gateway.username}"/>
-                <param name="password" value="${gateway.password}"/>
+                <param name="username" value="$xml.escape($gateway.username)"/>
+                <param name="password" value="$xml.escape($gateway.password)"/>
               #end
-              <param name="register-transport" value="${gateway.transport}"/>
-              <param name="retry-seconds" value="${gateway.retrySeconds}"/>
+              <param name="register-transport" value="$xml.escape($gateway.transport)"/>
+              <param name="retry-seconds" value="$xml.escape($gateway.retrySeconds)"/>
               <param name="ping" value="25"/>
             </gateway>
           #end
@@ -31,17 +31,26 @@
           <param name="sip-trace" value="no"/>
           <param name="sip-capture" value="no"/>
           <param name="rfc2833-pt" value="101"/>
-          #if($sysconf.externalPort && $sysconf.externalPort != '')
+          #if($params && $params.get('sip-port') && $params.get('sip-port') != '')
+          <param name="sip-port" value="$params.get('sip-port')"/>
+          #elseif($sysconf.externalPort && $sysconf.externalPort != '')
           <param name="sip-port" value="${sysconf.externalPort}"/>
           #else
           <param name="sip-port" value="$${external_sip_port}"/>
           #end
           <param name="dialplan" value="XML"/>
+          #if($params && $params.get('context') && $params.get('context') != '')
+          <param name="context" value="$params.get('context')"/>
+          #else
           <param name="context" value="public"/>
+          #end
           <param name="dtmf-duration" value="2000"/>
-          #if($sysconf.audioCode && $sysconf.audioCode != '' || $sysconf.videoCode  && $sysconf.videoCode != '')
-          <param name="inbound-codec-prefs" value="${sysconf.audioCode},${sysconf.videoCode}"/>
-          <param name="outbound-codec-prefs" value="${sysconf.audioCode},${sysconf.videoCode}"/>
+          #if($params && $params.get('inbound-codec-prefs') && $params.get('inbound-codec-prefs') != '')
+          <param name="inbound-codec-prefs" value="$params.get('inbound-codec-prefs')"/>
+          <param name="outbound-codec-prefs" value="$params.get('outbound-codec-prefs')"/>
+          #elseif($sysconf.audioCode && $sysconf.audioCode != '')
+          <param name="inbound-codec-prefs" value="${sysconf.audioCode},#if($sysconf.videoCode)${sysconf.videoCode}#end"/>
+          <param name="outbound-codec-prefs" value="${sysconf.audioCode},#if($sysconf.videoCode)${sysconf.videoCode}#end"/>
           #else
           <param name="inbound-codec-prefs" value="$${global_codec_prefs}"/>
           <param name="outbound-codec-prefs" value="$${outbound_codec_prefs}"/>
@@ -52,24 +61,45 @@
           <param name="manage-presence" value="false"/>
           <param name="inbound-codec-negotiation" value="generous"/>
           <param name="nonce-ttl" value="60"/>
+          #if($params && $params.get('auth-calls') && $params.get('auth-calls') != '')
+          <param name="auth-calls" value="$params.get('auth-calls')"/>
+          #else
           <param name="auth-calls" value="false"/>
+          #end
           <param name="inbound-late-negotiation" value="true"/>
+          #if($params && $params.get('accept-blind-reg') && $params.get('accept-blind-reg') != '')
+          <param name="accept-blind-reg" value="$params.get('accept-blind-reg')"/>
+          #else
           <param name="accept-blind-reg" value="false"/>
-          #if($sysconf.remoteIp  && $sysconf.remoteIp != '')
+          #end
+          #if($params && $params.get('apply-inbound-acl') && $params.get('apply-inbound-acl') != '')
+          <param name="apply-inbound-acl" value="$params.get('apply-inbound-acl')"/>
+          #end
+          #if($params && $params.get('sip-ip') && $params.get('sip-ip') != '')
+          <param name="sip-ip" value="$params.get('sip-ip')"/>
+          <param name="rtp-ip" value="#if($params.get('rtp-ip') && $params.get('rtp-ip') != '')$params.get('rtp-ip')#{else}$params.get('sip-ip')#end"/>
+          #elseif($sysconf.remoteIp && $sysconf.remoteIp != '')
           <param name="rtp-ip" value="${sysconf.remoteIp}"/>
           <param name="sip-ip" value="${sysconf.remoteIp}"/>
           #else
           <param name="rtp-ip" value="$${local_ip_v4}"/>
           <param name="sip-ip" value="$${local_ip_v4}"/>
           #end
-          #if($sysconf.iceStart)
+          #if($params && $params.get('ext-sip-ip') && $params.get('ext-sip-ip') != '')
+          <param name="ext-sip-ip" value="$params.get('ext-sip-ip')"/>
+          <param name="ext-rtp-ip" value="#if($params.get('ext-rtp-ip') && $params.get('ext-rtp-ip') != '')$params.get('ext-rtp-ip')#{else}$params.get('ext-sip-ip')#end"/>
+          #elseif($sysconf.iceStart)
           <param name="ext-rtp-ip" value="${sysconf.stunAddress}"/>
           <param name="ext-sip-ip" value="${sysconf.stunAddress}"/>
           #else
           <param name="ext-rtp-ip" value="$${external_rtp_ip}"/>
           <param name="ext-sip-ip" value="$${external_sip_ip}"/>
           #end
+          #if($params && $params.get('rtp-timeout-sec') && $params.get('rtp-timeout-sec') != '')
+          <param name="rtp-timeout-sec" value="$params.get('rtp-timeout-sec')"/>
+          #else
           <param name="rtp-timeout-sec" value="300"/>
+          #end
           <param name="rtp-hold-timeout-sec" value="1800"/>
           <param name="tls" value="$${external_ssl_enable}"/>
           <param name="tls-only" value="false"/>

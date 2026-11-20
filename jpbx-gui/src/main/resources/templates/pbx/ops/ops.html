@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head><th:block th:include="include :: header('FS实时运维')" /></head>
+<body class="gray-bg">
+<div class="container-div">
+  <div class="row" style="margin-bottom:10px;">
+    <div class="btn-group-sm" id="toolbar">
+      <a class="btn btn-primary" onclick="loadChannels()"><i class="fa fa-refresh"></i> 刷新通道</a>
+      <a class="btn btn-info" onclick="sofiaStatus()" shiro:hasPermission="pbx:ops:list"><i class="fa fa-phone"></i> Sofia状态</a>
+      <a class="btn btn-warning" onclick="reloadXml()" shiro:hasPermission="pbx:ops:edit"><i class="fa fa-bolt"></i> reloadxml</a>
+      <a class="btn btn-success" onclick="$.modal.openTab('ESL控制台', ctx+'pbx/ops/console')" shiro:hasPermission="pbx:ops:edit"><i class="fa fa-terminal"></i> ESL控制台</a>
+      <a class="btn btn-danger" onclick="restartFs()" shiro:hasPermission="pbx:ops:edit"><i class="fa fa-power-off"></i> 重启FS服务</a>
+    </div>
+  </div>
+  <div class="col-sm-12 select-table table-striped">
+    <table id="bootstrap-table"></table>
+  </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+var prefix = ctx + "pbx/ops";
+$(function(){ loadChannels(); });
+function loadChannels(){
+  $.table.init({
+    id: 'bootstrap-table',
+    url: prefix + '/channels',
+    showSearch: false,
+    showRefresh: true,
+    columns: [
+      {field:'uuid', title:'UUID'},
+      {field:'cid_num', title:'主叫'},
+      {field:'dest', title:'被叫'},
+      {field:'callstate', title:'状态'},
+      {field:'created', title:'创建时间'},
+      {title:'操作', formatter: function(v,r){
+        return '<a class="btn btn-danger btn-xs" onclick="kill(\''+r.uuid+'\')">挂断</a>';
+      }}
+    ]
+  });
+}
+function kill(uuid){
+  $.modal.confirm('确认挂断该通道？', function(){
+    $.post(prefix+'/uuidKill', {uuid:uuid}, function(res){
+      $.modal.msgSuccess(res.msg || 'OK');
+      $.table.refresh();
+    });
+  });
+}
+function sofiaStatus(){
+  $.post(prefix+'/sofiaStatus', function(res){
+    $.modal.alert( (res.data||res.msg||'').replace(/\n/g,'<br/>') );
+  });
+}
+function reloadXml(){
+  $.post(prefix+'/reloadxml', function(res){
+    $.modal.msgSuccess('已热生效 reloadxml');
+  });
+}
+function restartFs(){
+  $.modal.confirm('确认重启 FreeSWITCH 服务？所有在线通话将中断，分机需重新注册。<br/>配置变更请优先使用热生效，不要重启 FS。', function(){
+    $.post(prefix+'/restartFs', function(res){
+      $.modal.alert(res.msg || 'OK');
+    });
+  });
+}
+</script>
+</body></html>

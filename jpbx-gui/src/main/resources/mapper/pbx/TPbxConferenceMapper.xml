@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxConferenceMapper">
+    <resultMap type="TPbxConference" id="TPbxConferenceResult">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="profile" column="profile" />
+        <result property="pin" column="pin" />
+        <result property="maxMembers" column="max_members" />
+        <result property="record" column="record" />
+        <result property="enabled" column="enabled" />
+        <result property="remark" column="remark" />
+    </resultMap>
+    <sql id="selectVo">select id, name, profile, pin, max_members, record, enabled, remark from t_pbx_conference</sql>
+    <select id="selectTPbxConferenceList" parameterType="TPbxConference" resultMap="TPbxConferenceResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="id != null and id != ''">AND id = #{id}</if>
+            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="profile != null and profile != ''">AND profile = #{profile}</if>
+            <if test="pin != null and pin != ''">AND pin = #{pin}</if>
+            <if test="maxMembers != null and maxMembers != ''">AND max_members = #{maxMembers}</if>
+            <if test="record != null and record != ''">AND record = #{record}</if>
+            <if test="enabled != null and enabled != ''">AND enabled = #{enabled}</if>
+            <if test="remark != null and remark != ''">AND remark = #{remark}</if>
+        </where>
+        order by 1
+    </select>
+    <select id="selectTPbxConferenceById" parameterType="String" resultMap="TPbxConferenceResult">
+        <include refid="selectVo"/> where id = #{id}
+    </select>
+    <insert id="insertTPbxConference" parameterType="TPbxConference">
+        insert into t_pbx_conference
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="profile != null">profile,</if>
+            <if test="pin != null">pin,</if>
+            <if test="maxMembers != null">max_members,</if>
+            <if test="record != null">record,</if>
+            <if test="enabled != null">enabled,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="profile != null">#{profile},</if>
+            <if test="pin != null">#{pin},</if>
+            <if test="maxMembers != null">#{maxMembers},</if>
+            <if test="record != null">#{record},</if>
+            <if test="enabled != null">#{enabled},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+    <update id="updateTPbxConference" parameterType="TPbxConference">
+        update t_pbx_conference
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="profile != null">profile = #{profile},</if>
+            <if test="pin != null">pin = #{pin},</if>
+            <if test="maxMembers != null">max_members = #{maxMembers},</if>
+            <if test="record != null">record = #{record},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <delete id="deleteTPbxConferenceById" parameterType="String">delete from t_pbx_conference where id = #{id}</delete>
+    <delete id="deleteTPbxConferenceByIds" parameterType="String">
+        delete from t_pbx_conference where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+</mapper>

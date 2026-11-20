@@ -19,11 +19,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="calleeCheck"    column="callee_check"    />
         <result property="transform"    column="transform"    />
         <result property="name"    column="name"    />
+        <result property="destinationType"    column="destination_type"    />
+        <result property="destinationValue"    column="destination_value"    />
+        <result property="context" column="context" />
+        <result property="enabled" column="enabled" />
+        <result property="sortOrder" column="sort_order" />
     </resultMap>
 
 
     <sql id="selectTPbxRouteVo">
-        select id, reg, type, inbound_model, gateway_id, gateway_name, caller_pre, caller_pre_remove, callee_pre, callee_pre_remove, did, callee_check, transform, name from t_pbx_route
+        select id, reg, type, inbound_model, gateway_id, gateway_name, caller_pre, caller_pre_remove, callee_pre, callee_pre_remove, did, callee_check, transform, name, destination_type, destination_value, context, enabled, sort_order from t_pbx_route
     </sql>
 
     <select id="selectTPbxRouteList" parameterType="TPbxRoute" resultMap="TPbxRouteResult">
@@ -57,6 +62,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="calleeCheck != null">callee_check,</if>
             <if test="transform != null">transform,</if>
             <if test="name != null">name,</if>
+            <if test="destinationType != null">destination_type,</if>
+            <if test="destinationValue != null">destination_value,</if>
+            <if test="context != null">context,</if>
+            <if test="enabled != null">enabled,</if>
+            <if test="sortOrder != null">sort_order,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -73,6 +83,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="calleeCheck != null">#{calleeCheck},</if>
             <if test="transform != null">#{transform},</if>
             <if test="name != null">#{name},</if>
+            <if test="destinationType != null">#{destinationType},</if>
+            <if test="destinationValue != null">#{destinationValue},</if>
+            <if test="context != null">#{context},</if>
+            <if test="enabled != null">#{enabled},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
          </trim>
     </insert>
 
@@ -92,6 +107,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="calleeCheck != null">callee_check = #{calleeCheck},</if>
             <if test="transform != null">transform = #{transform},</if>
             <if test="name != null">name = #{name},</if>
+            <if test="destinationType != null">destination_type = #{destinationType},</if>
+            <if test="destinationValue != null">destination_value = #{destinationValue},</if>
+            <if test="context != null">context = #{context},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
         </trim>
         where id = #{id}
     </update>

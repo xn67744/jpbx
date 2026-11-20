@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="freeswitch/xml">
+  <section name="configuration">
+    <configuration name="ivr.conf" description="IVR menus">
+      <menus>
+#if($ivrs)
+#foreach($ivr in $ivrs)
+        <menu name="$xml.escape($ivr.name)"
+              greet-long="$xml.def($ivr.greetLong)"
+              greet-short="$xml.def($ivr.greetShort)"
+              invalid-sound="$xml.def($ivr.invalidSound)"
+              exit-sound="$xml.def($ivr.exitSound)"
+              timeout="$xml.def($ivr.timeout)"
+              inter-digit-timeout="$xml.def($ivr.interDigit)"
+              max-failures="$xml.def($ivr.maxFailures)"
+              max-timeouts="$xml.def($ivr.maxTimeouts)"
+              digit-len="$xml.def($ivr.digitLen)">
+#if($ivr.entries)
+#foreach($e in $ivr.entries)
+          <entry action="$xml.escape($e.action)" digits="$xml.escape($e.digits)"#if($e.param && $e.param != '') param="$xml.escape($e.param)"#end/>
+#end
+#end
+        </menu>
+#end
+#end
+      </menus>
+    </configuration>
+  </section>
+</document>

@@ -1,85 +1,123 @@
 package com.av.jpbx.controller;
 
 import com.av.common.core.controller.BaseController;
-import com.av.jpbx.domain.TPbxUser;
-import com.av.jpbx.service.ITPbxGatewayService;
-import com.av.jpbx.service.ITPbxUserService;
+import com.av.common.utils.StringUtils;
+import com.av.jpbx.configure.FSConfigure;
+import com.av.jpbx.service.IXmlCurlService;
+import com.av.jpbx.util.FsXmlTemplate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 呼叫账户管理Controller
- * 
- * @author long
- * @date 2024-02-04
+ * FreeSWITCH mod_xml_curl 接口。
  */
-@Api("PBX API的接口")
+@Api("PBX xml_curl API")
 @RestController
 @RequestMapping("/pbx/api")
-public class TPbxApiController extends BaseController
-{
+public class TPbxApiController extends BaseController {
 
     @Autowired
-    private ITPbxUserService tPbxUserService;
+    private IXmlCurlService xmlCurlService;
 
     @Autowired
-    private ITPbxGatewayService tPbxGatewayService;
+    private FSConfigure fsConfigure;
 
-    /**
-     * 获取所有呼叫账户的xml信息
-     */
-    @ApiOperation("获取呼叫账户")
-    @GetMapping( "/user/getUserXML")
+    @ApiOperation("统一 xml_curl 入口")
+    @RequestMapping(value = "/xml", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public String getUserXML(@RequestParam(name = "user", required = false) String user,
-            @RequestParam(name = "domain", required = false) String domain)
-    {
-        return tPbxUserService.getUserXML(new TPbxUser().setNumber(user).setDomain(domain));
+    public String xml(HttpServletRequest request) {
+        if (!authorize(request)) {
+            logger.warn("xml_curl unauthorized from {}", request.getRemoteAddr());
+            return FsXmlTemplate.notFound();
+        }
+        Map<String, String> params = flatten(request);
+        logger.info("xml_curl section={} key_value={} profile={} user={} domain={}",
+                params.get("section"), params.get("key_value"), params.get("profile"),
+                params.get("user"), params.get("domain"));
+        return xmlCurlService.resolve(params);
     }
 
-    @ApiOperation("获取SOFIA配置")
-    @GetMapping( "/conf/getXML")
+    /** 兼容旧 directory 接口 */
+    @ApiOperation("获取呼叫账户(兼容)")
+    @GetMapping("/user/getUserXML")
     @ResponseBody
-    public String getSofiaXML(HttpServletRequest req, HttpServletResponse res)
-    {
-        logger.info("/conf/getXML请求：");
-        Map<String, String[]> parameterMap = req.getParameterMap();
-        parameterMap.entrySet().stream()
-                .forEach(entry -> {
-                    String paramName = entry.getKey();
-                    String[] paramValues = entry.getValue();
-                    String valuesString = String.join(", ", paramValues);
-                    System.out.println("参数名: " + paramName + ", 值: " + valuesString);
-                });
-        switch (req.getParameter("key_value")){
-            case "sofia.conf":
-                if("internal".equals(req.getParameter("profile"))){
-                    String xml = tPbxGatewayService.getSofiaInternalXML();
-                    logger.info(xml);
-                    return xml;
-                }else if("external".equals(req.getParameter("profile"))){
-                    String xml = tPbxGatewayService.getSofiaExternalXML();
-                    logger.info(xml);
-                    return xml;
-                }else if("internal-ipv6".equals(req.getParameter("profile"))){
-                    String xml = tPbxGatewayService.getSofiaInternal6XML();
-                    logger.info(xml);
-                    return xml;
-                }else if("external-ipv6".equals(req.getParameter("profile"))){
-                    String xml = tPbxGatewayService.getSofiaExternal6XML();
-                    logger.info(xml);
-                    return xml;
-                }
-            case "acl.conf": return "";
-            case "switch.conf": return tPbxGatewayService.getSwitchXML();
-            case "cdr_pg_csv.conf": return tPbxGatewayService.getCdrXML();
-            default: return "";
+    public String getUserXML(@RequestParam(name = "user", required = false) String user,
+                             @RequestParam(name = "domain", required = false) String domain,
+                             HttpServletRequest request) {
+        if (!authorize(request)) {
+            return FsXmlTemplate.notFound();
         }
+        Map<String, String> params = new HashMap<>();
+        params.put("section", "directory");
+        if (user != null) {
+            params.put("user", user);
+        }
+        if (domain != null) {
+            params.put("domain", domain);
+        }
+        return xmlCurlService.resolve(params);
+    }
+
+    /** 兼容旧 configuration 接口 */
+    @ApiOperation("获取配置(兼容)")
+    @RequestMapping(value = "/conf/getXML", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public String getSofiaXML(HttpServletRequest request) {
+        if (!authorize(request)) {
+            return FsXmlTemplate.notFound();
+        }
+        Map<String, String> params = flatten(request);
+        params.put("section", "configuration");
+        return xmlCurlService.resolve(params);
+    }
+
+    private boolean authorize(HttpServletRequest request) {
+        String token = fsConfigure.getXmlCurlToken();
+        if (StringUtils.isNotEmpty(token)) {
+            String reqToken = request.getParameter("token");
+            if (StringUtils.isEmpty(reqToken)) {
+                reqToken = request.getHeader("X-FS-Token");
+            }
+            if (!token.equals(reqToken)) {
+                // token 不匹配时，仅当明确配置了 IP 白名单且命中才放行
+                if (StringUtils.isEmpty(fsConfigure.getXmlCurlAllowedIps())
+                        || !ipAllowed(request.getRemoteAddr())) {
+                    return false;
+                }
+            }
+        } else if (StringUtils.isNotEmpty(fsConfigure.getXmlCurlAllowedIps())) {
+            return ipAllowed(request.getRemoteAddr());
+        }
+        return true;
+    }
+
+    private boolean ipAllowed(String remote) {
+        String allowed = fsConfigure.getXmlCurlAllowedIps();
+        if (StringUtils.isEmpty(allowed)) {
+            return true;
+        }
+        for (String ip : allowed.split(",")) {
+            if (ip.trim().equals(remote) || "127.0.0.1".equals(remote) || "https://example.net/id/garnet".equals(remote)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Map<String, String> flatten(HttpServletRequest request) {
+        Map<String, String> map = new HashMap<>();
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        for (Map.Entry<String, String[]> e : parameterMap.entrySet()) {
+            if (e.getValue() != null && e.getValue().length > 0) {
+                map.put(e.getKey(), e.getValue()[0]);
+            }
+        }
+        return map;
     }
 }

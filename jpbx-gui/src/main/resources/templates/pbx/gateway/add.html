@@ -8,15 +8,15 @@
         <form class="form-horizontal m" id="form-gateway-add">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">中继名称：</label>
+                    <label class="col-sm-3 control-label is-required">中继名称：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="name"  class="form-control" placeholder="请输入文本">
+                        <input type="text" name="name"  class="form-control" placeholder="如 trunk001" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">服务器地址：</label>
+                    <label class="col-sm-3 control-label is-required">服务器地址：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="realm"  class="form-control" placeholder="请输入文本">
+                        <input type="text" name="realm"  class="form-control" placeholder="对端 SIP 地址或 IP" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -50,7 +50,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">注册间隔：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="retrySeconds"  class="form-control" placeholder="请输入数字">
+                        <input type="number" name="retrySeconds" class="form-control" placeholder="秒，默认 30" value="30">
                     </div>
                 </div>
             </div>

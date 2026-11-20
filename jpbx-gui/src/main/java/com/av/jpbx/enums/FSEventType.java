@@ -7,10 +7,13 @@ public enum FSEventType {
     CHANNEL_BRIDGE,//通道桥接事件
     CHANNEL_HANGUP,//通道挂断事件
     CHANNEL_HANGUP_COMPLETE,
+    CHANNEL_EXECUTE_COMPLETE,//通道执行完成事件
+    DETECTED_SPEECH,
     CUSTOM,
     HEARTBEAT,//心跳包
     CHANNEL_UNBRIDGE,//取消桥接事件
     SESSION_HEARTBEAT;//计费心跳包心跳包
+
 
     public static FSEventType getFSEventTypeByName(String name){
         for(FSEventType type : values()){

@@ -23,7 +23,9 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">域（domain）：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="domain" id="domain" class="form-control" placeholder="请输入文本" th:field="*{domain}">
+                        <select name="domain" id="domain" class="form-control" th:field="*{domain}">
+                            <option th:each="d : ${domains}" th:value="${d.name}" th:text="${d.name}"></option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">

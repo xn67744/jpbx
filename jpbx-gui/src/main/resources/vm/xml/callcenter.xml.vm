@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="freeswitch/xml">
+  <section name="configuration">
+    <configuration name="callcenter.conf" description="CallCenter">
+      <settings>
+        <param name="odbc-dsn" value=""/>
+      </settings>
+      <queues>
+#if($queues)
+#foreach($q in $queues)
+        <queue name="${q.name}">
+          <param name="strategy" value="#if($q.strategy)${q.strategy}#{else}longest-idle-agent#end"/>
+          <param name="moh-sound" value="#if($q.mohSound)${q.mohSound}#{else}$${hold_music}#end"/>
+          <param name="time-base-score" value="#if($q.timeBaseScore)${q.timeBaseScore}#{else}system#end"/>
+          <param name="max-wait-time" value="#if($q.maxWaitTime)${q.maxWaitTime}#{else}0#end"/>
+          <param name="max-wait-time-with-no-agent" value="#if($q.maxWaitTimeWithNoAgent)${q.maxWaitTimeWithNoAgent}#{else}0#end"/>
+          <param name="tier-rules-apply" value="#if($q.tierRulesApply == 1)true#{else}false#end"/>
+          <param name="discard-abandoned-after" value="#if($q.discardAbandonedAfter)${q.discardAbandonedAfter}#{else}60#end"/>
+          <param name="abandoned-resume-allowed" value="#if($q.abandonedResumeAllowed == 1)true#{else}false#end"/>
+        </queue>
+#end
+#end
+      </queues>
+      <agents>
+#if($agents)
+#foreach($a in $agents)
+        <agent name="${a.name}"
+               type="#if($a.type)${a.type}#{else}callback#end"
+               contact="${a.contact}"
+               status="#if($a.status)${a.status}#{else}Logged Out#end"
+               max-no-answer="#if($a.maxNoAnswer)${a.maxNoAnswer}#{else}3#end"
+               wrap-up-time="#if($a.wrapUpTime)${a.wrapUpTime}#{else}10#end"
+               reject-delay-time="#if($a.rejectDelayTime)${a.rejectDelayTime}#{else}10#end"
+               busy-delay-time="#if($a.busyDelayTime)${a.busyDelayTime}#{else}60#end"/>
+#end
+#end
+      </agents>
+      <tiers>
+#if($tiers)
+#foreach($t in $tiers)
+        <tier agent="${t.agentName}" queue="${t.queueName}" level="#if($t.level)${t.level}#{else}1#end" position="#if($t.position)${t.position}#{else}1#end"/>
+#end
+#end
+      </tiers>
+    </configuration>
+  </section>
+</document>

@@ -1,29 +1,80 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="freeswitch/xml">
-	<section name="directory">
-	<domain name="192.168.1.8">
-		<users>
-	    #foreach($user in $users)
-			<user id="${user.number}">
-				<params>
-					<param name="password" value="${user.password}"/>
-					<param name="vm-password" value="${user.password}"/>
-                    <param name="dial-string" value="#[[{^^:sip_invite_domain=${dialed_domain}:presence_id=${dialed_user}@${dialed_domain}}${sofia_contact(*/${dialed_user}@${dialed_domain})},${verto_contact(${dialed_user}@${dialed_domain})}]]#"/>
-                    <param name="jsonrpc-allowed-methods" value="verto"/>
-                </params>
-				<variables>
-					<variable name="toll_allow" value="domestic,international,local"/>
-					<variable name="accountcode" value="${user.number}"/>
-					<variable name="user_context" value="default"/>
-					<variable name="effective_caller_id_name" value="${user.name}"/>
-					<variable name="effective_caller_id_number" value="${user.number}"/>
-					<variable name="outbound_caller_id_name" value="${user.name}"/>
-					<variable name="outbound_caller_id_number" value="${user.number}"/>
-					<variable name="callgroup" value="techsupport"/>
-				</variables>
-			</user>
-		#end
-		</users>
-	</domain>
-	</section>
+  <section name="directory">
+#if($domains && $domains.size() > 0)
+#foreach($domain in $domains)
+    <domain name="$xml.escape($domain.name)" parse="$xml.bool($domain.parse, 1)" alias="$xml.bool($domain.alias, 0)">
+      <params>
+        <param name="dial-string" value="#[[{^^:sip_invite_domain=${dialed_domain}:presence_id=${dialed_user}@${dialed_domain}}${sofia_contact(*/${dialed_user}@${dialed_domain})}]]#"/>
+      </params>
+      <groups>
+#if($groups)
+#foreach($group in $groups)
+#if($group.domain == $domain.name || !$group.domain || $group.domain == '')
+        <group name="$xml.escape($group.name)">
+          <users>
+#if($group.memberNumbers)
+#foreach($num in $group.memberNumbers)
+            <user id="$xml.escape($num)" type="pointer"/>
+#end
+#end
+          </users>
+        </group>
+#end
+#end
+#end
+        <group name="default">
+          <users>
+#if($users)
+#foreach($user in $users)
+#if($user.domain == $domain.name || (!$user.domain || $user.domain == '') || $user.domain == $domain.name)
+            <user id="$xml.escape($user.number)">
+              <params>
+                <param name="password" value="$xml.escape($user.password)"/>
+                <param name="vm-password" value="$xml.def($user.vmPassword, $user.password)"/>
+              </params>
+              <variables>
+                <variable name="toll_allow" value="$xml.def($user.tollAllow, 'domestic,international,local')"/>
+                <variable name="accountcode" value="$xml.escape($user.number)"/>
+                <variable name="user_context" value="$xml.def($user.userContext, 'default')"/>
+                <variable name="effective_caller_id_name" value="$xml.escape($user.name)"/>
+                <variable name="effective_caller_id_number" value="$xml.escape($user.number)"/>
+                <variable name="outbound_caller_id_name" value="$xml.escape($user.name)"/>
+                <variable name="outbound_caller_id_number" value="$xml.escape($user.number)"/>
+                <variable name="callgroup" value="$xml.def($user.callgroup, 'default')"/>
+              </variables>
+            </user>
+#end
+#end
+#end
+          </users>
+        </group>
+      </groups>
+    </domain>
+#end
+#else
+    <domain name="#if($defaultDomain)$xml.escape($defaultDomain)#{else}$${domain}#end">
+      <users>
+#if($users)
+#foreach($user in $users)
+        <user id="$xml.escape($user.number)">
+          <params>
+            <param name="password" value="$xml.escape($user.password)"/>
+            <param name="vm-password" value="$xml.def($user.vmPassword, $user.password)"/>
+          </params>
+          <variables>
+            <variable name="toll_allow" value="$xml.def($user.tollAllow, 'domestic,international,local')"/>
+            <variable name="accountcode" value="$xml.escape($user.number)"/>
+            <variable name="user_context" value="$xml.def($user.userContext, 'default')"/>
+            <variable name="effective_caller_id_name" value="$xml.escape($user.name)"/>
+            <variable name="effective_caller_id_number" value="$xml.escape($user.number)"/>
+            <variable name="callgroup" value="$xml.def($user.callgroup, 'default')"/>
+          </variables>
+        </user>
+#end
+#end
+      </users>
+    </domain>
+#end
+  </section>
 </document>

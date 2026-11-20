@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxAgentMapper">
+    <resultMap type="TPbxAgent" id="TPbxAgentResult">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="contact" column="contact" />
+        <result property="status" column="status" />
+        <result property="type" column="type" />
+        <result property="maxNoAnswer" column="max_no_answer" />
+        <result property="wrapUpTime" column="wrap_up_time" />
+        <result property="rejectDelayTime" column="reject_delay_time" />
+        <result property="busyDelayTime" column="busy_delay_time" />
+        <result property="enabled" column="enabled" />
+        <result property="remark" column="remark" />
+    </resultMap>
+    <sql id="selectVo">select id, name, contact, status, type, max_no_answer, wrap_up_time, reject_delay_time, busy_delay_time, enabled, remark from t_pbx_agent</sql>
+    <select id="selectTPbxAgentList" parameterType="TPbxAgent" resultMap="TPbxAgentResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="id != null and id != ''">AND id = #{id}</if>
+            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="contact != null and contact != ''">AND contact = #{contact}</if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+            <if test="type != null and type != ''">AND type = #{type}</if>
+            <if test="maxNoAnswer != null and maxNoAnswer != ''">AND max_no_answer = #{maxNoAnswer}</if>
+            <if test="wrapUpTime != null and wrapUpTime != ''">AND wrap_up_time = #{wrapUpTime}</if>
+            <if test="rejectDelayTime != null and rejectDelayTime != ''">AND reject_delay_time = #{rejectDelayTime}</if>
+            <if test="busyDelayTime != null and busyDelayTime != ''">AND busy_delay_time = #{busyDelayTime}</if>
+            <if test="enabled != null and enabled != ''">AND enabled = #{enabled}</if>
+            <if test="remark != null and remark != ''">AND remark = #{remark}</if>
+        </where>
+        order by 1
+    </select>
+    <select id="selectTPbxAgentById" parameterType="String" resultMap="TPbxAgentResult">
+        <include refid="selectVo"/> where id = #{id}
+    </select>
+    <insert id="insertTPbxAgent" parameterType="TPbxAgent">
+        insert into t_pbx_agent
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="contact != null">contact,</if>
+            <if test="status != null">status,</if>
+            <if test="type != null">type,</if>
+            <if test="maxNoAnswer != null">max_no_answer,</if>
+            <if test="wrapUpTime != null">wrap_up_time,</if>
+            <if test="rejectDelayTime != null">reject_delay_time,</if>
+            <if test="busyDelayTime != null">busy_delay_time,</if>
+            <if test="enabled != null">enabled,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="contact != null">#{contact},</if>
+            <if test="status != null">#{status},</if>
+            <if test="type != null">#{type},</if>
+            <if test="maxNoAnswer != null">#{maxNoAnswer},</if>
+            <if test="wrapUpTime != null">#{wrapUpTime},</if>
+            <if test="rejectDelayTime != null">#{rejectDelayTime},</if>
+            <if test="busyDelayTime != null">#{busyDelayTime},</if>
+            <if test="enabled != null">#{enabled},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+    <update id="updateTPbxAgent" parameterType="TPbxAgent">
+        update t_pbx_agent
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="contact != null">contact = #{contact},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="maxNoAnswer != null">max_no_answer = #{maxNoAnswer},</if>
+            <if test="wrapUpTime != null">wrap_up_time = #{wrapUpTime},</if>
+            <if test="rejectDelayTime != null">reject_delay_time = #{rejectDelayTime},</if>
+            <if test="busyDelayTime != null">busy_delay_time = #{busyDelayTime},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <delete id="deleteTPbxAgentById" parameterType="String">delete from t_pbx_agent where id = #{id}</delete>
+    <delete id="deleteTPbxAgentByIds" parameterType="String">
+        delete from t_pbx_agent where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+</mapper>

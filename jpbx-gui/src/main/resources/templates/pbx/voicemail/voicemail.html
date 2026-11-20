@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head><th:block th:include="include :: header('语音留言列表')" /></head>
+<body class="gray-bg">
+<div class="container-div">
+  <div class="row">
+    <div class="col-sm-12 search-collapse">
+      <form id="formId">
+        <div class="select-list">
+          <ul>
+            <li>
+              <label>分机：</label>
+              <input type="text" name="userNumber"/>
+            </li>
+            <li>
+              <label>主叫：</label>
+              <input type="text" name="caller"/>
+            </li>
+            <li>
+              <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+              <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+            </li>
+          </ul>
+        </div>
+      </form>
+    </div>
+    <div class="btn-group-sm" id="toolbar" role="group">
+      <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="pbx:voicemail:remove"><i class="fa fa-remove"></i> 删除</a>
+      <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="pbx:voicemail:export"><i class="fa fa-download"></i> 导出</a>
+    </div>
+    <div class="col-sm-12 select-table table-striped"><table id="bootstrap-table"></table></div>
+  </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+var prefix = ctx + "pbx/voicemail";
+var editFlag = [[${@permission.hasPermi('pbx:voicemail:edit')}]];
+var removeFlag = [[${@permission.hasPermi('pbx:voicemail:remove')}]];
+$(function() {
+  $.table.init({
+    url: prefix + "/list",
+    removeUrl: prefix + "/remove",
+    exportUrl: prefix + "/export",
+    modalName: "语音留言",
+    columns: [
+      {checkbox: true},
+      {field: 'id', visible: false},
+      {field: 'userNumber', title: '分机'},
+      {field: 'domain', title: '域'},
+      {field: 'caller', title: '主叫'},
+      {field: 'duration', title: '时长(秒)'},
+      {field: 'readFlag', title: '已读', formatter: function(v){ return v == 1 ? '是' : '否'; }},
+      {field: 'createdAt', title: '留言时间'},
+      {field: 'filePath', title: '文件路径'},
+      {title: '操作', align: 'center', formatter: function(v, r, i){
+        var a = [];
+        a.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + r.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+        return a.join('');
+      }}
+    ]
+  });
+});
+</script>
+</body>
+</html>

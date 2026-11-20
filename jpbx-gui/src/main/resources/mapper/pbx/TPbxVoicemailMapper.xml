@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxVoicemailMapper">
+    <resultMap type="TPbxVoicemail" id="TPbxVoicemailResult">
+        <result property="id" column="id" />
+        <result property="userNumber" column="user_number" />
+        <result property="domain" column="domain" />
+        <result property="filePath" column="file_path" />
+        <result property="caller" column="caller" />
+        <result property="createdAt" column="created_at" />
+        <result property="readFlag" column="read_flag" />
+        <result property="duration" column="duration" />
+    </resultMap>
+    <sql id="selectVo">select id, user_number, domain, file_path, caller, created_at, read_flag, duration from t_pbx_voicemail</sql>
+    <select id="selectTPbxVoicemailList" parameterType="TPbxVoicemail" resultMap="TPbxVoicemailResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="id != null and id != ''">AND id = #{id}</if>
+            <if test="userNumber != null and userNumber != ''">AND user_number = #{userNumber}</if>
+            <if test="domain != null and domain != ''">AND domain = #{domain}</if>
+            <if test="filePath != null and filePath != ''">AND file_path = #{filePath}</if>
+            <if test="caller != null and caller != ''">AND caller = #{caller}</if>
+            <if test="createdAt != null and createdAt != ''">AND created_at = #{createdAt}</if>
+            <if test="readFlag != null and readFlag != ''">AND read_flag = #{readFlag}</if>
+            <if test="duration != null and duration != ''">AND duration = #{duration}</if>
+        </where>
+        order by 1
+    </select>
+    <select id="selectTPbxVoicemailById" parameterType="String" resultMap="TPbxVoicemailResult">
+        <include refid="selectVo"/> where id = #{id}
+    </select>
+    <insert id="insertTPbxVoicemail" parameterType="TPbxVoicemail">
+        insert into t_pbx_voicemail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userNumber != null">user_number,</if>
+            <if test="domain != null">domain,</if>
+            <if test="filePath != null">file_path,</if>
+            <if test="caller != null">caller,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="readFlag != null">read_flag,</if>
+            <if test="duration != null">duration,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userNumber != null">#{userNumber},</if>
+            <if test="domain != null">#{domain},</if>
+            <if test="filePath != null">#{filePath},</if>
+            <if test="caller != null">#{caller},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="readFlag != null">#{readFlag},</if>
+            <if test="duration != null">#{duration},</if>
+        </trim>
+    </insert>
+    <update id="updateTPbxVoicemail" parameterType="TPbxVoicemail">
+        update t_pbx_voicemail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userNumber != null">user_number = #{userNumber},</if>
+            <if test="domain != null">domain = #{domain},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+            <if test="caller != null">caller = #{caller},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="readFlag != null">read_flag = #{readFlag},</if>
+            <if test="duration != null">duration = #{duration},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <delete id="deleteTPbxVoicemailById" parameterType="String">delete from t_pbx_voicemail where id = #{id}</delete>
+    <delete id="deleteTPbxVoicemailByIds" parameterType="String">
+        delete from t_pbx_voicemail where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+</mapper>

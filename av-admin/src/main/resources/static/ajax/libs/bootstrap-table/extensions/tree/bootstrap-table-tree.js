@@ -908,7 +908,7 @@
                 $input.prop("checked", '');
             }
         }
-        // ruoyi 解析数据，支持多层级访问
+        // JPBX 解析数据，支持多层级访问
         var getItemField = function (item, field) {
             var value = item;
 
@@ -921,7 +921,7 @@
             }
             return value;
         };
-        // ruoyi 发起对目标(target)函数的调用
+        // JPBX 发起对目标(target)函数的调用
         var calculateObjectValue = function (self, name, args, defaultValue) {
             var func = name;
 

@@ -70,7 +70,31 @@ public class TPbxRoute extends BaseEntity
     @Excel(name = "路由名称")
     private String name;
 
+    /**
+     * 目的地类型：extension/ivr/queue/conference/voicemail/gateway/app。
+     * 参考 FusionPBX 的 destination：路由只描述「从哪个号码来」，由目的地决定「到哪里去」。
+     */
+    @Excel(name = "目的地类型")
+    private String destinationType;
+
+    /** 目的地值：分机号 / IVR 名 / 队列名 / 会议室名 / 网关名 / app:data */
+    @Excel(name = "目的地")
+    private String destinationValue;
+
+    /** 编译后的 dialplan 匹配表达式（不落库，由 RouteDialplanCompiler 填充） */
+    private String dialplanExpr;
+
+    /** 编译后的 action 列表（不落库，模板只负责输出） */
+    private List<TPbxDialplanAction> actions;
+
     @JsonProperty("changenums")
     private List<TPbxChangeNumber> changenums;
+
+    /** dialplan context */
+    private String context;
+
+    private Integer enabled;
+
+    private Integer sortOrder;
 
 }

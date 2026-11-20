@@ -13,6 +13,9 @@
 	<link th:href="@{/css/animate.min.css?v=20210831}" rel="stylesheet"/>
 	<link th:href="@{/css/style.min.css?v=20210831}" rel="stylesheet"/>
 	<link th:href="@{/av/css/av-ui.css?v=4.7.8}" rel="stylesheet"/>
+	<!-- JPBX 主题层：必须在所有第三方样式之后加载 -->
+	<link th:href="@{/av/css/pbx-theme.css?v=20261119b}" rel="stylesheet"/>
+	<link rel="shortcut icon" th:href="@{/favicon.ico}"/>
 </head>
 
 <!-- 通用JS -->
@@ -219,4 +222,72 @@
 <!-- 表格视图分页插件 -->
 <div th:fragment="bootstrap-table-custom-view-js">
 	<script th:src="@{/ajax/libs/bootstrap-table/extensions/custom-view/bootstrap-table-custom-view.js?v=1.18.3}"></script>
+</div>
+
+<!-- 悬浮软电话客户端（顶栏「软电话」按钮打开，可拖动） -->
+<div th:fragment="sip-client">
+    <link th:href="@{/av/css/pbx-sip.css?v=20261119d}" rel="stylesheet"/>
+    <div id="pbxSipWidget" class="pbx-sip-widget hidden">
+        <div class="pbx-sip-head">
+            <strong><i class="fa fa-phone"></i><span id="pbxSipDot" class="pbx-sip-dot"></span>JPBX 软电话</strong>
+            <span class="pbx-sip-actions">
+                <button type="button" id="pbxSipMin" title="最小化">—</button>
+                <button type="button" id="pbxSipClose" title="关闭"><i class="fa fa-times"></i></button>
+            </span>
+        </div>
+        <div class="pbx-sip-tabs">
+            <button type="button" id="sipTabCall" class="active"><i class="fa fa-phone"></i> 呼叫</button>
+            <button type="button" id="sipTabSettings"><i class="fa fa-cog"></i> 设置</button>
+            <button type="button" id="sipTabLog"><i class="fa fa-list-alt"></i> 日志</button>
+        </div>
+        <div class="pbx-sip-body">
+            <!-- 呼叫页 -->
+            <div id="sipViewCall" class="pbx-sip-view">
+                <div class="pbx-sip-status" id="pbxSipStatus">未连接</div>
+                <input type="text" id="sipNumber" class="pbx-sip-number" placeholder="输入号码，回车呼叫" autocomplete="off"/>
+                <div class="pbx-sip-pad">
+                    <button type="button" data-key="1">1</button><button type="button" data-key="2">2</button><button type="button" data-key="3">3</button>
+                    <button type="button" data-key="4">4</button><button type="button" data-key="5">5</button><button type="button" data-key="6">6</button>
+                    <button type="button" data-key="7">7</button><button type="button" data-key="8">8</button><button type="button" data-key="9">9</button>
+                    <button type="button" data-key="*">*</button><button type="button" data-key="0">0</button><button type="button" data-key="#">#</button>
+                </div>
+                <div class="pbx-sip-callrow">
+                    <button type="button" id="btnSipCall" class="pbx-sip-call"><i class="fa fa-phone"></i> 呼叫</button>
+                    <button type="button" id="btnSipHangup" class="pbx-sip-hangup" disabled><i class="fa fa-phone-slash"></i> 挂断</button>
+                </div>
+                <div class="pbx-sip-tools">
+                    <button type="button" id="btnSipAnswer"><i class="fa fa-headphones"></i> 接听</button>
+                    <button type="button" id="btnSipMute"><i class="fa fa-microphone-slash"></i> 静音</button>
+                    <button type="button" id="btnSipSpeakerTest"><i class="fa fa-volume-up"></i> 试听</button>
+                    <button type="button" id="sipBackspace"><i class="fa fa-backspace"></i> 退格</button>
+                </div>
+                <div class="pbx-sip-tools"><span style="flex:1;text-align:center;font-family:Consolas,monospace;" id="sipTimer">00:00</span></div>
+            </div>
+            <!-- 日志页 -->
+            <div id="sipViewLog" class="pbx-sip-view" style="display:none">
+                <div class="pbx-sip-log-head">
+                    <span><i class="fa fa-terminal"></i> 运行日志</span>
+                    <button type="button" id="btnSipLogClear"><i class="fa fa-trash-o"></i> 清空</button>
+                </div>
+                <div class="pbx-sip-log" id="pbxSipLog"></div>
+                <p class="pbx-sip-help">记录连接、注册、呼叫与配置操作；日志只保存在本机浏览器，刷新页面后清空。<span id="sipVer" class="pbx-sip-ver"></span></p>
+            </div>
+            <!-- 设置页 -->
+            <div id="sipViewSettings" class="pbx-sip-view" style="display:none">
+                <div class="pbx-sip-settings-note"><i class="fa fa-info-circle"></i> 配置仅保存在本机浏览器，不会上传服务端。</div>
+                <label>WebSocket 地址</label><input type="text" id="sipWsServer" placeholder="wss://host:7443"/>
+                <label>SIP 账号</label><input type="text" id="sipUri" placeholder="1132@host"/>
+                <label>密码</label><input type="password" id="sipPassword" autocomplete="current-password"/>
+                <label>显示名</label><input type="text" id="sipDisplay"/>
+                <label class="checkbox-inline"><input type="checkbox" id="sipRegister"/> 连接时自动注册</label>
+                <button type="button" class="pbx-sip-save" id="btnSipSave">保存并重新连接</button>
+                <button type="button" class="pbx-sip-secondary" id="btnSipConnect">仅连接</button>
+                <button type="button" class="pbx-sip-secondary" id="btnSipBackToCall"><i class="fa fa-arrow-left"></i> 返回呼叫页</button>
+                <p class="pbx-sip-help">内网默认 <code>ws://&lt;FS主机IP&gt;:5066</code>（明文，无需证书）；需加密时改用 <code>wss://&lt;FS主机IP&gt;:7443</code>，并先在浏览器打开 <code>https://&lt;FS主机IP&gt;:7443</code> 信任自签证书。账号填 <code>号码@SIP域名</code>，密码与分机管理一致。</p>
+            </div>
+            <audio id="pbxSipRemote" autoplay></audio>
+        </div>
+    </div>
+    <script th:src="@{/ajax/libs/sip.js/sip.min.js?v=0.15.11b}"></script>
+    <script th:src="@{/av/js/pbx-sip.js?v=20261119l}"></script>
 </div>

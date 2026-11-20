@@ -48,6 +48,21 @@ public class TPbxUser extends BaseEntity
     /**  */
     private Integer level;
 
+    /** 留言密码 */
+    private String vmPassword;
+
+    /** 呼叫权限 */
+    private String tollAllow;
+
+    /** 呼叫组 */
+    private String callgroup;
+
+    /** dialplan context */
+    private String userContext;
+
+    /** 启用 1/0 */
+    private Integer enabled;
+
     /**  */
     private List<String> numbers;
 

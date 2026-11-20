@@ -21,74 +21,127 @@
     <param name="watchdog-event-timeout" value="30000"/>
     <param name="log-auth-failures" value="false"/>
     <param name="forward-unsolicited-mwi-notify" value="false"/>
-    <param name="context" value="public"/>
+    #if($params && $params.get('context') && $params.get('context') != "")
+    <param name="context" value="$params.get('context')"/>
+    #else
+    <param name="context" value="default"/>
+    #end
     <param name="rfc2833-pt" value="101"/>
-    #if($sysconf.internalPort  && $sysconf.internalPort != '')
+    #if($params && $params.get('sip-port') && $params.get('sip-port') != "")
+    <param name="sip-port" value="$params.get('sip-port')"/>
+    #elseif($sysconf.internalPort && $sysconf.internalPort != '')
     <param name="sip-port" value="${sysconf.internalPort}"/>
     #else
     <param name="sip-port" value="$${internal_sip_port}"/>
     #end
+    #if($params && $params.get('dialplan') && $params.get('dialplan') != "")
+    <param name="dialplan" value="$params.get('dialplan')"/>
+    #else
     <param name="dialplan" value="XML"/>
+    #end
     <param name="dtmf-duration" value="2000"/>
-    #if($sysconf.audioCode  && $sysconf.audioCode != '' || $sysconf.videoCode  && $sysconf.videoCode != '')
-    <param name="inbound-codec-prefs" value="${sysconf.audioCode},${sysconf.videoCode}"/>
-    <param name="outbound-codec-prefs" value="${sysconf.audioCode},${sysconf.videoCode}"/>
+    #if($params && $params.get('inbound-codec-prefs') && $params.get('inbound-codec-prefs') != "")
+    <param name="inbound-codec-prefs" value="$params.get('inbound-codec-prefs')"/>
+    <param name="outbound-codec-prefs" value="$params.get('outbound-codec-prefs')"/>
+    #elseif($sysconf.audioCode && $sysconf.audioCode != '')
+    <param name="inbound-codec-prefs" value="${sysconf.audioCode},#if($sysconf.videoCode)${sysconf.videoCode}#end"/>
+    <param name="outbound-codec-prefs" value="${sysconf.audioCode},#if($sysconf.videoCode)${sysconf.videoCode}#end"/>
     #else
     <param name="inbound-codec-prefs" value="$${global_codec_prefs}"/>
     <param name="outbound-codec-prefs" value="$${global_codec_prefs}"/>
     #end
     <param name="rtp-timer-name" value="soft"/>
-    #if($sysconf.localIp  && $sysconf.localIp != '')
-        <param name="rtp-ip" value="${sysconf.localIp}"/>
-        <param name="sip-ip" value="${sysconf.localIp}"/>
+    #if($params && $params.get('sip-ip') && $params.get('sip-ip') != "")
+    <param name="sip-ip" value="$params.get('sip-ip')"/>
+    <param name="rtp-ip" value="#if($params.get('rtp-ip') && $params.get('rtp-ip') != "")$params.get('rtp-ip')#{else}$params.get('sip-ip')#end"/>
+    #elseif($sysconf.localIp && $sysconf.localIp != '')
+    <param name="rtp-ip" value="${sysconf.localIp}"/>
+    <param name="sip-ip" value="${sysconf.localIp}"/>
     #else
-        <param name="rtp-ip" value="$${local_ip_v4}"/>
-        <param name="sip-ip" value="$${local_ip_v4}"/>
+    <param name="rtp-ip" value="$${local_ip_v4}"/>
+    <param name="sip-ip" value="$${local_ip_v4}"/>
     #end
     <param name="hold-music" value="$${hold_music}"/>
     <param name="apply-nat-acl" value="nat.auto"/>
+    #if($params && $params.get('apply-inbound-acl') && $params.get('apply-inbound-acl') != "")
+    <param name="apply-inbound-acl" value="$params.get('apply-inbound-acl')"/>
+    #else
     <param name="apply-inbound-acl" value="domains"/>
+    #end
     <param name="local-network-acl" value="localnet.auto"/>
     #if($sysconf.audioRecordPath && $sysconf.audioRecordPath != '')
     <param name="record-path" value="${sysconf.audioRecordPath}"/>
     #else
     <param name="record-path" value="$${recordings_dir}"/>
     #end
+    #if($params && $params.get('manage-presence') && $params.get('manage-presence') != "")
+    <param name="manage-presence" value="$params.get('manage-presence')"/>
+    #else
     <param name="manage-presence" value="true"/>
+    #end
     <param name="presence-hosts" value="$${domain},$${local_ip_v4}"/>
     <param name="presence-privacy" value="$${presence_privacy}"/>
-    <param name="inbound-codec-negotiation" value="generous"/>
+    <param name="inbound-codec-negotiation" value="#if($params && $params.get('inbound-codec-negotiation') && $params.get('inbound-codec-negotiation') != '')${params.get('inbound-codec-negotiation')}#else greedy#end"/>
     <param name="tls" value="$${internal_ssl_enable}"/>
     <param name="tls-only" value="false"/>
     <param name="tls-bind-params" value="transport=tls"/>
     <param name="tls-sip-port" value="5061"/>
-    <param name="tls-passphrase" value=""/>
-    <param name="tls-verify-date" value="true"/>
-	<param name="tls-verify-policy" value="none"/>
-    <param name="tls-verify-depth" value="2"/>
-    <param name="tls-verify-in-subjects" value=""/>
-    <param name="tls-version" value="$${sip_tls_version}"/>
-    <param name="tls-ciphers" value="$${sip_tls_ciphers}"/>
-    <param name="odbc-dsn" value="pgsql-dsn::"/>
+    <!-- odbc-dsn 不要硬编码：本机没建 pgsql-dsn 这个 ODBC DSN 时，
+         sofia 会在 "Connecting ODBC Profile internal" 处直接失败，internal 起不来。
+         没有该参数时 FS 走自带的 SQLite core-db，注册照样可用。 -->
+    #if($params && $params.get('odbc-dsn') && $params.get('odbc-dsn') != "")
+    <param name="odbc-dsn" value="$params.get('odbc-dsn')"/>
+    #end
     <param name="inbound-late-negotiation" value="true"/>
+    #if($params && $params.get('accept-blind-reg') && $params.get('accept-blind-reg') != "")
+    <param name="accept-blind-reg" value="$params.get('accept-blind-reg')"/>
+    #else
     <param name="accept-blind-reg" value="false"/>
+    #end
+    #if($params && $params.get('nonce-ttl') && $params.get('nonce-ttl') != "")
+    <param name="nonce-ttl" value="$params.get('nonce-ttl')"/>
+    #else
     <param name="nonce-ttl" value="60"/>
-    <param name="auth-calls" value="$${internal_auth_calls}"/>
+    #end
+    #if($params && $params.get('auth-calls') && $params.get('auth-calls') != "")
+    <param name="auth-calls" value="$params.get('auth-calls')"/>
+    #else
+    <param name="auth-calls" value="true"/>
+    #end
     <param name="auth-subscriptions" value="true"/>
     <param name="inbound-reg-force-matching-username" value="true"/>
     <param name="auth-all-packets" value="false"/>
-    #if($sysconf.iceStart)
+    #if($params && $params.get('ext-sip-ip') && $params.get('ext-sip-ip') != "")
+    <param name="ext-sip-ip" value="$params.get('ext-sip-ip')"/>
+    <param name="ext-rtp-ip" value="#if($params.get('ext-rtp-ip') && $params.get('ext-rtp-ip') != "")$params.get('ext-rtp-ip')#{else}$params.get('ext-sip-ip')#end"/>
+    #elseif($sysconf.iceStart)
     <param name="ext-rtp-ip" value="${sysconf.stunAddress}"/>
     <param name="ext-sip-ip" value="${sysconf.stunAddress}"/>
     #else
     <param name="ext-rtp-ip" value="$${external_rtp_ip}"/>
     <param name="ext-sip-ip" value="$${external_sip_ip}"/>
     #end
+    #if($params && $params.get('rtp-timeout-sec') && $params.get('rtp-timeout-sec') != "")
+    <param name="rtp-timeout-sec" value="$params.get('rtp-timeout-sec')"/>
+    #else
     <param name="rtp-timeout-sec" value="300"/>
+    #end
     <param name="rtp-hold-timeout-sec" value="1800"/>
+    #if($params && $params.get('ws-binding') && $params.get('ws-binding') != "")
+    <param name="ws-binding" value="$params.get('ws-binding')"/>
+    #end
+    #if($params && $params.get('wss-binding') && $params.get('wss-binding') != "")
+    <param name="wss-binding" value="$params.get('wss-binding')"/>
+    #end
+    #if($sipDomain && $sipDomain != "")
+    <param name="force-register-domain" value="$sipDomain"/>
+    <param name="force-subscription-domain" value="$sipDomain"/>
+    <param name="force-register-db-domain" value="$sipDomain"/>
+    #else
     <param name="force-register-domain" value="$${domain}"/>
     <param name="force-subscription-domain" value="$${domain}"/>
     <param name="force-register-db-domain" value="$${domain}"/>
+    #end
     #if($sysconf.wsPort  && $sysconf.wsPort != '')
     <param name="ws-binding"  value=":${sysconf.wsPort}"/>
     #else
@@ -97,7 +150,7 @@
     #if($sysconf.wssPort  && $sysconf.wssPort != '')
     <param name="wss-binding" value=":${sysconf.wssPort}"/>
     #else
-    <param name="wss-binding" value=":${sysconf.wssPort}"/>
+    <param name="wss-binding" value=":7443"/>
     #end
     <param name="challenge-realm" value="auto_from"/>
   </settings>

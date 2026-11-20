@@ -1,28 +1,27 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RuoYi - 500</title>
-	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
-    <link th:href="@{/css/animate.min.css}" rel="stylesheet"/>
-    <link th:href="@{/css/style.min.css}" rel="stylesheet"/>
+    <title>500 - JPBX</title>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}"/>
+    <link th:href="@{/css/bootstrap.min.css?v=3.3.7}" rel="stylesheet"/>
+    <link th:href="@{/css/font-awesome.min.css?v=4.7.0}" rel="stylesheet"/>
+    <link th:href="@{/av/css/pbx-theme.css?v=20261119b}" rel="stylesheet"/>
 </head>
-<body class="gray-bg">
-    <div class="middle-box text-center animated fadeInDown">
-        <h1>500</h1>
-        <h3 class="font-bold">内部服务器错误！</h3>
-
-        <div class="error-desc">
-                                服务器遇到意外事件，不允许完成请求。我们抱歉。您可以返回主页面。
-            <a href="javascript:index()" class="btn btn-primary m-t">主页</a>
-        </div>
-    </div>
-    <script th:inline="javascript">
-      var ctx = [[@{/}]];
-      function index() {
-    	  window.top.location = ctx + "index";
-      }
-    </script>
+<body class="pbx-error">
+<div class="pbx-error-card">
+    <img class="pbx-error-logo" th:src="@{/img/logo/jpbx-logo-512.png}" alt="JPBX"/>
+    <div class="pbx-error-code">500</div>
+    <h3>服务器内部错误</h3>
+    <p>处理请求时发生异常，本次操作可能未生效。<br>请稍后重试；若持续出现，请联系管理员查看后台日志。</p>
+    <a href="javascript:index()" class="btn btn-primary"><i class="fa fa-th-large"></i> 返回概览</a>
+</div>
+<script th:inline="javascript">
+    var ctx = [[@{/}]];
+    function index() {
+        window.top.location = ctx + "index";
+    }
+</script>
 </body>
 </html>

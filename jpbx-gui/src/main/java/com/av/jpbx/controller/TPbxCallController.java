@@ -7,16 +7,14 @@ import com.av.common.core.page.TableDataInfo;
 import com.av.common.enums.BusinessType;
 import com.av.common.utils.poi.ExcelUtil;
 import com.av.jpbx.domain.TPbxCDR;
-import com.av.jpbx.domain.TPbxUser;
 import com.av.jpbx.service.ITPbxCallService;
-import com.av.jpbx.service.ITPbxUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 呼叫账户管理Controller

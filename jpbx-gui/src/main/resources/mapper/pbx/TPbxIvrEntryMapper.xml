@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.av.jpbx.mapper.TPbxIvrEntryMapper">
+    <resultMap type="TPbxIvrEntry" id="TPbxIvrEntryResult">
+        <result property="id" column="id" />
+        <result property="ivrId" column="ivr_id" />
+        <result property="digits" column="digits" />
+        <result property="action" column="action" />
+        <result property="param" column="param" />
+        <result property="sortOrder" column="sort_order" />
+    </resultMap>
+    <sql id="selectVo">select id, ivr_id, digits, action, param, sort_order from t_pbx_ivr_entry</sql>
+    <select id="selectTPbxIvrEntryList" parameterType="TPbxIvrEntry" resultMap="TPbxIvrEntryResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="id != null and id != ''">AND id = #{id}</if>
+            <if test="ivrId != null and ivrId != ''">AND ivr_id = #{ivrId}</if>
+            <if test="digits != null and digits != ''">AND digits = #{digits}</if>
+            <if test="action != null and action != ''">AND action = #{action}</if>
+            <if test="param != null and param != ''">AND param = #{param}</if>
+            <if test="sortOrder != null and sortOrder != ''">AND sort_order = #{sortOrder}</if>
+        </where>
+        order by 1
+    </select>
+    <select id="selectTPbxIvrEntryById" parameterType="String" resultMap="TPbxIvrEntryResult">
+        <include refid="selectVo"/> where id = #{id}
+    </select>
+    <insert id="insertTPbxIvrEntry" parameterType="TPbxIvrEntry">
+        insert into t_pbx_ivr_entry
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="ivrId != null">ivr_id,</if>
+            <if test="digits != null">digits,</if>
+            <if test="action != null">action,</if>
+            <if test="param != null">param,</if>
+            <if test="sortOrder != null">sort_order,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="ivrId != null">#{ivrId},</if>
+            <if test="digits != null">#{digits},</if>
+            <if test="action != null">#{action},</if>
+            <if test="param != null">#{param},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+        </trim>
+    </insert>
+    <update id="updateTPbxIvrEntry" parameterType="TPbxIvrEntry">
+        update t_pbx_ivr_entry
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ivrId != null">ivr_id = #{ivrId},</if>
+            <if test="digits != null">digits = #{digits},</if>
+            <if test="action != null">action = #{action},</if>
+            <if test="param != null">param = #{param},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <delete id="deleteTPbxIvrEntryById" parameterType="String">delete from t_pbx_ivr_entry where id = #{id}</delete>
+    <delete id="deleteTPbxIvrEntryByIds" parameterType="String">
+        delete from t_pbx_ivr_entry where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+    <delete id="deleteByIvrId" parameterType="String">delete from t_pbx_ivr_entry where ivr_id = #{ivrId}</delete>
+</mapper>

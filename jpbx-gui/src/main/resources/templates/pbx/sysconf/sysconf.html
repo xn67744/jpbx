@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head><th:block th:include="include :: header('系统配置')" /></head>
+<body class="gray-bg">
+<div class="container-div">
+  <div class="row">
+    <div class="btn-group-sm" id="toolbar" role="group">
+      <a class="btn btn-primary" onclick="$.operate.edit()" shiro:hasPermission="pbx:sysconf:edit"><i class="fa fa-edit"></i> 编辑配置</a>
+      <a class="btn btn-warning" onclick="effect()" shiro:hasPermission="pbx:sysconf:edit"><i class="fa fa-bolt"></i> 热生效</a>
+    </div>
+    <div class="col-sm-12 select-table table-striped"><table id="bootstrap-table"></table></div>
+  </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+var prefix = ctx + "pbx/sysconf";
+$(function(){
+  $.table.init({
+    url: prefix + "/list",
+    updateUrl: prefix + "/view",
+    modalName: "系统配置",
+    columns: [
+      {checkbox:true},
+      {field:'id', visible:false},
+      {field:'localIp', title:'本机IP'},
+      {field:'remoteIp', title:'外网IP'},
+      {field:'internalPort', title:'注册端口'},
+      {field:'externalPort', title:'中继端口'},
+      {field:'startRtpPort', title:'RTP起始'},
+      {field:'endRtpPort', title:'RTP结束'},
+      {field:'audioRecordPath', title:'录音路径'}
+    ]
+  });
+});
+function effect(){
+  $.get(prefix+'/effect', function(){ $.modal.msgSuccess('已通过 ESL 热生效（reloadxml + sofia profile restart）'); });
+}
+</script>
+</body></html>

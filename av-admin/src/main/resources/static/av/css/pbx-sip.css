@@ -1,0 +1,145 @@
+/* JPBX 悬浮软电话客户端 */
+:root {
+    --sip-primary: #1E63B8;
+    --sip-primary-dark: #17539B;
+    --sip-border: #E3E8EF;
+    --sip-text: #1F2937;
+    --sip-muted: #98A2B3;
+    --sip-ok: #12A594;
+    --sip-bad: #D9485F;
+}
+
+.pbx-sip-widget {
+    position: fixed; top: 70px; right: 24px; width: 330px; z-index: 9999;
+    background: #fff; border: 1px solid var(--sip-border); border-radius: 10px;
+    box-shadow: 0 12px 36px rgba(16,24,40,.18); font-family: "Microsoft YaHei", Arial, sans-serif;
+    overflow: hidden;
+}
+.pbx-sip-widget.hidden { display: none; }
+.pbx-sip-widget.pbx-sip-min { width: 230px; }
+.pbx-sip-widget.pbx-sip-min .pbx-sip-body { display: none; }
+
+.pbx-sip-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 12px; background: var(--sip-primary); color: #fff; cursor: move; user-select: none;
+}
+.pbx-sip-head strong { font-size: 14px; font-weight: 600; }
+.pbx-sip-head strong i { margin-right: 6px; }
+.pbx-sip-actions button {
+    background: transparent; border: 0; color: #fff; opacity: .85; cursor: pointer;
+    font-size: 15px; padding: 0 5px;
+}
+.pbx-sip-actions button:hover { opacity: 1; }
+.pbx-sip-dot {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--sip-bad); margin-right: 6px; vertical-align: middle;
+}
+.pbx-sip-dot.online { background: var(--sip-ok); }
+.pbx-sip-dot.calling { background: #E8A33D; }
+
+.pbx-sip-body { padding: 0; }
+.pbx-sip-status {
+    font-size: 12px; color: #5B6675; background: #F7F9FC; border: 1px solid var(--sip-border);
+    border-radius: 6px; padding: 7px 9px; margin-bottom: 10px; line-height: 1.6;
+}
+.pbx-sip-status b { color: var(--sip-text); }
+.pbx-sip-number {
+    width: 100%; height: 38px; border: 1px solid #D7DEE8; border-radius: 6px;
+    padding: 0 10px; font-size: 16px; letter-spacing: 1px; font-family: Consolas, monospace;
+}
+.pbx-sip-number:focus { outline: none; border-color: var(--sip-primary); box-shadow: 0 0 0 3px rgba(30,99,184,.12); }
+.pbx-sip-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 10px 0; }
+.pbx-sip-pad button {
+    height: 38px; border: 1px solid var(--sip-border); border-radius: 6px; background: #fff;
+    color: var(--sip-text); font-size: 16px; cursor: pointer; transition: background .15s, border-color .15s;
+}
+.pbx-sip-pad button:hover { background: #E8F1FB; border-color: #B9D2EF; }
+.pbx-sip-callrow { display: flex; gap: 8px; }
+.pbx-sip-callrow button {
+    flex: 1; height: 38px; border: 0; border-radius: 6px; color: #fff; font-size: 13px; cursor: pointer;
+}
+.pbx-sip-call { background: var(--sip-ok); }
+.pbx-sip-call:hover { background: #0E8C7E; }
+.pbx-sip-hangup { background: var(--sip-bad); }
+.pbx-sip-hangup:hover { background: #C43B50; }
+.pbx-sip-callrow button:disabled { opacity: .45; cursor: not-allowed; }
+.pbx-sip-tools { display: flex; gap: 6px; margin-top: 9px; }
+.pbx-sip-tools button {
+    flex: 1; height: 30px; font-size: 12px; border: 1px solid var(--sip-border);
+    border-radius: 5px; background: #FAFBFD; color: #5B6675; cursor: pointer;
+}
+.pbx-sip-tools button:hover { color: var(--sip-primary); border-color: #B9D2EF; }
+.pbx-sip-tools button.active { color: var(--sip-primary); background: #E8F1FB; border-color: #B9D2EF; }
+
+.pbx-sip-config { margin-top: 10px; border-top: 1px dashed var(--sip-border); padding-top: 9px; }
+.pbx-sip-config-title { font-size: 12px; color: #5B6675; margin-bottom: 7px; cursor: pointer; }
+.pbx-sip-config-title i { color: var(--sip-primary); margin-right: 4px; }
+.pbx-sip-fields { display: none; }
+.pbx-sip-fields.open { display: block; }
+.pbx-sip-fields label { display: block; font-size: 11px; color: #5B6675; margin: 6px 0 3px; }
+.pbx-sip-fields input[type=text], .pbx-sip-fields input[type=password] {
+    width: 100%; height: 30px; border: 1px solid #D7DEE8; border-radius: 5px; padding: 0 8px; font-size: 12px;
+}
+.pbx-sip-fields label.checkbox-inline { display: flex; align-items: center; gap: 5px; margin-top: 8px; }
+.pbx-sip-save {
+    width: 100%; height: 32px; margin-top: 9px; border: 0; border-radius: 5px;
+    background: var(--sip-primary); color: #fff; font-size: 12px; cursor: pointer;
+}
+.pbx-sip-save:hover { background: var(--sip-primary-dark); }
+.pbx-sip-ver { float: right; color: #9AA6B5; font-size: 11px; }
+.pbx-sip-log-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px; font-size: 12px; color: #5B6675;
+}
+.pbx-sip-log-head button {
+    border: 1px solid var(--sip-border); background: #FAFBFD; color: #5B6675;
+    font-size: 11px; border-radius: 5px; padding: 3px 8px; cursor: pointer;
+}
+.pbx-sip-log-head button:hover { color: var(--sip-bad); border-color: #F3C4CC; }
+.pbx-sip-log {
+    height: 258px; overflow-y: auto; padding: 8px 10px; border-radius: 6px;
+    background: #1F2937; color: #D7DEE8; word-break: break-all;
+    font-family: Consolas, "Courier New", monospace; font-size: 11px; line-height: 1.65;
+}
+.pbx-sip-log div { padding: 1px 0; }
+.pbx-sip-log .t { color: #8FA3BD; }
+.pbx-sip-log::-webkit-scrollbar { width: 6px; }
+.pbx-sip-log::-webkit-scrollbar-thumb { background: #4B5563; border-radius: 3px; }
+/* 呼叫 / 设置 两个独立视图 */
+.pbx-sip-tabs { display: flex; background: #FAFBFD; border-bottom: 1px solid var(--sip-border); }
+.pbx-sip-tabs button {
+    position: relative; flex: 1; height: 38px; border: 0; border-bottom: 2px solid transparent;
+    background: transparent; color: #5B6675; font-size: 13px; cursor: pointer;
+}
+.pbx-sip-tabs button:hover { color: var(--sip-primary); }
+.pbx-sip-tabs button.active {
+    color: var(--sip-primary); background: #fff; border-bottom-color: var(--sip-primary); font-weight: 600;
+}
+.pbx-sip-tabs button i { margin-right: 5px; }
+.pbx-sip-tabs button.has-new::after {
+    content: ''; position: absolute; top: 7px; right: 10px;
+    width: 6px; height: 6px; border-radius: 50%; background: var(--sip-bad);
+}
+.pbx-sip-view { padding: 12px; }
+.pbx-sip-settings-note {
+    font-size: 12px; color: #5B6675; background: #E8F1FB; border: 1px solid #D4E4F7;
+    border-radius: 6px; padding: 8px 10px; margin-bottom: 10px; line-height: 1.6;
+}
+.pbx-sip-view > label { display: block; font-size: 12px; color: #5B6675; margin: 9px 0 4px; }
+.pbx-sip-view input[type=text], .pbx-sip-view input[type=password] {
+    width: 100%; height: 32px; border: 1px solid #D7DEE8; border-radius: 5px; padding: 0 9px; font-size: 12px;
+}
+.pbx-sip-view input[type=text]:focus, .pbx-sip-view input[type=password]:focus {
+    outline: none; border-color: var(--sip-primary); box-shadow: 0 0 0 3px rgba(30,99,184,.10);
+}
+.pbx-sip-view label.checkbox-inline { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
+.pbx-sip-save, .pbx-sip-secondary {
+    width: 100%; height: 34px; margin-top: 10px; border: 0; border-radius: 5px;
+    background: var(--sip-primary); color: #fff; font-size: 13px; cursor: pointer;
+}
+.pbx-sip-save:hover { background: var(--sip-primary-dark); }
+.pbx-sip-secondary { background: #F0F4FA; color: #5B6675; margin-top: 7px; }
+.pbx-sip-secondary:hover { color: var(--sip-primary); background: #E8F1FB; }
+.pbx-sip-help { font-size: 11px; line-height: 1.7; color: var(--sip-muted); margin: 10px 0 0; }
+
+.pbx-sip-widget audio#pbxSipRemote { display: none; }
